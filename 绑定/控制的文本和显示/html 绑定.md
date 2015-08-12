@@ -1,0 +1,38 @@
+#  html 绑定
+
+html绑定让相关的DOM元素按照参数的内容展示html片段。
+
+## 示例
+
+```html
+<div data-bind="html: details"></div>
+```
+
+```javascript
+var viewModel = {
+        details: ko.observable() // Initially blank
+    };
+    viewModel.details("<em>For further details, view the report <a href='report.html'>here</a>.</em>"); // HTML content appears
+    ko.applyBindings(viewModel);
+```
+
+## 参数说明
+
+### 主要参数
+
+knockout会先清除绑定元素中的html内容，然后根据情况把参数中的值设置为绑定元素的内容。
+
+这里的情况分为两种，如果页面中引入了jquery，那么ko会调用$.html()函数来设置值；如果没有，那么knockout会拷贝参数内容到绑定元素中，然后append到绑定元素上，作为绑定元素的子元素。
+
+如果参数是一个observable变量，那么无论时候变量发生变化，页面上的值也会随着变量一起变化；否则，只会在首次绑定的改变绑定元素的值，之后不会页面上的值不会随着参数变量值发生变化而变化。
+
+如果参数的类型不是number或者string（e.g., 对象或者数组），那么页面上展示的文本是对象到字符串等效转化的值，相当于```yourParameter.toString()```
+
+### 其他参数
+
+无
+
+## 注意 HTML 编码
+
+既然HTML绑定是用```innerHTML```来实现的，那么使用的时候要小心，别引入不被信任的代码片段，因为这可能导致```script ```注入攻击。如果你不能确认引用的模块是否安全，可以使用```text``绑定，而它的原理使用```innerText``` 或者```textContent ```来实现内容绑定的。
+

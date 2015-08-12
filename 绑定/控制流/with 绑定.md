@@ -1,0 +1,108 @@
+# with 绑定说明
+
+## 作用
+
+```with``` 绑定创建了一个新的的绑定上下文，这样在被绑定对象的后代元素也就绑定到上下文中了。
+
+当然你也可以把 ```with```绑定和其他控制流绑定一起结合使用，比如```if``` 和 ```foreach```。
+
+## 样例1 静态绑定
+
+这里有一个简单例子来说明把绑定的上下文切换到一个孩子对象上。注意：在```data-bind```属性中，没有必要给```latitude ```或者```longitude ```加上```coords```前缀。
+
+```html
+	<h1 data-bind="text: city"> </h1>
+	<p data-bind="with: coords">
+	    Latitude: <span data-bind="text: latitude"> </span>,
+	    Longitude: <span data-bind="text: longitude"> </span>
+	</p>
+	 
+	<script type="text/javascript">
+	    ko.applyBindings({
+	        city: "London",
+	        coords: {
+	            latitude:  51.5001524,
+	            longitude: -0.1262362
+	        }
+	    });
+	</script>
+```
+
+## 样例2 动态双向绑定
+
+这个例子说明：
+
+1 ```with```绑定能够动态的添加或者删除绑定对象的后代元素取决于是否把相关的后代值设为```null```/```undefined``` 。
+
+2 如果你想从父对象绑定上下文中获取 ```data```/```function``` ，你可以使用特殊的上下文属性，比如 ```$parent```和```$root```
+
+view 代码
+
+```html
+	<form data-bind="submit: getTweets">
+	    Twitter account:
+	    <input data-bind="value: twitterName" />
+	    <button type="submit">Get tweets</button>
+	</form>
+	 
+	<div data-bind="with: resultData">
+	    <h3>Recent tweets fetched at <span data-bind="text: retrievalDate"> </span></h3>
+	    <ol data-bind="foreach: topTweets">
+	        <li data-bind="text: text"></li>
+	    </ol>
+	 
+	    <button data-bind="click: $parent.clearResults">Clear tweets</button>
+	</div>
+```
+
+View model 代码
+
+```javascript
+	function AppViewModel() {
+	    var self = this;
+	    self.twitterName = ko.observable('@example');
+	    self.resultData = ko.observable(); // No initial value
+	 
+	    self.getTweets = function() {
+	        var name = self.twitterName(),
+	            simulatedResults = [
+	                { text: name + ' What a nice day.' },
+	                { text: name + ' Building some cool apps.' },
+	                { text: name + ' Just saw a famous celebrity eating lard. Yum.' }
+	            ];
+	 
+	        self.resultData({ retrievalDate: new Date(), topTweets: simulatedResults });
+	    }
+	 
+	    self.clearResults = function() {
+	        self.resultData(undefined);
+	    }
+	}
+	 
+	ko.applyBindings(new AppViewModel());
+```
+
+
+## 参数
+
+一个你想用来绑定到上下文中的对象
+
+如果对象值为 ```null```/```undefined```，那么它的后代元素的都不会被绑定，但是也不会被从文档中移除。
+
+如果这个对象表达式中包含观察者变量，那么无论什么时候这些观察者变量发生变化，这个表达式都会被重新计算值。然后所有的后代元素都会被清除，并且被标记对象一份新的备份值会被添加到文档中，用表达式的新值绑定到上下文中去。
+
+
+## ```with```不带元素的绑定
+
+```html
+	<ul>
+	    <li>Header element</li>
+	    <!-- ko with: outboundFlight -->
+	        ...
+	    <!-- /ko -->
+	    <!-- ko with: inboundFlight -->
+	        ...
+	    <!-- /ko -->
+	</ul>
+```
+

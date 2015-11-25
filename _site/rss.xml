@@ -5,8 +5,8 @@
         <description>knockout 中文 - wikieswan</description>
         <link>http://knockoutcn.github.io</link>
         <link>http://knockoutcn.github.io</link>
-        <lastBuildDate>2015-11-25T17:24:39+08:00</lastBuildDate>
-        <pubDate>2015-11-25T17:24:39+08:00</pubDate>
+        <lastBuildDate>2015-11-25T17:53:21+08:00</lastBuildDate>
+        <pubDate>2015-11-25T17:53:21+08:00</pubDate>
         <ttl>1800</ttl>
 
 
@@ -1035,6 +1035,95 @@ viewModel.myMessage(&quot;Hello, world!&quot;); // Text appears
 </description>
                 <link>http://knockoutcn.github.io/share/2015/11/25/some-tips-when-using-knockoutjs</link>
                 <guid>http://knockoutcn.github.io/share/2015/11/25/some-tips-when-using-knockoutjs</guid>
+                <pubDate>2015-11-25T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>ifnot bind</title>
+                <description>
+&lt;p&gt;if 绑定的表达式取反&lt;/p&gt;
+
+&lt;p&gt;恩 就这么简单！！！&lt;/p&gt;
+</description>
+                <link>http://knockoutcn.github.io/2015/11/25/ifnot-bind</link>
+                <guid>http://knockoutcn.github.io/2015/11/25/ifnot-bind</guid>
+                <pubDate>2015-11-25T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>if bind</title>
+                <description>
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;if 绑定控制文档的一块区域显示，if 表达式为 true时显示，否则不显示。&lt;/p&gt;
+
+&lt;p&gt;if 和 visible bind 作用相似。区别在于，visible包含DOM代码，只是利用css来控制DOM显示与否；但是if 绑定是如果表达式为false，就移除了改DOM节点，如果为 true 就展示出来。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;例子 1&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;label&amp;gt;&amp;lt;input type=&quot;checkbox&quot; data-bind=&quot;checked: displayMessage&quot; /&amp;gt; Display message&amp;lt;/label&amp;gt;
+
+&amp;lt;div data-bind=&quot;if: displayMessage&quot;&amp;gt;Here is a message. Astonishing.&amp;lt;/div&amp;gt;
+
+
+ko.applyBindings({
+    displayMessage: ko.observable(false)
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;例子2&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;foreach: planets&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        Planet: &amp;lt;b data-bind=&quot;text: name&quot;&amp;gt; &amp;lt;/b&amp;gt;
+        &amp;lt;div data-bind=&quot;if: capital&quot;&amp;gt;
+            Capital: &amp;lt;b data-bind=&quot;text: capital.cityName&quot;&amp;gt; &amp;lt;/b&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+
+
+&amp;lt;script&amp;gt;
+    ko.applyBindings({
+        planets: [
+            { name: &#39;Mercury&#39;, capital: null }, 
+            { name: &#39;Earth&#39;, capital: { cityName: &#39;Barnsley&#39; } }        
+        ]
+    });
+&amp;lt;/script&amp;gt;	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例子2 中，只有当 capital 有对象的时候，才会有子节点的代码执行。&lt;/p&gt;
+
+&lt;p&gt;if 绑定是很重要的，它能让代码正常工作。 比如上面的例子，如果没有 if 绑定， 那么当 capital 为空的时候， 子节点 capital.cityName 这个属性是不存在的，代码会报错。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;参数&lt;/h2&gt;
+
+&lt;p&gt;js表达式，返回true或者false&lt;/p&gt;
+
+&lt;p&gt;如果表达式包含 observable 变量，那么当变量值重新计算时，表达式的值也会被重新计算。相应的，当表达式的值被重新计算后 ，if 里面的代码块会被重新添加或者移除 。当重新添加代码块时，data-bind 属性会被应用到原来代码的新拷贝上。&lt;/p&gt;
+
+&lt;h2 id=&quot;if-&quot;&gt;注意 使用 if 时不要使用包含元素&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;This item always appears&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;I want to make this item present/absent dynamically&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;加入li需要 if 来控制显示与否，而ul中又不允许使用其他元素，那么这时候可以用虚拟元素绑定，像下面这样。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;This item always appears&amp;lt;/li&amp;gt;
+    &amp;lt;!-- ko if: someExpressionGoesHere --&amp;gt;
+        &amp;lt;li&amp;gt;I want to make this item present/absent dynamically&amp;lt;/li&amp;gt;
+    &amp;lt;!-- /ko --&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+</description>
+                <link>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/if-bind</link>
+                <guid>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/if-bind</guid>
                 <pubDate>2015-11-25T00:00:00+08:00</pubDate>
         </item>
 

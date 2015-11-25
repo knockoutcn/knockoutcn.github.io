@@ -4,7 +4,7 @@
  <title>knockout 中文</title>
  <link href="http://knockoutcn.github.io/" rel="self"/>
  <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-25T10:52:00+08:00</updated>
+ <updated>2015-11-25T11:55:03+08:00</updated>
  <id>http://knockoutcn.github.io</id>
  <author>
    <name>wikieswan</name>
@@ -13,257 +13,1901 @@
 
  
  <entry>
-   <title>how to use r.js to packet requirejs modules</title>
-   <link href="http://knockoutcn.github.io/2015/11/23/how-to-use-rjs-to-packet-requirejs-modules"/>
-   <updated>2015-11-23T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/2015/11/23/how-to-use-rjs-to-packet-requirejs-modules</id>
+   <title>with bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/with-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/with-bind</id>
    <content type="html">
-&lt;p&gt;这篇文章用来介绍如何用 r.js 给 requirejs 模块打包&lt;/p&gt;
+&lt;h1 id=&quot;with-&quot;&gt;with 绑定说明&lt;/h1&gt;
 
-&lt;h2 id=&quot;rjs&quot;&gt;r.js是什么&lt;/h2&gt;
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
 
-&lt;p&gt;r.js 是一个requirejs 官方推荐打包工具，它的作用是把零散的 define 模块按照 requirejs 的依赖关系打包到一个js文件中，来解决上线代码请求数过多的问题。除此之外，r.js 还可以对整个项目的代码进行优化，比如对js代码ugly、对css代码压缩、加上浏览器厂商前缀等。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;with&lt;/code&gt; 绑定创建了一个新的的绑定上下文，这样在被绑定对象的后代元素也就绑定到上下文中了。&lt;/p&gt;
 
-&lt;p&gt;关于打包问题，目前一直有关于 webpacket 和 r.js 打包方式的争论，其实它们的争端在于是否需要把公用模块单独拿出来打包尽量使用304. webpacket的做法是把公用模块打包，这样不同页面公用的模块间会用304加载模块，整体代码量会相对减少。 r.js 是把 requirejs用到的模块都打成一个文件，不去区分是否公用，这样公用的模块就会在不同的js文件中出现，整体代码量会上去，但是整体请求数会下降。
-二者都有可取之处，关键看应用场景，是看重请求数的影响还是看重下载的代码量（对应流量）。&lt;/p&gt;
+&lt;p&gt;当然你也可以把 &lt;code&gt;with&lt;/code&gt;绑定和其他控制流绑定一起结合使用，比如&lt;code&gt;if&lt;/code&gt; 和 &lt;code&gt;foreach&lt;/code&gt;。&lt;/p&gt;
 
-&lt;p&gt;这里就先介绍 r.js 的打包方式吧！&lt;/p&gt;
+&lt;h2 id=&quot;section-1&quot;&gt;样例1 静态绑定&lt;/h2&gt;
 
-&lt;p&gt;直接看代码的同学，&lt;a href=&quot;https://github.com/wikieswan/rjs-demo&quot;&gt;进入这里&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这里有一个简单例子来说明把绑定的上下文切换到一个孩子对象上。注意：在&lt;code&gt;data-bind&lt;/code&gt;属性中，没有必要给&lt;code&gt;latitude&lt;/code&gt;或者&lt;code&gt;longitude&lt;/code&gt;加上&lt;code&gt;coords&lt;/code&gt;前缀。&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;准备材料&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;require.js  
-r.js
-node
-gulp
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;项目结构&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;www/
-	css/
-		main.css
-	js/
-		app/
-			index.js
-		mod/
-			add.js
-			minus.js
-		pub/	
-			ten.js
-	lib/
-		require.js
-	inde.html
-build.js
-gulpfile.js
-package.json
-r.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;工程目录中引入了gulp，引入gulp的目的是为了能在gulpfile中执行build指令，这个不是必须的，但是如果你项目本身就是用的gulp，把build集合到你的gulpfile中会很有用的。记住， gulpfile.js  package.json 这两个文件是非必须的。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;代码结构简介&lt;/h2&gt;
-
-&lt;p&gt;项目中index.html作为文件入口，所有的资源引用来自这里。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//index.html
-
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;
-	&amp;lt;title&amp;gt; rjs demo &amp;lt;/title&amp;gt;
-	&amp;lt;meta charset=&quot;utf-8&quot; &amp;gt;
-	&amp;lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/main.css&quot;&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
- &amp;lt;h2&amp;gt;rjs demo&amp;lt;/h2&amp;gt;
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&amp;lt;script type=&quot;text/javascript&quot; src=&quot;lib/require.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-
-&amp;lt;!-- 仅仅在开发环境下使用 require.dev.config.js ，打包后删除引用 --&amp;gt;
-&amp;lt;script type=&quot;text/javascript&quot; src=&quot;js/require.dev.config.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;!-- end of require.dev.config.js --&amp;gt;
-
-&amp;lt;script type=&quot;text/javascript&quot; src=&quot;js/app/index.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;js/require.dev.config.js 是配置文件，requirejs的配置入口。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//js/require.dev.config.js
-requirejs.config({
-    baseUrl: &#39;./js/mod&#39;,
-    urlArgs: &#39;1.0.0&#39;,
-    paths: {
-        pub : &#39;../pub&#39;
-    },
-    shim: {
-
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;app/ 是业务逻辑代码文件夹
-mod/ pub/ 是模块代码文件夹&lt;/p&gt;
-
-&lt;p&gt;app/index.js&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//app/index.js
-requirejs([&#39;add&#39;,&#39;minus&#39;,&#39;pub/ten&#39;],function(add,minus,ten){
-	var a = 1, 
-		b = 2;
-	var rst0 = add(a,b);
-	var rst1 = minus(a,b);
-	var rst2 = ten(a);	
-
-	console.log(rst0,rst1,rst2);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看出来，index.js引入了 ‘add’,’minus’,’pub/ten’ 这三个文件&lt;/p&gt;
-
-&lt;p&gt;这里就不罗列这3个文件的代码了，看名字就能看出来，分别是加、减、乘以10。&lt;/p&gt;
-
-&lt;p&gt;这时候用浏览器打开，查看浏览器的http请求，可以发现类似下面的形式&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;index.html
-main.css
-require.js
-require.dev.config.js
-index.js
-add.js?1.0.0
-minus.js?1.0.0
-ten.js?1.0.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;其中?1.0.0是在配置文件 js/require.dev.config.js 配置的版本号。&lt;/p&gt;
-
-&lt;h2 id=&quot;build&quot;&gt;开始build&lt;/h2&gt;
-
-&lt;p&gt;上面介绍了requirejs项目的情况，接下来我们就准备打包吧。&lt;/p&gt;
-
-&lt;p&gt;打包必须：r.js&lt;/p&gt;
-
-&lt;p&gt;这个文件可以去requirejs官网下载。官网提供两种方式打包，分别是命令行配置和文件配置。&lt;/p&gt;
-
-&lt;p&gt;命令行配置不利于理解，也不利于代码维护，这里我们就讲文件配置打包方式。&lt;/p&gt;
-
-&lt;p&gt;我们再项目的根目录下配置一个buil.js。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//build.js
-({
-    appDir: &#39;./www&#39;,
-    baseUrl: &#39;js/mod&#39;,
-    dir: &#39;./build&#39;,
-    paths: {
-        &#39;pub&#39; : &#39;../pub&#39;,
-        &#39;app&#39; : &#39;../app&#39;
-    },
-    modules: [
-        {
-            name: &#39;app/index&#39;
+&lt;pre&gt;&lt;code&gt;&amp;lt;h1 data-bind=&quot;text: city&quot;&amp;gt; &amp;lt;/h1&amp;gt;
+&amp;lt;p data-bind=&quot;with: coords&quot;&amp;gt;
+    Latitude: &amp;lt;span data-bind=&quot;text: latitude&quot;&amp;gt; &amp;lt;/span&amp;gt;,
+    Longitude: &amp;lt;span data-bind=&quot;text: longitude&quot;&amp;gt; &amp;lt;/span&amp;gt;
+&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    ko.applyBindings({
+        city: &quot;London&quot;,
+        coords: {
+            latitude:  51.5001524,
+            longitude: -0.1262362
         }
-    ],
-    fileExclusionRegExp: /require.dev.config.js/,
-    removeCombined: true,
-    optimizeCss: &#39;standard&#39;
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里讲解下这几个参数的意义；&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;appDir
-待打包项目的根目录
-
-baseUrl
-js文件的根路径，等价于  js/require.dev.config.js 配置的 baseUrl
-
-dir
-rjs打包输出路径
-
-paths
-等价于 js/require.dev.config.js 配置的 paths 。模块（modules）的相对目录。
-
-shim
-为那些没有使用define()声名依赖关系及设置模块值的模块，配置依赖关系与“浏览器全局”出口的脚本。
-
-fileExclusionRegExp
-定义打包过滤的规则，把不需要输出的文件过滤掉。
-
-removeCombined
-是否在打包前清空上次生成的代码
-
-optimizeCss
-css代码的优化规则，RequireJS Optimizer会自动优化应用程序下的CSS文件。这个参数控制CSS最优化设置。允许的值： “none”, “standard”, “standard.keepLines”, “standard.keepComments”, “standard.keepComments.keepLines”。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在正确配置build.js信息之后，我们需要执行一个命令来打包&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node r.js -o build.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;打包之后，在项目根目录下生成 build/	，build/的结构如下&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;css/
-	main.css
-js/
-	app/
-		index.js
-lib/
-	require.js
-build.txt	
-index.html	
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，js/文件夹下就只有 app/index.js 了。build.txt 里面记录了rjs打包规则。&lt;/p&gt;
-
-&lt;p&gt;这时候查看 build/index.html 可以看到请求结果如下&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;index.html
-main.css
-require.js
-index.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;其中	 main.css css代码被压缩，index.js 代码合并了所以来的模块代码。&lt;/p&gt;
-
-&lt;p&gt;可以发现，这时候 js/require.dev.config.js 这个文件就没有必要引用了。为什么呢？&lt;/p&gt;
-
-&lt;p&gt;道理是这样的，js/require.dev.config.js 这个文件存在于开发环境 （www/），当html引入了 app/index.js ，js/require.dev.config.js来告诉网页怎么根据 app/index.js 的引用去找到真实的js模块代码 。&lt;/p&gt;
-
-&lt;p&gt;当打包完成之后，所以 app/index.js 依赖的模块都被打包进去了，已经完成了代码的注入了，所以就不需要依赖 js/require.dev.config.js 来寻址其他模块了 ，所以说打包后就不再需要引入了 。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;结论&lt;/h2&gt;
-
-&lt;p&gt;可以看到，打包后请求数显著下降了，整个工程的代码也都被优化了。&lt;/p&gt;
-
-&lt;h2 id=&quot;gulprjs-build&quot;&gt;如何在gulp中执行rjs build命令&lt;/h2&gt;
-
-&lt;p&gt;rjs 的打包命令是&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node r.js -o build.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;我们只需要在gulpfile.js执行这条语句就好了 。代码如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var gulp = require(&#39;gulp&#39;)
-var exec = require(&#39;child_process&#39;).exec;
-
-gulp.task(&#39;rjsBuild&#39;, function(cb) {
-    exec(&#39;node r.js -o build.js&#39;, function (err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        cb(err);
     });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;样例2 动态双向绑定&lt;/h2&gt;
+
+&lt;p&gt;这个例子说明：&lt;/p&gt;
+
+&lt;p&gt;1 &lt;code&gt;with&lt;/code&gt;绑定能够动态的添加或者删除绑定对象的后代元素取决于是否把相关的后代值设为&lt;code&gt;null&lt;/code&gt;/&lt;code&gt;undefined&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;2 如果你想从父对象绑定上下文中获取 &lt;code&gt;data&lt;/code&gt;/&lt;code&gt;function&lt;/code&gt; ，你可以使用特殊的上下文属性，比如 &lt;code&gt;$parent&lt;/code&gt;和&lt;code&gt;$root&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;view 代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;form data-bind=&quot;submit: getTweets&quot;&amp;gt;
+    Twitter account:
+    &amp;lt;input data-bind=&quot;value: twitterName&quot; /&amp;gt;
+    &amp;lt;button type=&quot;submit&quot;&amp;gt;Get tweets&amp;lt;/button&amp;gt;
+&amp;lt;/form&amp;gt;
+ 
+&amp;lt;div data-bind=&quot;with: resultData&quot;&amp;gt;
+    &amp;lt;h3&amp;gt;Recent tweets fetched at &amp;lt;span data-bind=&quot;text: retrievalDate&quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;/h3&amp;gt;
+    &amp;lt;ol data-bind=&quot;foreach: topTweets&quot;&amp;gt;
+        &amp;lt;li data-bind=&quot;text: text&quot;&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;/ol&amp;gt;
+ 
+    &amp;lt;button data-bind=&quot;click: $parent.clearResults&quot;&amp;gt;Clear tweets&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;View model 代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function AppViewModel() {
+    var self = this;
+    self.twitterName = ko.observable(&#39;@example&#39;);
+    self.resultData = ko.observable(); // No initial value
+ 
+    self.getTweets = function() {
+        var name = self.twitterName(),
+            simulatedResults = [
+                { text: name + &#39; What a nice day.&#39; },
+                { text: name + &#39; Building some cool apps.&#39; },
+                { text: name + &#39; Just saw a famous celebrity eating lard. Yum.&#39; }
+            ];
+ 
+        self.resultData({ retrievalDate: new Date(), topTweets: simulatedResults });
+    }
+ 
+    self.clearResults = function() {
+        self.resultData(undefined);
+    }
+}
+ 
+ko.applyBindings(new AppViewModel());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;参数&lt;/h2&gt;
+
+&lt;p&gt;一个你想用来绑定到上下文中的对象&lt;/p&gt;
+
+&lt;p&gt;如果对象值为 &lt;code&gt;null&lt;/code&gt;/&lt;code&gt;undefined&lt;/code&gt;，那么它的后代元素的都不会被绑定，但是也不会被从文档中移除。&lt;/p&gt;
+
+&lt;p&gt;如果这个对象表达式中包含观察者变量，那么无论什么时候这些观察者变量发生变化，这个表达式都会被重新计算值。然后所有的后代元素都会被清除，并且被标记对象一份新的备份值会被添加到文档中，用表达式的新值绑定到上下文中去。&lt;/p&gt;
+
+&lt;h2 id=&quot;with&quot;&gt;&lt;code&gt;with&lt;/code&gt;不带元素的绑定&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;Header element&amp;lt;/li&amp;gt;
+    &amp;lt;!-- ko with: outboundFlight --&amp;gt;
+        ...
+    &amp;lt;!-- /ko --&amp;gt;
+    &amp;lt;!-- ko with: inboundFlight --&amp;gt;
+        ...
+    &amp;lt;!-- /ko --&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>visible bind</title>
+   <link href="http://knockoutcn.github.io/2015/11/25/visible-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/2015/11/25/visible-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;visible-&quot;&gt;1 visible 绑定&lt;/h1&gt;
+
+&lt;p&gt;作用&lt;/p&gt;
+
+&lt;p&gt;visible 根据变量值的true或者false来控制DOM元素的显示或者隐藏。&lt;/p&gt;
+
+&lt;p&gt;示例&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;visible: shouldShowMessage&quot;&amp;gt;
+    You will see this message only when &quot;shouldShowMessage&quot; holds a true value.
+&amp;lt;/div&amp;gt;
+
+var viewModel = {
+    shouldShowMessage: ko.observable(true) // Message initially visible
+};
+//viewModel.shouldShowMessage(false); // ... now it&#39;s hidden
+viewModel.shouldShowMessage(true); // ... now it&#39;s visible again
+ko.applyBindings(viewModel);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参数说明&lt;/p&gt;
+
+&lt;p&gt;主要参数&lt;/p&gt;
+
+&lt;p&gt;参数值为类似false值（eg，false、0、null、undefined）把yourElement.style.display设置为none，元素就隐藏了。&lt;/p&gt;
+
+&lt;p&gt;参数值为类似true值（eg，true、非null 的对象），则元素会显示。&lt;/p&gt;
+
+&lt;p&gt;如果参数是一个observable 变量，无论参数的值什么时候发生变化，元素的visible属性也会发生改变的。如果参数不是一个observable 变量，那么只会在第一次绑定的时候控制元素的visible属性，之后元素的visible属性不会发生变化。&lt;/p&gt;
+
+&lt;p&gt;其他参数&lt;/p&gt;
+
+&lt;p&gt;无&lt;/p&gt;
+
+&lt;p&gt;注意 使用函数或者表达式控制元素的显示或者隐藏&lt;/p&gt;
+
+&lt;p&gt;可以是用javascript函数或者表达式作为参数；knockout会运行函数或者表达式，用返回值来作为参数，从而觉得元素的显示或者隐藏。&lt;/p&gt;
+
+&lt;p&gt;e.g.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;visible: myValues().length &amp;gt; 0&quot;&amp;gt;
+  You will see this message only when &#39;myValues&#39; has at least one member.
+&amp;lt;/div&amp;gt;
+
+var viewModel = {
+    myValues: ko.observableArray([]) // Initially empty, so message hidden
+};
+viewModel.myValues.push(&quot;some value&quot;); // Now visible
+ko.applyBindings(viewModel);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;依赖&lt;/p&gt;
+
+&lt;p&gt;无&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>value bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/value-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/value-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;value-&quot;&gt;value 绑定&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;value&lt;/code&gt; 绑定将 view model 的属性绑定到DOM元素的值上。常用于 &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt;,&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;和 &lt;code&gt;&amp;lt;textarea&amp;gt;&lt;/code&gt;标签中。&lt;/p&gt;
+
+&lt;p&gt;当用户在表单中更改元素的值，view model的值会自动更新。反过来，view model的值发生变化，表单中元素的值也会发生变化。&lt;/p&gt;
+
+&lt;p&gt;注意：如果使用 checkbox 或者 radio 标签，请使用 checked 绑定来读写DOM元素的 checked状态，而不是使用 &lt;code&gt;value&lt;/code&gt; 绑定。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;例子&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;Login name: &amp;lt;input data-bind=&quot;value: userName&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;Password: &amp;lt;input type=&quot;password&quot; data-bind=&quot;value: userPassword&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        userName: ko.observable(&quot;&quot;),        // Initially blank
+        userPassword: ko.observable(&quot;abc&quot;), // Prepopulate
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参数&lt;/h2&gt;
+
+&lt;p&gt;knockout 会用参数的值重写元素的 &lt;code&gt;value&lt;/code&gt; 值。&lt;/p&gt;
+
+&lt;p&gt;如果参数是 observable 值，那么当参数发生变化的时候，绑定会更新元素的值。如果参数不是一个 observable ，只会在第一次初始化的时候设置元素的值，以后就不会在更新元素了。&lt;/p&gt;
+
+&lt;p&gt;如果参数不是 number 或 string（比如object或者array），那么会被转化成 string类型 &lt;code&gt;yourParameter.toString()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;无论何时用户编辑表单中得值，KO会更新 view model中属性的值。 页面上当表单中的值被修改并且元素失去焦点，KO就会修改view model中的值。 但是你可以使用 &lt;code&gt;valueUpdate&lt;/code&gt;属性来触发KO更新。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;附加参数&lt;/h3&gt;
+
+&lt;h4 id=&quot;valueupdate&quot;&gt;&lt;code&gt;valueUpdate&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;如果绑定中包含参数 &lt;code&gt;valueUpdate&lt;/code&gt;，那么除了 &lt;code&gt;change&lt;/code&gt;事件之外，KO也会触发更新。参数值如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;&quot;input&quot;&lt;/code&gt; - &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt;和&lt;code&gt;&amp;lt;textarea&amp;gt;&lt;/code&gt; 的值改变的时候会触发更新view model。（IE 9+支持）&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;&quot;keyup&quot;&lt;/code&gt; -   释放键盘是更新view model。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;&quot;keypress&quot;&lt;/code&gt; - 按下键盘是更新view model。和&lt;code&gt;&quot;keyup&quot;&lt;/code&gt;不一样，用户按着键盘一直不松手的话，会持续触发更新view model。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;&quot;afterkeydown&quot;&lt;/code&gt; - 按下一个字符就更新 view model 。它的原理是捕获浏览器的 keydown 事件，然后一步处理。在一些移动端浏览器可能不起作用。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;valueallowunset&quot;&gt;&lt;code&gt;valueAllowUnset&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;只有在 &lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;元素上使用，在其他元素上使用没有效果。&lt;/p&gt;
+
+&lt;h2 id=&quot;input&quot;&gt;注意1 ： 立即更新来自input中的值&lt;/h2&gt;
+
+&lt;p&gt;如果你用&lt;code&gt;&amp;lt;input type=&quot;text&quot; /&amp;gt;&lt;/code&gt; 或者 &lt;code&gt;&amp;lt;textarea&amp;gt;&lt;/code&gt;，想立马更新 view model 的值，那么使用 &lt;code&gt;textInput&lt;/code&gt;绑定吧，因为它比 value 绑定的 valueUpdate 浏览器兼容性更好。&lt;/p&gt;
+
+&lt;h2 id=&quot;select&quot;&gt;注意2 ： 和下拉框组合使用（&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;元素）&lt;/h2&gt;
+
+&lt;p&gt;knockout支持下拉框。&lt;code&gt;value&lt;/code&gt; 绑定和&lt;code&gt;option&lt;/code&gt; 绑定一起使用，来读写任意js对象的值。，而不仅仅是string类型的变量。具体细节可以参照 &lt;code&gt;option&lt;/code&gt; 绑定。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;元素,你也可以使用value绑定而不使用option绑定。这是&lt;code&gt;option&lt;/code&gt; 选项需呀使用 &lt;code&gt;foreach&lt;/code&gt;或者&lt;code&gt;temlate&lt;/code&gt;绑定来实现。你甚至可以嵌套使用 &lt;code&gt;&amp;lt;optgroup&amp;gt;&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h3 id=&quot;selectvalueallowunset&quot;&gt;&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;元素&lt;code&gt;valueAllowUnset&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;通常当你在&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;元素上使用 &lt;code&gt;value&lt;/code&gt;绑定的时候，通常是指定某个option被选中。但是如果你设置一个在list中不存在的值怎么办呢？knockout会默认重写你的值，把它重设为下拉框中任何一个已经被选中的值，这样做是为了阻止模型和视图不同步。&lt;/p&gt;
+
+&lt;p&gt;然而，有时候我们不想knockout这种默认行为。如果你想让knockout允许你输入一个在 &lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;中不存在的值，那么就需要指定 &lt;code&gt;valueAllowUnset: true&lt;/code&gt;。这样，只要有不匹配的值，&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;就没有被选中的值，通常是个空值。 用户再选中存在的值，&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;的值就正常表现了。例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;
+    Select a country:
+    &amp;lt;select data-bind=&quot;options: countries,
+                       optionsCaption: &#39;Choose one...&#39;,
+                       value: selectedCountry,
+                       valueAllowUnset: true&quot;&amp;gt;&amp;lt;/select&amp;gt;
+&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        countries: [&#39;Japan&#39;, &#39;Bolivia&#39;, &#39;New Zealand&#39;],
+        selectedCountry: ko.observable(&#39;Latvia&#39;)
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;selectedCountry&lt;/code&gt;的值是 &lt;code&gt;Latvia&lt;/code&gt;,因为&lt;code&gt;countries&lt;/code&gt;中不存在，那么&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;的值是个空值。&lt;/p&gt;
+
+&lt;p&gt;如果 &lt;code&gt;valueAllowUnset&lt;/code&gt; 没有被设置为 true，那么knockout就会用 &lt;code&gt;undefined&lt;/code&gt;来重写 &lt;code&gt;selectedCountry&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;observablenon-observable&quot;&gt;注意3 ： 更新observable和non-observable属性的值&lt;/h2&gt;
+
+&lt;p&gt;如果使用 &lt;code&gt;value&lt;/code&gt; 绑定把observable属性绑定到DOM元素上，knockout会建立一个双向绑定，这样一个改变会影响另一个值。&lt;/p&gt;
+
+&lt;p&gt;但是，如果使用 &lt;code&gt;value&lt;/code&gt; 绑定把一个non-observable属性绑定到DOM元素上，那么knockout会像下面那样做：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果non-observable是一个简单属性，比如说事view model上的普通属性，那么knockout只会在初始化的绑定一次。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果不是简单属性，比如说是一个函数或者一个复杂的表达式，也只会绑定一次。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- Two-way binding. Populates textbox; syncs both ways. --&amp;gt;
+&amp;lt;p&amp;gt;First value: &amp;lt;input data-bind=&quot;value: firstValue&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+ 
+&amp;lt;!-- One-way binding. Populates textbox; syncs only from textbox to model. --&amp;gt;
+&amp;lt;p&amp;gt;Second value: &amp;lt;input data-bind=&quot;value: secondValue&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+ 
+&amp;lt;!-- No binding. Populates textbox, but doesn&#39;t react to any changes. --&amp;gt;
+&amp;lt;p&amp;gt;Third value: &amp;lt;input data-bind=&quot;value: secondValue.length &amp;gt; 8&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        firstValue: ko.observable(&quot;hello&quot;), // Observable
+        secondValue: &quot;hello, again&quot;         // Not observable
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;checked--value&quot;&gt;注意 4 ： checked 属性使用 value绑定&lt;/h2&gt;
+
+&lt;p&gt;请不要使用 &lt;code&gt;value&lt;/code&gt; 对 &lt;code&gt;&amp;lt;input type=&#39;checkbox&#39;&amp;gt;&lt;/code&gt; 或者 &lt;code&gt;&amp;lt;input type=&#39;radio&#39;&amp;gt;&lt;/code&gt; 进行绑定，要使用 &lt;code&gt;checked&lt;/code&gt;绑定。如果一定要使用的话，相当于 &lt;code&gt;checked&lt;/code&gt; 绑定的 &lt;code&gt;checkedValue&lt;/code&gt;参数。&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>text bind</title>
+   <link href="http://knockoutcn.github.io/2015/11/25/text-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/2015/11/25/text-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;text-&quot;&gt;text 绑定&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;text 绑定让DOM元素显示参数的值。对于 span 、 em 这些常用来表示文本的标签起作用，但是你想绑定在其他标签上也是可以的。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;示例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Today&#39;s message is: &amp;lt;span data-bind=&quot;text: myMessage&quot;&amp;gt;&amp;lt;/span&amp;gt;
+
+var viewModel = {
+    myMessage: ko.observable() // Initially blank
+};
+viewModel.myMessage(&quot;Hello, world!&quot;); // Text appears
+ko.applyBindings(viewModel);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;参数说明&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;主要参数&lt;/h3&gt;
+
+&lt;p&gt;Knockout 用参数的值设置DOM元素的text属性值；DOM元素原先的值会被复写。&lt;/p&gt;
+
+&lt;p&gt;如果参数是一个observable变量，那么一旦参数的值发生变化，页面上绑定的值都会立即改变；如果不是，那么只会在第一次绑定的时候改变页面元素的文本值，页面上的值之后就不会再被改变。&lt;/p&gt;
+
+&lt;p&gt;如果参数的类型不是number或者string（e.g., 对象或者数组），那么页面上展示的文本是对象到字符串等效转化的值，相当于yourParameter.toString()&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;其他参数&lt;/h3&gt;
+
+&lt;p&gt;无&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;注意1：使用函数和表达式获取文本的值&lt;/h2&gt;
+
+&lt;p&gt;如果想通过程序方式确定文本的值，那么需要用到可计算的observable,用可以返回文本的函数名作为参数。&lt;/p&gt;
+
+&lt;p&gt;e.g.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;The item is &amp;lt;span data-bind=&quot;text: priceRating&quot;&amp;gt;&amp;lt;/span&amp;gt; today.
+
+var viewModel = {
+    price: ko.observable(24.95)
+};
+viewModel.priceRating = ko.pureComputed(function() {
+    return this.price() &amp;gt; 50 ? &quot;expensive&quot; : &quot;affordable&quot;;
+}, viewModel);
+ko.applyBindings(viewModel);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么文本的值就会根据price 的变化而取 “expensive” 或者 “affordable” 。&lt;/p&gt;
+
+&lt;p&gt;另外，如果像下面那样只做简单的逻辑处理的话，是不需要创建可计算的observable的函数的。你可以传递任何的javascript表达式作为数据绑定。e.g.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;The item is &amp;lt;span data-bind=&quot;text: price() &amp;gt; 50 ? &#39;expensive&#39; : &#39;affordable&#39;&quot;&amp;gt;&amp;lt;/span&amp;gt; today.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;html&quot;&gt;注意2 HTML编码&lt;/h3&gt;
+
+&lt;p&gt;既然绑定是用文本节点的值来设置页面上文本的值的，那么为了安全起见，设置任何字符串值的时候都应该避免HTML或者script注入。&lt;/p&gt;
+
+&lt;p&gt;e.g.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;viewModel.myMessage(&quot;&amp;lt;i&amp;gt;Hello, world!&amp;lt;/i&amp;gt;&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段代码不会在页面上渲染出斜体文本，（即html标签不会被浏览器解析渲染），而是在页面上直接原样显示。&lt;/p&gt;
+
+&lt;p&gt;如果你要在数据模型中设置html代码，请看下文关于html绑定的说明。&lt;/p&gt;
+
+&lt;h3 id=&quot;html-1&quot;&gt;注意3 不适用html元素完成文本绑定&lt;/h3&gt;
+
+&lt;p&gt;有时候，你想完成数据绑定而不引入额外的HTML元素。例如，在option标签中引入额外的元素是不可以的，像下面的代码是不会生效的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;select data-bind=&quot;foreach: items&quot;&amp;gt;
+  &amp;lt;option&amp;gt;Item &amp;lt;span data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/option&amp;gt;
+&amp;lt;/select&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了处理这种情况，需要引入无容器的语法 – 文本注释标签&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;select data-bind=&quot;foreach: items&quot;&amp;gt;
+	&amp;lt;option&amp;gt;Item &amp;lt;!--ko text: name--&amp;gt;&amp;lt;!--/ko--&amp;gt;&amp;lt;/option&amp;gt;
+&amp;lt;/select&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;!--ko--&amp;gt;&lt;/code&gt;和&lt;code&gt;&amp;lt;!--/ko--&amp;gt;&lt;/code&gt;表示注释区域的开始和结束。用这种方式定义了“虚拟元素”，里面包含了标记绑定。Knockout 会理解这种虚拟元素语法，并且会完成数据绑定。&lt;/p&gt;
+
+&lt;h3 id=&quot;ie-6&quot;&gt;注意4 IE 6下怪异的空格&lt;/h3&gt;
+
+&lt;p&gt;IE 6会忽略紧跟在span标签后面的空格。例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Welcome, &amp;lt;span data-bind=&quot;text: userName&quot;&amp;gt;&amp;lt;/span&amp;gt; to our web site.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在IE 6下 to our web site前面的空格不会显示出来，解决这个问题的办法是在span标签里面加上 例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Welcome, &amp;lt;span data-bind=&quot;text: userName&quot;&amp;gt;&amp;amp;nbsp;&amp;lt;/span&amp;gt; to our web site.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在新版本的IE浏览器或者其他浏览器没有这个问题。&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>template bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/template-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/template-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;section&quot;&gt;模板绑定&lt;/h1&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;模板绑定 &lt;code&gt;template&lt;/code&gt; 用渲染模板的结果来填充相关的DOM元素。模板是构建负责UI结构（可能是重复的或者嵌套的代码块）的一种简单、方便的方式，就想视图模型对象的一个函数。&lt;/p&gt;
+
+&lt;p&gt;有两种方式来使用模板：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;本地模板是支撑  &lt;code&gt;foreach&lt;/code&gt;, &lt;code&gt;if&lt;/code&gt;, &lt;code&gt;with&lt;/code&gt;和其他控制流绑定的机制。控制流绑定的内部机制：控制流绑定获取HTML标签，然后用把它当做一个模板用数据来渲染。这个特征是KO内建机制，不需要依赖其他库。&lt;/li&gt;
+  &lt;li&gt;基于字符串的模板是联系KO和某个第三方模板引擎的桥梁。KO会吧模型属性传递给外部的模板引擎，然后把结果注入到HTML文件流中。下面的例子来展示使用 &lt;code&gt;jquery.tmpl&lt;/code&gt; 和 Underscore 模板引擎 。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;参数&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;1 快捷方式&lt;/h3&gt;
+
+&lt;p&gt;如果你仅应用一个字符串值，KO会把它当成一个要渲染模板的ID。当前模型对象是渲染模板需要的数据。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;2 完整方式&lt;/h3&gt;
+
+&lt;p&gt;下面是传递js对象的属性：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;name&lt;/code&gt; - 包含模板的DOM元素的id&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;nodes&lt;/code&gt; - 直接传递一个DOM节点数组作为一个模板。这样会生成一个非观察者数组对象。需要说明的是，这些元素如果有父元素的话，会被从他们当前父元素中移除。如果你已经使用了 &lt;code&gt;name&lt;/code&gt; 属性，这个属性会被忽略。&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;data&lt;/code&gt; - 渲染模板的数据。如果省略这个参数，KO会查找 &lt;code&gt;foreach&lt;/code&gt; 参数，或者使用当前数据模型。&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;if&lt;/code&gt; - 如果有这个属性，那么模板只有当js表达式的结果是 &lt;code&gt;true&lt;/code&gt; （或者是非 &lt;code&gt;false&lt;/code&gt; ）的时候才会被渲染。这样可以避免把一个值为null的对象渲染到一个模板上。&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;foreach&lt;/code&gt; - 只是KO以循环模式渲染模板。&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;as&lt;/code&gt; - 和&lt;code&gt;foreach&lt;/code&gt; 结合使用，定义别名。&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;afterRender&lt;/code&gt;, &lt;code&gt;afterAdd&lt;/code&gt;, 或者 &lt;code&gt;beforeRemove&lt;/code&gt; - 渲染DOM时的回调函数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;注意1 渲染一个有名字的模板&lt;/h2&gt;
+
+&lt;p&gt;通常，当使用控制流绑定（&lt;code&gt;foreach&lt;/code&gt;, &lt;code&gt;with&lt;/code&gt;, &lt;code&gt;if&lt;/code&gt;,等）时，就不需要为模板命名：这些模板会被隐式的定义并以匿名方式标记到DOM元素中。但是如果你想的话。你可以把模板放到几个相互分离的元素中然后用name关联他们。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h2&amp;gt;Participants&amp;lt;/h2&amp;gt;
+Here are the participants:
+&amp;lt;div data-bind=&quot;template: { name: &#39;person-template&#39;, data: buyer }&quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div data-bind=&quot;template: { name: &#39;person-template&#39;, data: seller }&quot;&amp;gt;&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/html&quot; id=&quot;person-template&quot;&amp;gt;
+    &amp;lt;h3 data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/h3&amp;gt;
+    &amp;lt;p&amp;gt;Credits: &amp;lt;span data-bind=&quot;text: credits&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/script&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+     function MyViewModel() {
+         this.buyer = { name: &#39;Franklin&#39;, credits: 250 };
+         this.seller = { name: &#39;Mario&#39;, credits: 5800 };
+     }
+     ko.applyBindings(new MyViewModel());
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要为模板命名的情况很少，但是使用的时候它会减少重复代码的使用。&lt;/p&gt;
+
+&lt;h2 id=&quot;foreach&quot;&gt;注意2 为命名模板使用“foreach”选项&lt;/h2&gt;
+
+&lt;p&gt;下面使用模板的方式和&lt;code&gt;foreach&lt;/code&gt;绑定等效：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h2&amp;gt;Participants&amp;lt;/h2&amp;gt;
+Here are the participants:
+&amp;lt;div data-bind=&quot;template: { name: &#39;person-template&#39;, foreach: people }&quot;&amp;gt;&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/html&quot; id=&quot;person-template&quot;&amp;gt;
+    &amp;lt;h3 data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/h3&amp;gt;
+    &amp;lt;p&amp;gt;Credits: &amp;lt;span data-bind=&quot;text: credits&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/script&amp;gt;
+ 
+ function MyViewModel() {
+     this.people = [
+         { name: &#39;Franklin&#39;, credits: 250 },
+         { name: &#39;Mario&#39;, credits: 5800 }
+     ]
+ }
+ ko.applyBindings(new MyViewModel());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;等价于&lt;code&gt;foreach&lt;/code&gt;下面这样的写法:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;foreach: people&quot;&amp;gt;
+    &amp;lt;h3 data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/h3&amp;gt;
+    &amp;lt;p&amp;gt;Credits: &amp;lt;span data-bind=&quot;text: credits&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;asforeach-&quot;&gt;注意3 使用 “as”给“foreach” 的项目起别名&lt;/h2&gt;
+
+&lt;p&gt;当嵌套使用&lt;code&gt;foreach&lt;/code&gt;模板时，在层次结构中获取更高层次的项目是很有用的。一种做法是使用&lt;code&gt;$parent&lt;/code&gt;或者其他的&lt;a href=&quot;https://github.com/knockoutcn/knockoutcn.github.io/issues/11&quot;&gt;绑定上下文&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;然而一个更简单、更优雅的方式是用&lt;code&gt;as&lt;/code&gt;为循环迭代项目起个别名。例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;template: { name: &#39;employeeTemplate&#39;,
+                              foreach: employees,
+                              as: &#39;employee&#39; }&quot;&amp;gt;&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用&lt;code&gt;as&lt;/code&gt;起的别名&lt;code&gt;&#39;employee&#39;&lt;/code&gt; ，现在在&lt;code&gt;foreach&lt;/code&gt;循环中，就可以用&lt;code&gt;employee&lt;/code&gt;来访问相关的employee 对象了。&lt;/p&gt;
+
+&lt;p&gt;在嵌套&lt;code&gt;foreach&lt;/code&gt;循环中，这样做很有有用，因为这样你可以明确的访问更高层的任意被命名的对象。下面有个复杂的例子，展示在渲染模板&lt;code&gt;month&lt;/code&gt;时，season ```是如何被访问到的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;template: { name: &#39;seasonTemplate&#39;, foreach: seasons, as: &#39;season&#39; }&quot;&amp;gt;&amp;lt;/ul&amp;gt;
+ 
+&amp;lt;script type=&quot;text/html&quot; id=&quot;seasonTemplate&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        &amp;lt;strong data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/strong&amp;gt;
+        &amp;lt;ul data-bind=&quot;template: { name: &#39;monthTemplate&#39;, foreach: months, as: &#39;month&#39; }&quot;&amp;gt;&amp;lt;/ul&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/script&amp;gt;
+ 
+&amp;lt;script type=&quot;text/html&quot; id=&quot;monthTemplate&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        &amp;lt;span data-bind=&quot;text: month&quot;&amp;gt;&amp;lt;/span&amp;gt;
+        is in
+        &amp;lt;span data-bind=&quot;text: season.name&quot;&amp;gt;&amp;lt;/span&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/script&amp;gt;
+ 
+&amp;lt;script&amp;gt;
+    var viewModel = {
+        seasons: ko.observableArray([
+            { name: &#39;Spring&#39;, months: [ &#39;March&#39;, &#39;April&#39;, &#39;May&#39; ] },
+            { name: &#39;Summer&#39;, months: [ &#39;June&#39;, &#39;July&#39;, &#39;August&#39; ] },
+            { name: &#39;Autumn&#39;, months: [ &#39;September&#39;, &#39;October&#39;, &#39;November&#39; ] },
+            { name: &#39;Winter&#39;, months: [ &#39;December&#39;, &#39;January&#39;, &#39;February&#39; ] }
+        ])
+    };
+    ko.applyBindings(viewModel);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;小提示：给&lt;code&gt;as&lt;/code&gt;传参时，要使用字符串，例如&lt;code&gt;as: &#39;season&#39;&lt;/code&gt;，而不是&lt;code&gt;as: season&lt;/code&gt; ，这是因为你为一个新的变量传递一个名称，而不是读取一个已经存在的变量。&lt;/p&gt;
+
+&lt;h2 id=&quot;afterrender-afteradd--beforeremove&quot;&gt;注意4 使用“afterRender”, “afterAdd”, 和 “beforeRemove”&lt;/h2&gt;
+
+&lt;p&gt;有时候在生成模板后需要运行自定义的业务逻辑。&lt;/p&gt;
+
+&lt;p&gt;通常最好的方式是编写自定义绑定，但是也可以&lt;code&gt;afterRender&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;传递一个函数引用，在渲染解说或者重新渲染你的模板时，KO会调用它。如果你使用&lt;code&gt;foreach&lt;/code&gt;,当每一个项目被添加到你的观察者上时，KO会调用一次&lt;code&gt;afterRender&lt;/code&gt;。例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&#39;template: { name: &quot;personTemplate&quot;,
+                        data: myData,
+                        afterRender: myPostProcessingLogic }&#39;&amp;gt; &amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;…然后在你的视图模型上定义一个函数&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;javascript
+viewModel.myPostProcessingLogic = function(elements) {
+    // &quot;elements&quot; is an array of DOM nodes just rendered by the template
+    // You can add custom post-processing logic here
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;如果使用&lt;code&gt;foreach&lt;/code&gt;，仅仅想获取那些被添加或者被移除的元素的通知，可以使用&lt;code&gt;afterAdd&lt;/code&gt; 和 &lt;code&gt;beforeRemove&lt;/code&gt; 。详细请看 &lt;a href=&quot;https://github.com/knockoutcn/knockoutcn.github.io/issues/9&quot;&gt;foreach 绑定&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-6&quot;&gt;注意5 动态选择使用哪一种模板&lt;/h2&gt;
+
+&lt;p&gt;如果你有多个命名的模板，你可以为&lt;code&gt;name&lt;/code&gt;选项传递一个观察者。当观察者的值发生变化，利用模板，元素的内容会重新被渲染。另外你可以传递一个回调函数来决定使用哪一个模板。如果你使用&lt;code&gt;foreach&lt;/code&gt;模板模式，KO会为数组里每一个项目执行一次回调函数，并把项目的值作为唯一的参数传递给回调函数。否则，&lt;code&gt;data&lt;/code&gt;的值会被传递给回调函数，或者把整个视图模型传递给回调函数。&lt;/p&gt;
+
+&lt;p&gt;例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&#39;template: { name: displayMode,
+                           foreach: employees }&#39;&amp;gt; &amp;lt;/ul&amp;gt;
+ 
+&amp;lt;script&amp;gt;
+    var viewModel = {
+        employees: ko.observableArray([
+            { name: &quot;Kari&quot;, active: ko.observable(true) },
+            { name: &quot;Brynn&quot;, active: ko.observable(false) },
+            { name: &quot;Nora&quot;, active: ko.observable(false) }
+        ]),
+        displayMode: function(employee) {
+            // Initially &quot;Kari&quot; uses the &quot;active&quot; template, while the others use &quot;inactive&quot;
+            return employee.active() ? &quot;active&quot; : &quot;inactive&quot;;
+        }
+    };
+ 
+    // ... then later ...
+    viewModel.employees()[1].active(true); // Now &quot;Brynn&quot; is also rendered using the &quot;active&quot; template.
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你的函数指向一个观察者变量，那么只要这些观察者的值发生变化，绑定会就更新。这样就用模板重新渲染数据了。&lt;/p&gt;
+
+&lt;p&gt;如果你的函数接受第二个参数，那么它就是整个绑定的上下文。你可以使用&lt;code&gt;$parent&lt;/code&gt;或者其他任何上下文变量来动态选择模板。例如，你可以像下面这样修改上面的代码：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;javascript
+displayMode: function(employee, bindingContext) {
+    // Now return a template name string based on properties of employee or bindingContext
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;jquerytmpl-&quot;&gt;　注意6 使用jQuery.tmpl-外部的模板引擎&lt;/h2&gt;
+
+&lt;p&gt;在绝大多数情况下，&lt;code&gt;foreach&lt;/code&gt;, &lt;code&gt;with&lt;/code&gt;, &lt;code&gt;if&lt;/code&gt;和其他控制流绑定可以满足你构建UI应用的所有需求。但是如果你想使用第三方模板库，比如 &lt;a href=&quot;http://documentcloud.github.io/underscore/#template&quot;&gt;Underscore template engine&lt;/a&gt; 或者 &lt;a href=&quot;http://api.jquery.com/jquery.tmpl/&quot;&gt;jquery.tmpl&lt;/a&gt;, KO也会支持。&lt;/p&gt;
+
+&lt;p&gt;我们介绍KO中使用&lt;a href=&quot;http://api.jquery.com/jquery.tmpl/&quot;&gt;jquery.tmpl&lt;/a&gt;。首先需要按照顺序引入库：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- First jQuery --&amp;gt;     &amp;lt;script src=&quot;http://code.jquery.com/jquery-1.7.1.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;!-- Then jQuery.tmpl --&amp;gt; &amp;lt;script src=&quot;jquery.tmpl.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;!-- Then Knockout --&amp;gt;    &amp;lt;script src=&quot;knockout-x.y.z.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后使用jquery.tmpl作为你的模板引擎：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h1&amp;gt;People&amp;lt;/h1&amp;gt;
+&amp;lt;div data-bind=&quot;template: &#39;peopleList&#39;&quot;&amp;gt;&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/html&quot; id=&quot;peopleList&quot;&amp;gt;
     
+        &amp;lt;p&amp;gt;
+            &amp;lt;b&amp;gt;${name}&amp;lt;/b&amp;gt; is ${age} years old
+        &amp;lt;/p&amp;gt;
+    
+&amp;lt;/script&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        people: ko.observableArray([
+            { name: &#39;Rod&#39;, age: 123 },
+            { name: &#39;Jane&#39;, age: 125 },
+        ])
+    }
+    ko.applyBindings(viewModel);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;{ {each ...} }&lt;/code&gt; 和 &lt;code&gt;${ ... }&lt;/code&gt;都是jquery.tmpl语法。&lt;/p&gt;
+
+&lt;h2 id=&quot;underscorejs-&quot;&gt;注意7 使用 Underscore.js 模板引擎&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script type=&quot;text/html&quot; id=&quot;peopleList&quot;&amp;gt;
+    &amp;lt;% _.each(people(), function(person) { %&amp;gt;
+        &amp;lt;li&amp;gt;
+            &amp;lt;b&amp;gt;&amp;lt;%= person.name %&amp;gt;&amp;lt;/b&amp;gt; is &amp;lt;%= person.age %&amp;gt; years old
+        &amp;lt;/li&amp;gt;
+    &amp;lt;% }) %&amp;gt;
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>submit bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/submit-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/submit-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;submit-&quot;&gt;submit 绑定&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;submit&lt;/code&gt; 绑定添加事件句柄这样的话当DOM元素被提交的时候，绑定的js函数会被触发。通常只在 &lt;code&gt;form&lt;/code&gt; 元素中使用。&lt;/p&gt;
+
+&lt;p&gt;当在form中使用&lt;code&gt;submit&lt;/code&gt; 绑定时，knockout会阻止浏览器默认的submit行为。换句话说，浏览器会调用句柄函数但是不会把form提交到服务器。 这种默认的设定很有用，因为当使用&lt;code&gt;submit&lt;/code&gt; 绑定时，通常是你把form当做视图模型的界面来使用，而不是作为一个正常的 HTML from表单。如果你想让form正常的提交，在&lt;code&gt;submit&lt;/code&gt; 绑定的函数中 返回一个 &lt;code&gt;true&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;form data-bind=&quot;submit: doSomething&quot;&amp;gt;
+    ... form contents go here ...
+    &amp;lt;button type=&quot;submit&quot;&amp;gt;Submit&amp;lt;/button&amp;gt;
+&amp;lt;/form&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        doSomething : function(formElement) {
+            // ... now do something
+        }
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例子的说明：knockout把form元素作为参数传递给句柄函数。你可以忽略这个参数，也可以用下面的方式使用它，例如：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;从form元素中提取data或者状态&lt;/li&gt;
+  &lt;li&gt;使用类似&lt;code&gt;jquery validation&lt;/code&gt;库触发UI层的验证，大致代码如下; &lt;code&gt;if ($(formElement).valid()) { /* do something */ }&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;submit-click-&quot;&gt;为什么不在submit的按钮上绑定一个 click 句柄&lt;/h2&gt;
+
+&lt;p&gt;不用&lt;code&gt;submit&lt;/code&gt;绑定的话，可以在 submit 按钮上用&lt;code&gt;click&lt;/code&gt;绑定。然而，&lt;code&gt;submit&lt;/code&gt; 的优势是它也会捕捉其他方式来提交form，例如，按下 enter 键触发。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;参数&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;绑定到&lt;code&gt;submit&lt;/code&gt; 上得js函数&lt;/li&gt;
+  &lt;li&gt;可以引用任何js函数 - 它可以不是视图模型上得函数对象。&lt;/li&gt;
+  &lt;li&gt;视图模型上的函数可以简写属性名，例如，可以使用&lt;code&gt;submit: doSomething&lt;/code&gt;，而不需要使用 &lt;code&gt;submit: viewModel.doSomething&lt;/code&gt;（当然这样写也是可以的）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;## 注意&lt;/p&gt;
+
+&lt;p&gt;更多参数传递方式信息，查看 [click 绑定]&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>style bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/style-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/style-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;style-&quot;&gt;style 绑定&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;style&lt;/code&gt; 绑定可以对DOM元素的&lt;code&gt;style&lt;/code&gt;属性值进行动态的添加和移除。如果你不想改变元素的&lt;code&gt;style&lt;/code&gt;属性，而是想通过 CSS的 &lt;code&gt;class&lt;/code&gt;属性来改变样式，那么可以参考 &lt;a href=&quot;https://github.com/knockoutcn/knockoutcn.github.io/issues/5&quot;&gt;css绑定&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;样例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;style: { color: currentProfit() &amp;lt; 0 ? &#39;red&#39; : &#39;black&#39; }&quot;&amp;gt;
+   Profit Information
+&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        currentProfit: ko.observable(150000) // Positive value, so initially black
+    };
+    viewModel.currentProfit(-50); // Causes the DIV&#39;s contents to go red
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码中文字的颜色样式根据 &lt;code&gt;currentProfit&lt;/code&gt;变量的值取 &lt;code&gt;red&lt;/code&gt; 或者 &lt;code&gt;black&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;参数&lt;/h2&gt;
+
+&lt;p&gt;参数对象的属性名是需要设置的style属性，参数属性对应的值是要给style属性设置的值。&lt;code&gt;data-bind&lt;/code&gt;的参数结构是&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;style:{
+	color:&#39;#ccc&#39;,
+	background : &#39;#fff&#39;,
+	fontWeight ： someValue 
+	....
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果一次设置多个style属性值，可以用逗号间隔每个属性值，像下面这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;style: { color: currentProfit() &amp;lt; 0 ? &#39;red&#39; : &#39;black&#39;, fontWeight: isSevere() ? &#39;bold&#39; : &#39;&#39; }&quot;&amp;gt;...&amp;lt;/div&amp;gt;
+
+
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        currentProfit: ko.observable(1) ,
+        isSevere : false 
+    };
+    
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在js代码中，对于用&lt;code&gt;ko.observable()&lt;/code&gt;绑定的参数，会和页面上进行联动变化；否则只会在第一次执行的时候页面DOM的style发生变化，之后这个变量发生变化，都不会引起页面style的变化。&lt;/p&gt;
+
+&lt;p&gt;通常可以用js表达式或者函数作为参数，KO会计算出结果然后决定DOM的style属性。&lt;/p&gt;
+
+&lt;h2 id=&quot;stylejs&quot;&gt;注意 绑定的style属性名不是js合法的变量名称&lt;/h2&gt;
+
+&lt;p&gt;如果你绑定 &lt;code&gt;font-weight&lt;/code&gt;  或者  &lt;code&gt;text-decoration&lt;/code&gt;这样的style属性，或者其他类似的不是js合法变量的属性，那么你就必须用对应的js属性来代替。例如：&lt;/p&gt;
+
+&lt;p&gt;错误写法 ： &lt;code&gt;{ font-weight: someValue }&lt;/code&gt; ； 正确写法 &lt;code&gt;{ fontWeight: someValue }&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;错误写法 ： &lt;code&gt;{ text-decoration: someValue }&lt;/code&gt; ； 正确写法 &lt;code&gt;{ textDecoration: someValue }&lt;/code&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>html bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/html-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/html-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;html-&quot;&gt;html 绑定&lt;/h1&gt;
+
+&lt;p&gt;html绑定让相关的DOM元素按照参数的内容展示html片段。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;示例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;html: details&quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+var viewModel = {
+    details: ko.observable() // Initially blank
+};
+viewModel.details(&quot;&amp;lt;em&amp;gt;For further details, view the report &amp;lt;a href=&#39;report.html&#39;&amp;gt;here&amp;lt;/a&amp;gt;.&amp;lt;/em&amp;gt;&quot;); // HTML content appears
+ko.applyBindings(viewModel);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参数说明&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;主要参数&lt;/h3&gt;
+
+&lt;p&gt;knockout会先清除绑定元素中的html内容，然后根据情况把参数中的值设置为绑定元素的内容。&lt;/p&gt;
+
+&lt;p&gt;这里的情况分为两种，如果页面中引入了jquery，那么ko会调用$.html()函数来设置值；如果没有，那么knockout会拷贝参数内容到绑定元素中，然后append到绑定元素上，作为绑定元素的子元素。&lt;/p&gt;
+
+&lt;p&gt;如果参数是一个observable变量，那么无论时候变量发生变化，页面上的值也会随着变量一起变化；否则，只会在首次绑定的改变绑定元素的值，之后不会页面上的值不会随着参数变量值发生变化而变化。&lt;/p&gt;
+
+&lt;p&gt;如果参数的类型不是number或者string（e.g., 对象或者数组），那么页面上展示的文本是对象到字符串等效转化的值，相当于&lt;code&gt;yourParameter.toString()&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;其他参数&lt;/h3&gt;
+
+&lt;p&gt;无&lt;/p&gt;
+
+&lt;h2 id=&quot;html--1&quot;&gt;注意 HTML 编码&lt;/h2&gt;
+
+&lt;p&gt;既然HTML绑定是用&lt;code&gt;innerHTML&lt;/code&gt;来实现的，那么使用的时候要小心，别引入不被信任的代码片段，因为这可能导致&lt;code&gt;script&lt;/code&gt;注入攻击。如果你不能确认引用的模块是否安全，可以使用&lt;code&gt;text``绑定，而它的原理使用&lt;/code&gt;innerText&lt;code&gt;或者&lt;/code&gt;textContent ```来实现内容绑定的。&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>knockoutjs怎样工作并且它能给我们带来什么好处</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work</id>
+   <content type="html">
+&lt;h1 id=&quot;knockoutjs&quot;&gt;knockoutjs怎样工作并且它能给我们带来什么好处？&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;介绍&lt;/h2&gt;
+&lt;p&gt;Knockout是一个以干净的数据模型（data model）为基础的能够帮助你创建富文本，响应显示和编辑用户界面的JavaScript类库。任何时候你的UI部分需要动态更新（比如：更新取决于用户的操作或外部数据源变化）。KO可以帮助你实现由于它更简单并且很容易维护。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;重要特性&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;优雅的依赖跟踪-无论何时你的数据模型改变你的需要变化的UI部分都会自动更新。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;声明式绑定-通过一种简单易懂的方式连接你的数据模型到你的UI部分。你可以非常容易的运用任意的嵌套绑定上下文的方式来构建一个复杂的动态界面。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;傻瓜式扩展-仅仅短短几行代码就可以做出可重用的新声明式绑定来实现用户自定义行为&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;额外的好处&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;纯净的javascript库：兼容所有的服务器端和客户端技术。&lt;/li&gt;
+  &lt;li&gt;可以轻松添加到已有的web程序顶部：而不需要大的架构改变。&lt;/li&gt;
+  &lt;li&gt;简洁的：压缩后只有13kb&lt;/li&gt;
+  &lt;li&gt;兼容任何主流浏览器 (IE 6+、Firefox 2+、Chrome、Safari、其它)。&lt;/li&gt;
+  &lt;li&gt;统一的规范(采用行为驱动开发) 意味着在新的浏览器和平台上可以正确的运行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;开发者如果熟悉Ruby on Rails (是一个可以使你开发，部署，维护 web 应用程序变得简单的框架。)或其它MVC技术可能会发现它是一个带有声明式语法的MVC实时form。从另一个意义上讲,你能想到可以把KO作为一种编辑JSON数据的方法而不用在乎它怎么工作。&lt;/p&gt;
+
+&lt;p&gt;OK，但是我们怎么使用它呢？
+开始的最快和最有趣的方式是通过互动教程。一旦你掌握了基本知识,然后在一个自己的项目中运用它了。&lt;/p&gt;
+
+&lt;p&gt;KO和jquery是对立关系，还是相互协作呢？&lt;/p&gt;
+
+&lt;p&gt;所有人都喜欢jQuery! 它是一个在页面里操作元素和事件的框架，非常出色并且易使用，在DOM操作上肯定使用jQuery，KO解决不同的问题。&lt;/p&gt;
+
+&lt;p&gt;如果页面要求复杂，仅仅使用jQuery需要花费更多的代码。 例如：一个表格里显示一个列表，然后统计列表的数量，Add按钮在数据行TR小于5调的时候启用，否则就禁用。jQuery 没有基本的数据模型的概念，所以需要获取数据的数量（从table/div或者专门定义的CSS class），如果需要在某些SPAN里显示数据的数量，当添加新数据的时候，你还要记得更新这个SPAN的text。当然，你还要判断当总数&amp;gt;=5条的时候禁用Add按钮。 然后，如果还要实现Delete功能的时候，你不得不指出哪一个DOM元素被点击以后需要改变。&lt;/p&gt;
+
+&lt;h2 id=&quot;knockout&quot;&gt;Knockout的实现有何不同？&lt;/h2&gt;
+
+&lt;p&gt;使用KO非常简单。将你的数据描绘成一个JavaScript数组对象myItems，然后使用模板（template）转化这个数组到表格里（或者一组DIV）。不管什么时候数组改变， UI界面也会响应改变（不用指出如何插入新行&amp;lt;tr&amp;gt;或在哪里插入），剩余的工作就是同步了。例如：你可以声明绑定如下一个SPAN显示数据数量（可以放在页面的任何地方，不一定非要在template里）：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;There are &amp;lt;span data-bind=&quot;text: myItems().count&quot;&amp;gt;&amp;lt;/span&amp;gt; items
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;就是这些！你不需要写代码去更新它，它的更新依赖于数组&lt;code&gt;myItems&lt;/code&gt;的改变。同样， Add按钮的启用和禁用依赖于数组&lt;code&gt;myItems&lt;/code&gt;的长度，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;button data-bind=&quot;enable: myItems().count &amp;lt; 5&quot;&amp;gt;Add&amp;lt;/button&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之后，如果你要实现Delete功能，不必指出如何操作UI元素，只需要修改数据模型就可以了。&lt;/p&gt;
+
+&lt;p&gt;总结：KO没有和jQuery或类似的DOM 操作API对抗竞争。KO提供了一个关联数据模型和用户界面的高级功能。KO本身不依赖jQuery，但是你可以一起同时使用jQuery， 生动平缓的UI改变需要真正使用jQuery。&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>foreach bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/foreach-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/foreach-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;foreach-&quot;&gt;foreach 绑定&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;foreach&lt;/code&gt; 绑定可以循环遍历一个数组对象,访问到每一个对象.&lt;/p&gt;
+
+&lt;p&gt;把数组设置成可观察的数组对象,那么每当数组中有值发生变化,绑定的UI层对应的DOM会立马作出反应，而不影响其他的元素。
+相比数组每次发生变化就重新生成整个&lt;code&gt;foreach&lt;/code&gt;输出要快的很多。&lt;/p&gt;
+
+&lt;p&gt;当然，你可以把&lt;code&gt;foreach&lt;/code&gt;配合&lt;code&gt;if&lt;/code&gt;或者 ```with``使用.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;样例 1 遍历一个数组&lt;/h2&gt;
+
+&lt;p&gt;这个例子使用 &lt;code&gt;foreach&lt;/code&gt;遍历一个数组每一行来生成一个只读的表格&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;table&amp;gt;
+    &amp;lt;thead&amp;gt;
+        &amp;lt;tr&amp;gt;&amp;lt;th&amp;gt;First name&amp;lt;/th&amp;gt;&amp;lt;th&amp;gt;Last name&amp;lt;/th&amp;gt;&amp;lt;/tr&amp;gt;
+    &amp;lt;/thead&amp;gt;
+    &amp;lt;tbody data-bind=&quot;foreach: people&quot;&amp;gt;
+        &amp;lt;tr&amp;gt;
+            &amp;lt;td data-bind=&quot;text: firstName&quot;&amp;gt;&amp;lt;/td&amp;gt;
+            &amp;lt;td data-bind=&quot;text: lastName&quot;&amp;gt;&amp;lt;/td&amp;gt;
+        &amp;lt;/tr&amp;gt;
+    &amp;lt;/tbody&amp;gt;
+&amp;lt;/table&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    ko.applyBindings({
+        people: [
+            { firstName: &#39;Bert&#39;, lastName: &#39;Bertington&#39; },
+            { firstName: &#39;Charles&#39;, lastName: &#39;Charlesforth&#39; },
+            { firstName: &#39;Denise&#39;, lastName: &#39;Dentiste&#39; }
+        ]
+    });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;样例 2 动态添加或者移除&lt;/h2&gt;
+
+&lt;p&gt;下面的例子展示了一个可观察的数组对象会和UI的变化保持同步&lt;/p&gt;
+
+&lt;p&gt;view层&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h4&amp;gt;People&amp;lt;/h4&amp;gt;
+&amp;lt;ul data-bind=&quot;foreach: people&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        Name at position &amp;lt;span data-bind=&quot;text: $index&quot;&amp;gt; &amp;lt;/span&amp;gt;:
+        &amp;lt;span data-bind=&quot;text: name&quot;&amp;gt; &amp;lt;/span&amp;gt;
+        &amp;lt;a href=&quot;#&quot; data-bind=&quot;click: $parent.removePerson&quot;&amp;gt;Remove&amp;lt;/a&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;button data-bind=&quot;click: addPerson&quot;&amp;gt;Add&amp;lt;/button&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;model层&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function AppViewModel() {
+    var self = this;
+ 
+    self.people = ko.observableArray([
+        { name: &#39;Bert&#39; },
+        { name: &#39;Charles&#39; },
+        { name: &#39;Denise&#39; }
+    ]);
+ 
+    self.addPerson = function() {
+        self.people.push({ name: &quot;New at &quot; + new Date() });
+    };
+ 
+    self.removePerson = function() {
+        self.people.remove(this);
+    }
+}
+ 
+ko.applyBindings(new AppViewModel());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;参数&lt;/h2&gt;
+&lt;p&gt;传递一个你需要循环输出的数组对象,循环遍历数组的每一行并完成绑定DOM.&lt;/p&gt;
+
+&lt;p&gt;另外,传递的js对象有一个属性叫&lt;code&gt;data&lt;/code&gt;,它指向你要遍历的数组对象.这个数组对象还有其他的属性,比如有
+&lt;code&gt;afterAdd&lt;/code&gt;或者&lt;code&gt;includeDestroyed&lt;/code&gt;.下面有详细的介绍.&lt;/p&gt;
+
+&lt;p&gt;如果传递的数组参数是一个可观察的对象,那么&lt;code&gt;foreach &lt;/code&gt;绑定的DOM会和数组对象实现同步变化.&lt;/p&gt;
+
+&lt;h2 id=&quot;data&quot;&gt;注意1 用&lt;code&gt;$data&lt;/code&gt;获取数组的每一个元素&lt;/h2&gt;
+
+&lt;p&gt;下面的例子用 &lt;code&gt;$data&lt;/code&gt;可以访问到数组中的每一个元素.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;foreach: months&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        The current item is: &amp;lt;b data-bind=&quot;text: $data&quot;&amp;gt;&amp;lt;/b&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    ko.applyBindings({
+        months: [ &#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;etc&#39; ]
+    });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是如果数组元素中的对象不是像上面的那样的简单值类型,而是引用类型的值,那么你可以
+用特殊的上下文属性&lt;code&gt;$data&lt;/code&gt;.&lt;code&gt;$data&lt;/code&gt;表示&lt;code&gt;foreach&lt;/code&gt;代码块中一个”当前被循环访问到的对象”.&lt;/p&gt;
+
+&lt;p&gt;对于上面的例2中的代码,你可以在绑定对象上加上&lt;code&gt;$data&lt;/code&gt;前缀,就像下面这样&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;td data-bind=&quot;text: $data.firstName&quot;&amp;gt;&amp;lt;/td&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;$data&lt;/code&gt;前缀不是必须加的,因为&lt;code&gt;firstName&lt;/code&gt;会按照默认的方式去计算上下文.&lt;/p&gt;
+
+&lt;h2 id=&quot;index-parent&quot;&gt;注意2 用$index, $parent,和其他上下文属性&lt;/h2&gt;
+
+&lt;p&gt;你可以看到上面的例子中使用了&lt;code&gt;$index&lt;/code&gt;来访问当前数组的索引值.&lt;code&gt;$index&lt;/code&gt;是一个观察者,会随着当前索引对象的变化而变化.(比如新增了一行或者删除了某一行,索引值就会发生变化).&lt;/p&gt;
+
+&lt;p&gt;相似的,你可以用 &lt;code&gt;$parent&lt;/code&gt;来访问&lt;code&gt;foreach&lt;/code&gt;循环之外的数据对象.比如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h1 data-bind=&quot;text: blogPostTitle&quot;&amp;gt;&amp;lt;/h1&amp;gt;
+&amp;lt;ul data-bind=&quot;foreach: likes&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        &amp;lt;b data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/b&amp;gt; 
+        likes the blog post 
+        &amp;lt;b data-bind=&quot;text: $parent.blogPostTitle&quot;&amp;gt;&amp;lt;/b&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;as--foreach&quot;&gt;注意3 使用 ‘as’ 来给 ‘foreach’的元素起’别名’&lt;/h2&gt;
+
+&lt;p&gt;在注意1中,我们说了用 &lt;code&gt;$data&lt;/code&gt; 可以访问到数组循环的当前值.在一些情况下,可以用&lt;code&gt;as&lt;/code&gt;来给数组对象重命名.
+比如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;foreach: { data: people, as: &#39;person&#39; }&quot;&amp;gt;&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样在&lt;code&gt;foreach&lt;/code&gt;循环内部,就可以用&lt;code&gt;person&lt;/code&gt;来访问当前遍历到的数组对象.&lt;code&gt;as&lt;/code&gt;的应用场景是嵌套循环.
+例子:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;foreach: { data: categories, as: &#39;category&#39; }&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        &amp;lt;ul data-bind=&quot;foreach: { data: items, as: &#39;item&#39; }&quot;&amp;gt;
+            &amp;lt;li&amp;gt;
+                &amp;lt;span data-bind=&quot;text: category.name&quot;&amp;gt;&amp;lt;/span&amp;gt;:
+                &amp;lt;span data-bind=&quot;text: item&quot;&amp;gt;&amp;lt;/span&amp;gt;
+            &amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+ 
+&amp;lt;script&amp;gt;
+    var viewModel = {
+        categories: ko.observableArray([
+            { name: &#39;Fruit&#39;, items: [ &#39;Apple&#39;, &#39;Orange&#39;, &#39;Banana&#39; ] },
+            { name: &#39;Vegetables&#39;, items: [ &#39;Celery&#39;, &#39;Corn&#39;, &#39;Spinach&#39; ] }
+        ])
+    };
+    ko.applyBindings(viewModel);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Tip:注意在使用&lt;code&gt;as&lt;/code&gt;命名别名的时候,使用一个文本来表示别名
+(e.g.,&lt;code&gt;as: &#39;category&#39;&lt;/code&gt;,而不是&lt;code&gt;as: category&lt;/code&gt;).因为后者js会认为它是一个js变量.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;注意 4 不带元素的绑定&lt;/h2&gt;
+
+&lt;p&gt;有时候你希望循环输出的绑定不绑定到某个元素上,比如你想生成下面的这段代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
+    &amp;lt;li class=&quot;header&quot;&amp;gt;Header item&amp;lt;/li&amp;gt;
+    &amp;lt;!-- The following are generated dynamically from an array --&amp;gt;
+    &amp;lt;li&amp;gt;Item A&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;Item B&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;Item C&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以使用不带包裹的控制流语法,这种是基于注释标签的.例如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
+    &amp;lt;li class=&quot;header&quot;&amp;gt;Header item&amp;lt;/li&amp;gt;
+    &amp;lt;!-- ko foreach: myItems --&amp;gt;
+        &amp;lt;li&amp;gt;Item &amp;lt;span data-bind=&quot;text: $data&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;!-- /ko --&amp;gt;
+&amp;lt;/ul&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    ko.applyBindings({
+        myItems: [ &#39;A&#39;, &#39;B&#39;, &#39;C&#39; ]
+    });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;!-- ko --&amp;gt;&lt;/code&gt;和&lt;code&gt;&amp;lt;!-- /ko --&amp;gt;&lt;/code&gt;`备注标签是一对开始结束标签,称作虚拟标签.KO会理解这样的虚拟元素语法,
+并且会像真是元素一样完成绑定.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;注意5 数组的变化是怎么被检测并被处理的&lt;/h2&gt;
+
+&lt;p&gt;当你修改model层中的数组对象的时候(比如添加,移动,或者删除),&lt;code&gt;foreach&lt;/code&gt;绑定会使用高效的差异比对算法来计算出那些发生了变化,然后来更新DOM.这意味着KO的&lt;code&gt;foreach&lt;/code&gt;可以处理任意组合和同时发生的变化.&lt;/p&gt;
+
+&lt;p&gt;当你新增数组对象,&lt;code&gt;foreach&lt;/code&gt;会生成一个新的模板备份,插入到现在的DOM中.&lt;/p&gt;
+
+&lt;p&gt;当你删除数组对象,&lt;code&gt;foreach&lt;/code&gt;就移除了对应的DOM元素.&lt;/p&gt;
+
+&lt;p&gt;当你重新排序数组对象,&lt;code&gt;foreach&lt;/code&gt;也会改变DOM的顺序.&lt;/p&gt;
+
+&lt;p&gt;需要指出的是,对于重新排序的情况,如果数组很大,会带来大量的更待DOM元素顺序的操作,严重影响性能.这时候KO会用删除原来的元素然后生成新的DOM的原来来实现.想知道这个事情会发生的边界吗?自己去试试吧!!!&lt;/p&gt;
+
+&lt;h2 id=&quot;section-6&quot;&gt;注意6 被销毁的实体是默认隐藏的&lt;/h2&gt;
+
+&lt;p&gt;有时候你想删除一个数组对象,但是又不想丢失数组中记录的数据.这就是非破坏性删除.
+&lt;a href=&quot;http://knockoutjs.com/documentation/observableArrays.html#destroy-and-destroyall&quot;&gt;详细点击&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;默认情况下,KO的&lt;code&gt;foreach&lt;/code&gt;绑定会跳过(或者隐藏)任何数组中被标记被删除的元素.如果你想让被标记被销毁的元素也被
+显示出来,那么使用&lt;code&gt;includeDestroyed&lt;/code&gt;.例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&#39;foreach: { data: myArray, includeDestroyed: true }&#39;&amp;gt;
+    ...
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;dom&quot;&gt;注意7 对生成的DOM元素进行后处理或者动画处理&lt;/h2&gt;
+
+&lt;p&gt;KO提供了&lt;code&gt;afterRender/afterAdd/beforeRemove/beforeMove/afterMove&lt;/code&gt;这些回调函数来进行后处理.例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;foreach: { data: myItems, afterAdd: yellowFadeIn }&quot;&amp;gt;
+    &amp;lt;li data-bind=&quot;text: $data&quot;&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+ 
+&amp;lt;button data-bind=&quot;click: addItem&quot;&amp;gt;Add&amp;lt;/button&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    ko.applyBindings({
+        myItems: ko.observableArray([ &#39;A&#39;, &#39;B&#39;, &#39;C&#39; ]),
+        yellowFadeIn: function(element, index, data) {
+            $(element).filter(&quot;li&quot;)
+                      .animate({ backgroundColor: &#39;yellow&#39; }, 200)
+                      .animate({ backgroundColor: &#39;white&#39; }, 800);
+        },
+        addItem: function() { this.myItems.push(&#39;New item&#39;); }
+    });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>event bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/event-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/event-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;event-&quot;&gt;event 绑定&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;event&lt;/code&gt;绑定允许为特殊的事件添加事件句柄，这样DOM元素上绑定的事件被触发了之后，js函数就会执行。它适用任何事件类型，比如 &lt;code&gt;keypress&lt;/code&gt;, &lt;code&gt;mouseover&lt;/code&gt; 或 &lt;code&gt;mouseout&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;
+    &amp;lt;div data-bind=&quot;event: { mouseover: enableDetails, mouseout: disableDetails }&quot;&amp;gt;
+        Mouse over me
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div data-bind=&quot;visible: detailsEnabled&quot;&amp;gt;
+        Details
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        detailsEnabled: ko.observable(false),
+        enableDetails: function() {
+            this.detailsEnabled(true);
+        },
+        disableDetails: function() {
+            this.detailsEnabled(false);
+        }
+    };
+    ko.applyBindings(viewModel);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;参数&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;传递一个js对象，对象的属性名对应事件名，并且对象值对应绑定到事件上的函数。&lt;/li&gt;
+  &lt;li&gt;可以引用任何js函数 - 它可以不是视图模型上得函数对象。&lt;/li&gt;
+  &lt;li&gt;可以引用任何对象的函数 - 像这样写 &lt;code&gt;event : { mouseover: someObject.someFunction }&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;click&quot;&gt;注意事项参照 &lt;code&gt;click&lt;/code&gt;绑定。&lt;/h2&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>enalble bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/enalble-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/enalble-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;enable-&quot;&gt;enable 绑定&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;enable&lt;/code&gt;绑定，只有当参数值为&lt;code&gt;true&lt;/code&gt;&lt;code&gt;时，才会把DOM元素设置为 enable 。通常适用于类似 &lt;/code&gt;&lt;code&gt;input&lt;/code&gt;&lt;code&gt;, &lt;/code&gt;&lt;code&gt;select&lt;/code&gt;&lt;code&gt;, 和 &lt;/code&gt;&lt;code&gt;textarea&lt;/code&gt;`元素。&lt;/p&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;
+    &amp;lt;input type=&#39;checkbox&#39; data-bind=&quot;checked: hasCellphone&quot; /&amp;gt;
+    I have a cellphone
+&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;
+    Your cellphone number:
+    &amp;lt;input type=&#39;text&#39; data-bind=&quot;value: cellphoneNumber, enable: hasCellphone&quot; /&amp;gt;
+&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        hasCellphone : ko.observable(false),
+        cellphoneNumber: &quot;&quot;
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当checkbox选中的时候，input可用。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;参数&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;控制DOM元素是否可用的值&lt;/li&gt;
+  &lt;li&gt;非&lt;code&gt;bool&lt;/code&gt;型值被当转义成bool型。&lt;code&gt;0&lt;/code&gt;，&lt;code&gt;null&lt;/code&gt;会当做&lt;code&gt;false&lt;/code&gt;，&lt;code&gt;21&lt;/code&gt;和非空对象被当做 &lt;code&gt;true&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;## 注意: 使用任意js表达式&lt;/p&gt;
+
+&lt;p&gt;可以使用任何js表达式来控制元素的enable属性&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;button data-bind=&quot;enable: parseAreaCode(viewModel.cellphoneNumber()) != &#39;555&#39;&quot;&amp;gt;
+    Do something
+&amp;lt;/button&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>下载和安装</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs</id>
+   <content type="html">
+&lt;h1 id=&quot;section&quot;&gt;下载和安装&lt;/h1&gt;
+
+&lt;p&gt;Knockout是在以下三个功能上建立起来的：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;1.监控属性和依赖跟踪&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;2.声明式绑定&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;3.模板&lt;/p&gt;
+
+    &lt;p&gt;这一节，你讲学到3个功能中的第一个。 在这之前， 我们先来解释一下MVVM模式和view model的概念。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;mvvm-and-view-models&quot;&gt;MVVM and View Models&lt;/h2&gt;
+
+&lt;p&gt;Model-View-View Model (MVVM) 是一种构建用户界面的设计模式。它描述了如果把一个复杂的UI分成三部分：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;A model： 你的应用程序存储的数据。这个数据表示对象和业务领域的操作(比如银行业务-可以执行转账)，并且它独立于任何UI。当你使用KO的时候，model通常指的是利用ajax从服务器端读取和写入进去的数据模型。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A view model: 一些纯粹的代码表示UI层面的数据和操作。例如，你正在实现列表编辑，你的视图模型就是列表项目对象和增删改查操作方法。&lt;/p&gt;
+
+    &lt;p&gt;注意这不是UI本身：它不包含任何按钮的概念或者显示风格。它也不是持续数据模型 – 包含用户正在使用的未保存数据。使用KO的时候，你的view models是不包含任何HTML知识的纯JavaScript 对象。保持view model抽象可以保持简单，以便你能管理更复杂的行为。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;view: 一个可见的，交互式的，表示view model状态的UI。 从view model显示数据，发送命令到view model（例如：当用户click按钮的时候） ，任何view model状态改变的时候更新。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>css bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/css-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/css-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;css-&quot;&gt;css 绑定&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;css 可以实现给指定DOM元素增加或者移除一个或者多个class。例如当参数值发生变化的时候，根据需要，给页面元素高亮成红色。&lt;/p&gt;
+
+&lt;h2 id=&quot;class&quot;&gt;示例1 静态class&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;css: { profitWarning: currentProfit() &amp;lt; 0 }&quot;&amp;gt;
+   Profit Information
+&amp;lt;/div&amp;gt;
+
+
+var viewModel = {
+    currentProfit: ko.observable(150000) // Positive value, so initially we don&#39;t apply the &quot;profitWarning&quot; class
+};
+viewModel.currentProfit(-50); // Causes the &quot;profitWarning&quot; class to be applied
+
+ko.applyBindings(viewModel);
+
+
+.profitWarning{
+  color:#f00;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当currentProfit 的值小于0的时候，元素会加上profitWarning 这个class&lt;/p&gt;
+
+&lt;h2 id=&quot;class-1&quot;&gt;示例2 动态class&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;css: profitStatus&quot;&amp;gt;
+    Profit Information
+&amp;lt;/div&amp;gt;
+
+
+var viewModel = {
+    currentProfit: ko.observable(150000)
+};
+ 
+// Evalutes to a positive value, so initially we apply the &quot;profitPositive&quot; class
+viewModel.profitStatus = ko.pureComputed(function() {
+    return this.currentProfit() &amp;lt; 0 ? &quot;profitWarning&quot; : &quot;profitPositive&quot;;
+}, viewModel);
+ 
+// Causes the &quot;profitPositive&quot; class to be removed and &quot;profitWarning&quot; class to be added
+viewModel.currentProfit(-50);
+ko.applyBindings(viewModel);
+
+
+.profitWarning{
+  color:#f00;
+}
+.profitPositive{
+  color:#ff0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当currentProfit是正值的时候，元素会绑定profitPositive  class，否则绑定profitWarning class&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参数说明&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;主要参数&lt;/h3&gt;
+
+&lt;p&gt;如果你使用静态的CSS class，然后传递一个属性名是CSS类名的javascript对象，根据是否加上CSS类的需求，把它们的值设置为true或者false。&lt;/p&gt;
+
+&lt;p&gt;可以一次设置多个CSS 类。例如，如果数据模型中有一个属性&lt;b&gt;isSevere&lt;/b&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;css: { profitWarning: currentProfit() &amp;lt; 0, majorHighlight: isSevere }&quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用引号括起来多个CSS类，可以实现根据同一个条件来设置多个CSS 类。例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;css: { profitWarning: currentProfit() &amp;lt; 0, &#39;major highlight&#39;: isSevere }&quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;非boolean 会被转化为boolean 型。例如0和null被转化为false；数字21或者非空对象被转化为true。&lt;/p&gt;
+
+&lt;p&gt;如果参数是一个observable 参数，当参数值发生改变的时候，绑定元素会添加或者移除CSS类。如果不是，那么直会在第一次绑定的时候添加或者移除CSS类，之后不会改变。&lt;/p&gt;
+
+&lt;p&gt;如果你想用动态的CSS类，（所谓动态是指参数去不同的值，元素会绑定不同的CSS类），你需要传递一个字符串，这个字符串用来表示将要添加到DOM上的CSS类名。&lt;/p&gt;
+
+&lt;p&gt;如果参数是一个observable参数，绑定的时候会移除DOM原先的所有CSS类，然后根据参数的值给元素添加新的CSS类。&lt;/p&gt;
+
+&lt;p&gt;通常，可以使用任意的javascript函数或者表达式作为参数。knockout会计算结果，然后根据逻辑决定添加或者移除CSS类。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;其他参数&lt;/h3&gt;
+
+&lt;p&gt;无&lt;/p&gt;
+
+&lt;p&gt;注意 不能使用不合法的javascript变量名作为CSS类名&lt;/p&gt;
+
+&lt;p&gt;如果你想使用&lt;b&gt;my-class&lt;/b&gt;类名，你不能像下面这样写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;css: { my-class: someValue }&quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为这时&lt;b&gt;my-class&lt;/b&gt;不是合法的标示符。解决方案很简单，用引号括起来就可以了。这样CSS类名变成了一个简单的字符串文本，对于javascript对象来说这就是合法的属性名了。换句话说，javascript语言本身不支持带’-‘的属性名。
+例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;css: { &#39;my-class&#39;: someValue }&quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>component bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/component-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/component-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;component&quot;&gt;组件绑定 component&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;component&lt;/code&gt; 组件绑定把一个特定功能的组件注入到绑定元素中去，还可以向组件中传递参数。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;组件绑定的示例&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;视图层代码&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h4&amp;gt;First instance, without parameters&amp;lt;/h4&amp;gt;
+&amp;lt;div data-bind=&#39;component: &quot;message-editor&quot;&#39;&amp;gt;&amp;lt;/div&amp;gt;
+ 
+&amp;lt;h4&amp;gt;Second instance, passing parameters&amp;lt;/h4&amp;gt;
+&amp;lt;div data-bind=&#39;component: {
+    name: &quot;message-editor&quot;,
+    params: { initialText: &quot;Hello, world!&quot; }
+}&#39;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;视图模型层代码&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;ko.components.register(&#39;message-editor&#39;, {
+    viewModel: function(params) {
+        this.text = ko.observable(params &amp;amp;&amp;amp; params.initialText || &#39;&#39;);
+    },
+    template: &#39;Message: &amp;lt;input data-bind=&quot;value: text&quot; /&amp;gt; &#39;
+            + &#39;(length: &amp;lt;span data-bind=&quot;text: text().length&quot;&amp;gt;&amp;lt;/span&amp;gt;)&#39;
+});
+ 
+ko.applyBindings();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;提示：在开发环境中，需要从外部加载组件文件，而不是在代码中注册它们。&lt;a href=&quot;https://github.com/knockoutcn/knockoutcn.github.io/issues/17&quot;&gt;详细了解请猛戳&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;api&quot;&gt;API&lt;/h2&gt;
+
+&lt;p&gt;有两种方式来使用 &lt;code&gt;component&lt;/code&gt;  组件绑定。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;1 快捷方式&lt;/h3&gt;
+
+&lt;p&gt;传递一个组件的名称，那么这个组件就被注入到元素中去了。
+例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&#39;component: &quot;my-component&quot;&#39;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;快捷方式的值也可以是一个观察者。这个例子中，如果绑定组件发生变化，它会处理旧组件，然后注入新的变化之后的组件。例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&#39;component: observableWhoseValueIsAComponentName&#39;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;2 完整方式&lt;/h3&gt;
+
+&lt;p&gt;用下面的属性可以把参数传递到组件中。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;name&lt;/code&gt; – 需要引入的组件的名称。再次说明，它是可以被观察的。&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;params&lt;/code&gt; — 传递到组件中的参数对象。&lt;code&gt;key-value&lt;/code&gt;的方式可以传递多个值对象；参数是被组件视图模型的构造函数接受的。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&#39;component: {
+    name: &quot;shopping-cart&quot;,
+    params: { mode: &quot;detailed-list&quot;, items: productsList }
+}&#39;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;组件的生命周期&lt;/h2&gt;
+
+&lt;p&gt;当一个组件绑定注入了一个组件&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;1.视图模型的工厂函数和模板需要组件的加载&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;2.组件模板被备份并注入到绑定的元素中&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;3.如果组件有视图模型，那么它会被实例化&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;4.视图模型会被绑定到视图上&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;5.组件是活动的&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;6.组件被关闭，它的视图模型被处理&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-6&quot;&gt;注意1： 只有模板的组件&lt;/h2&gt;
+
+&lt;p&gt;组件通常都有视图模型，但它们不是必须有的。一个组件可以只有模板。&lt;/p&gt;
+
+&lt;p&gt;这种情况下，传递的参数会直接传递到模板中进行使用。例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ko.components.register(&#39;special-offer&#39;, {
+    template: &#39;&amp;lt;div class=&quot;offer-box&quot; data-bind=&quot;text: productName&quot;&amp;gt;&amp;lt;/div&amp;gt;&#39;
 });
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这里解释下，如果需要在gulpfile.js 中执行任意 node 语句 ，需要引入 require(‘child_process’).exec 模块，这是node 自己的模块，不需要借助其他gulp插件。&lt;/p&gt;
+&lt;p&gt;…会像下面那样使用：&lt;/p&gt;
 
-&lt;h2 id=&quot;section-4&quot;&gt;完&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&#39;component: {
+     name: &quot;special-offer-callout&quot;,
+     params: { productName: someProduct.name }
+}&#39;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;…更简单的用法 ，可以看 &lt;a href=&quot;http://knockoutjs.com/documentation/component-custom-elements.html&quot;&gt;自定义元素&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-7&quot;&gt;注意2：不带包含元素使用组件绑定&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;html
+&amp;lt;!-- ko component: &quot;message-editor&quot; --&amp;gt;
+&amp;lt;!-- /ko --&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;和其他虚拟元素绑定一样的用法。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-8&quot;&gt;注意3： 向组件传递标记&lt;/h2&gt;
+
+&lt;p&gt;绑定组件的元素可能包含更多的标记，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;component: { name: &#39;my-special-list&#39;, params: { items: someArrayOfPeople } }&quot;&amp;gt;
+    &amp;lt;!-- Look, here&#39;s some arbitrary markup. By default it gets stripped out
+         and is replaced by the component output. --&amp;gt;
+    The person &amp;lt;em data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/em&amp;gt;
+    is &amp;lt;em data-bind=&quot;text: age&quot;&amp;gt;&amp;lt;/em&amp;gt; years old.
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然绑定组件的元素内部的DOM节点会被剥离，默认并不会绑定，但是这些DOM不会消失。他们会被组件引用（例子中的&lt;code&gt;my-special-list&lt;/code&gt;），组件的输出中会包含他们。&lt;/p&gt;
+
+&lt;p&gt;它的使用场景：组件表现出绑定元素内的UI元素。比如：表格、列表、对话框或者tab set
+，这些都需要注入和绑定任意标签到一个公共的结构中。&lt;/p&gt;
+
+&lt;h2 id=&quot;dispose-&quot;&gt;dispose 内存管理&lt;/h2&gt;
+
+&lt;p&gt;你的视图模型类中可能含有一个&lt;code&gt;dispose&lt;/code&gt;函数。如果有的话，只要组件被关闭并从DOM中移除（比如相应的组件被从&lt;code&gt;foreach&lt;/code&gt;中移除或者&lt;code&gt;if&lt;/code&gt;的绑定之变成了&lt;code&gt;false&lt;/code&gt;），KO就会调用这个&lt;code&gt;dispose&lt;/code&gt;函数。&lt;/p&gt;
+
+&lt;p&gt;必须使用 &lt;code&gt;dispose&lt;/code&gt; 来释放任何没有被垃圾回收器资源。例如:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;setInterval&lt;/code&gt; 的回调函数在显示清除之前是一直存在于内存中的。&lt;/p&gt;
+
+    &lt;p&gt;要使用 &lt;code&gt;clearInterval(handle)&lt;/code&gt; 来清除回调函数，否则视图模型会一直驻留在内存中。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;ko.computed&lt;/code&gt;  属性在显示释放前，会一直从它的依赖那里接收通知。&lt;/p&gt;
+
+    &lt;p&gt;如果依赖是一个外部对象，&lt;code&gt;ko.computed&lt;/code&gt; 属性需要调用 &lt;code&gt;.dispose()&lt;/code&gt; ，否则它（也可能是视图模型对象）会一直驻留在内存中。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在显示释放之前，对于观察者的订阅会一直存在。&lt;/p&gt;
+
+    &lt;p&gt;如果对一个外部对象订阅，那么订阅者需要调用 &lt;code&gt;.dispose()&lt;/code&gt; ，否则订阅者的回调函数（也可能是视图模型对象）会一直驻留在内存中。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;createViewModel&lt;/code&gt; 函数在外部DOM元素上手动创建的事件句柄需要移除。&lt;/p&gt;
+
+    &lt;p&gt;当然我们不需要关心释放任何事件以标准KO绑定创建的句柄，当元素被移除时，KO会自动取消注册他们。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var someExternalObservable = ko.observable(123);
+ 
+function SomeComponentViewModel() {
+    this.myComputed = ko.computed(function() {
+        return someExternalObservable() + 1;
+    }, this);
+ 
+    this.myPureComputed = ko.pureComputed(function() {
+        return someExternalObservable() + 2;
+    }, this);
+ 
+    this.mySubscription = someExternalObservable.subscribe(function(val) {
+        console.log(&#39;The external observable changed to &#39; + val);
+    }, this);
+ 
+    this.myIntervalHandle = window.setInterval(function() {
+        console.log(&#39;Another second passed, and the component is still alive.&#39;);
+    }, 1000);
+}
+ 
+SomeComponentViewModel.prototype.dispose = function() {
+    this.myComputed.dispose();
+    this.mySubscription.dispose();
+    window.clearInterval(this.myIntervalHandle);
+    // this.myPureComputed doesn&#39;t need to be manually disposed.
+}
+ 
+ko.components.register(&#39;your-component-name&#39;, {
+    viewModel: SomeComponentViewModel,
+    template: &#39;some template&#39;
+});
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>click bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/click-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/click-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;click-&quot;&gt;click 绑定&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;click&lt;/code&gt; 绑定会添加事件处理句柄，这样当DOM元素被点击的时候，会触发绑定的js函数。常用的地方有&lt;code&gt;button&lt;/code&gt;, ````input&lt;code&gt;,&lt;/code&gt;a```标签。通常绑定在显示出来的DOM元素上。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;例子&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;
+    You&#39;ve clicked &amp;lt;span data-bind=&quot;text: numberOfClicks&quot;&amp;gt;&amp;lt;/span&amp;gt; times
+    &amp;lt;button data-bind=&quot;click: incrementClickCounter&quot;&amp;gt;Click me&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        numberOfClicks : ko.observable(0),
+        incrementClickCounter : function() {
+            var previousCount = this.numberOfClicks();
+            this.numberOfClicks(previousCount + 1);
+        }
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;每次点击按钮，都会触发模型的 &lt;code&gt;incrementClickCounter()&lt;/code&gt;  函数。这个函数会改变视图模型的状态，这样UI就会更新。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参数&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;绑定到元素 &lt;code&gt;click&lt;/code&gt; 事件的函数&lt;/li&gt;
+  &lt;li&gt;可以引用任何js函数 - 它可以不是视图模型上得函数对象。&lt;/li&gt;
+  &lt;li&gt;可以引用任何对象的函数 - 像这样写 &lt;code&gt;click: someObject.someFunction&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;## 注意1 ： 把当前条目作为参数传递到句柄函数&lt;/p&gt;
+
+&lt;p&gt;当触发句柄，Knockout 支持把当前模型的值作为第一个参数。如果你逐一对集合每一个条目渲染UI的适合，这会很有用的， 这样点击的时候，你就可以知道那个条目被点击了。例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;foreach: places&quot;&amp;gt;
+    &amp;lt;li&amp;gt;
+        &amp;lt;span data-bind=&quot;text: $data&quot;&amp;gt;&amp;lt;/span&amp;gt;
+        &amp;lt;button data-bind=&quot;click: $parent.removePlace&quot;&amp;gt;Remove&amp;lt;/button&amp;gt;
+    &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+ 
+ &amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+     function MyViewModel() {
+         var self = this;
+         self.places = ko.observableArray([&#39;London&#39;, &#39;Paris&#39;, &#39;Tokyo&#39;]);
+ 
+         // The current item will be passed as the first parameter, so we know which place to remove
+         self.removePlace = function(place) {
+             self.places.remove(place)
+         }
+     }
+     ko.applyBindings(new MyViewModel());
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有两点需要指出来：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果在嵌套绑定上下文中，比如 &lt;code&gt;foreach&lt;/code&gt;或&lt;code&gt;with&lt;/code&gt;中， 你的句柄函数是在根视图模型中或者在父级上下文中， 你需要用 &lt;code&gt;$parent&lt;/code&gt;或者 &lt;code&gt;$root&lt;/code&gt;来制定句柄函数。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在视图模型中用 &lt;code&gt;self&lt;/code&gt;（或者其他变量）来缓存 &lt;code&gt;this&lt;/code&gt;来避免 &lt;code&gt;this&lt;/code&gt;混乱。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;注意2：获取事件对象，或者传递更多的参数&lt;/h2&gt;
+
+&lt;p&gt;在一些场景下，你可能需要获取你点击的DOM事件对象。Knockout 会把事件对象作为第二个参数传递给函数，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;button data-bind=&quot;click: myFunction&quot;&amp;gt;
+    Click me
+&amp;lt;/button&amp;gt;
+ 
+ &amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        myFunction: function(data, event) {
+            if (event.shiftKey) {
+                //do something different when user has shift key down
+            } else {
+                //do normal action
+            }
+        }
+    };
+    ko.applyBindings(viewModel);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你需要传递更多的参数，一个方式是用function关键字包裹句柄函数包，在function关键字中传递参数，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;button data-bind=&quot;click: function(data, event) { myFunction(&#39;param1&#39;, &#39;param2&#39;, data, event) }&quot;&amp;gt;
+    Click me
+&amp;lt;/button&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在knockout 就会把data和event对象传递到你的function关键字中，这样句柄函数就可以获得这些参数。&lt;/p&gt;
+
+&lt;p&gt;另外，如果不想在view中写function关键字，你可以使用 &lt;code&gt;bind&lt;/code&gt; 函数来实现传参，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;button data-bind=&quot;click: myFunction.bind($data, &#39;param1&#39;, &#39;param2&#39;)&quot;&amp;gt;
+    Click me
+&amp;lt;/button&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;click&quot;&gt;注意3 ： 允许默认的click操作&lt;/h2&gt;
+
+&lt;p&gt;默认情况下，knockout会阻止click事件的默认行为。直白的说，就是你在&lt;code&gt;a&lt;/code&gt;标签上使用 &lt;code&gt;click&lt;/code&gt; 绑定，浏览器只会触犯绑定的函数，而不会跳转到&lt;code&gt;a&lt;/code&gt;标签的 &lt;code&gt;href&lt;/code&gt;属性。默认情况下这是很有用的，因为当使用 &lt;code&gt;click&lt;/code&gt; 绑定的适合，通常只是使用&lt;code&gt;a&lt;/code&gt;的样式而不是用它的链接属性。&lt;/p&gt;
+
+&lt;p&gt;然而，如果你不想让默认click行为被阻止，那么只要在&lt;code&gt;click&lt;/code&gt;句柄函数中返回&lt;code&gt;true&lt;/code&gt;就可以了。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;阻止事件冒泡&lt;/h2&gt;
+
+&lt;p&gt;默认情况下，knockout 会允许click事件继续冒泡到更高层次的事件句柄中的。 例如，如果你的元素和它的父级元素都绑定 &lt;code&gt;click&lt;/code&gt; 事件，那么两个绑定函数句柄都会被触发。 如果有必要，你可以通过引用一个叫 &lt;code&gt;clickBubble&lt;/code&gt; 的额外的绑定，并且传递&lt;code&gt;false&lt;/code&gt;值来阻止事件冒泡，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;click: myDivHandler&quot;&amp;gt;
+    &amp;lt;button data-bind=&quot;click: myButtonHandler, clickBubble: false&quot;&amp;gt;
+        Click me
+    &amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通常情况下，&lt;code&gt;myButtonHandler&lt;/code&gt;会先触发，然后click会向上冒泡到 &lt;code&gt;myDivHandler&lt;/code&gt; 函数。 然而，&lt;code&gt;clickBubble: false&lt;/code&gt; 绑定会阻止冒泡的过程。&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title> bind context</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/bind-context"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/bind-context</id>
+   <content type="html">
+&lt;h1 id=&quot;section&quot;&gt;绑定的上下文&lt;/h1&gt;
+
+&lt;p&gt;绑定的上下文是一个对象，它保存了你可以从你的绑定中获取的数据。当使用绑定的时候，KO会自动创建并管理一个有层次结构的上下文环境。 它的根节点指向你在 js中 &lt;code&gt;ko.applyBindings(viewModel)&lt;/code&gt; 执行绑定锁传递的参数 &lt;code&gt;viewModel&lt;/code&gt; 。之后每次使用控制流绑定，比如 &lt;code&gt;with&lt;/code&gt; 或者 &lt;code&gt;foreach&lt;/code&gt; 的时候，就会创建一个子绑定的上下文，指向嵌套的视图模型的数据。&lt;/p&gt;
+
+&lt;p&gt;绑定的上下文提供下面这些特殊的属性，你可以在任何绑定中使用。&lt;/p&gt;
+
+&lt;h2 id=&quot;parent&quot;&gt;$parent&lt;/h2&gt;
+
+&lt;p&gt;指向当前数据模型的父级上下文环境，在根节点上下文环境中，它是 &lt;code&gt;undefined&lt;/code&gt; 。例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h1 data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/h1&amp;gt;
+ 
+&amp;lt;div data-bind=&quot;with: manager&quot;&amp;gt;
+    &amp;lt;!-- Now we&#39;re inside a nested binding context --&amp;gt;
+    &amp;lt;span data-bind=&quot;text: name&quot;&amp;gt;&amp;lt;/span&amp;gt; is the
+    manager of &amp;lt;span data-bind=&quot;text: $parent.name&quot;&amp;gt;&amp;lt;/span&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;parents&quot;&gt;$parents&lt;/h2&gt;
+
+&lt;p&gt;是一个数组对象，存储了当前对象的所有父级属相。（类似于jquery的parents）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$parents[0]&lt;/code&gt; 是直接父级上下文的视图模型（等价于上面的 &lt;code&gt;$parent&lt;/code&gt; ）；&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$parents[1]&lt;/code&gt; 是祖父级上下文的视图模型；&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$parents[2]&lt;/code&gt; 是曾祖父级上下文视图模型；&lt;/p&gt;
+
+&lt;p&gt;……以此类推吧。&lt;/p&gt;
+
+&lt;h2 id=&quot;root&quot;&gt;$root&lt;/h2&gt;
+
+&lt;p&gt;指向根级上下文环境，就是 &lt;code&gt;ko.applyBindings&lt;/code&gt; 传递的参数。等同于 &lt;code&gt;$parents[$parents.length - 1]&lt;/code&gt; .&lt;/p&gt;
+
+&lt;h2 id=&quot;component&quot;&gt;$component&lt;/h2&gt;
+
+&lt;p&gt;在组件模板的上下文中， &lt;code&gt;$component&lt;/code&gt; 指向组件的视图模型。特殊情况下是等于 &lt;code&gt;$root&lt;/code&gt; de 。在嵌套组件中， &lt;code&gt;$component&lt;/code&gt; 指向最近的组件的视图模型。&lt;/p&gt;
+
+&lt;h2 id=&quot;data&quot;&gt;$data&lt;/h2&gt;
+
+&lt;p&gt;指向当前上下文环境中的视图模型。在根级上下文环境中 &lt;code&gt;$data&lt;/code&gt; 和 &lt;code&gt;$root&lt;/code&gt; 是相等的。 在嵌套绑定上下文中，&lt;code&gt;$data&lt;/code&gt; 指向当前数据模型。&lt;code&gt;$data&lt;/code&gt; 通常在要获取视图模型本身的时候使用。例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul data-bind=&quot;foreach: [&#39;cats&#39;, &#39;dogs&#39;, &#39;fish&#39;]&quot;&amp;gt;
+    &amp;lt;li&amp;gt;The value is &amp;lt;span data-bind=&quot;text: $data&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;indexforeach&quot;&gt;$index(只在&lt;code&gt;foreach&lt;/code&gt;绑定中使用)&lt;/h2&gt;
+
+&lt;p&gt;一个从0开始的指向&lt;code&gt;foreach&lt;/code&gt;的索引值。和其他绑定上下文属性不同的是，&lt;code&gt;$index&lt;/code&gt; 是一个观察者并且只要数组对象的选项发生变化，它都会随之更新。&lt;/p&gt;
+
+&lt;h2 id=&quot;parentcontext&quot;&gt;$parentContext&lt;/h2&gt;
+
+&lt;p&gt;指向父级的上下文，它和&lt;code&gt;$parent&lt;/code&gt; 是不同的。&lt;code&gt;$parent&lt;/code&gt;指向的是父级的数据，而不是绑定的环境。如果你需要中&lt;code&gt;foreach&lt;/code&gt; 内部一行的上下文中获取它外部的索引值，那么就需要用到它。例如&lt;code&gt;$parentContext.$index&lt;/code&gt; .在根级上下文它是 &lt;code&gt;undefined&lt;/code&gt; .&lt;/p&gt;
+
+&lt;h2 id=&quot;rawdata&quot;&gt;$rawData&lt;/h2&gt;
+
+&lt;p&gt;在行级数据模型中指向当前的上下文。通常它和 &lt;code&gt;$data&lt;/code&gt; 是一样的，但是如果传递给KO的数据模型是包含在一个观察者中的， &lt;code&gt;$data&lt;/code&gt; 指向的数据模型，而&lt;code&gt;$rawData&lt;/code&gt; 指向这个观察者本身。&lt;/p&gt;
+
+&lt;h2 id=&quot;componenttemplatenodes&quot;&gt;$componentTemplateNodes&lt;/h2&gt;
+
+&lt;p&gt;在组件模板的上下文中，&lt;code&gt;$componentTemplateNodes&lt;/code&gt; 是一个包含所有被传递到组件中的 DOM 节点。这样就很简单的创建一个组件来接受模板，比如说一个表格组件接受模板来定义它的行输出。&lt;/p&gt;
+
+&lt;p&gt;下面这些属性在绑定中也是可用的，但是它们不是绑定上下文对象的一部分。&lt;/p&gt;
+
+&lt;h2 id=&quot;context&quot;&gt;$context&lt;/h2&gt;
+
+&lt;p&gt;指向当前绑定的上下文对象。当这些属性可能存在于视图模型中或者你想把上下文对象传递到你视图模型中的一个帮助函数中的时候，如果你想获得上线文对象的属性，那就需要使用 &lt;code&gt;$context&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h2 id=&quot;element&quot;&gt;$element&lt;/h2&gt;
+
+&lt;p&gt;指向当前绑定的 DOM 节点对象。当你想获得当前元素的一些属性的时候，可以使用它。例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div id=&quot;item1&quot; data-bind=&quot;text: $element.id&quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;在自定义绑定中，控制或者修改绑定上下文&lt;/h2&gt;
+
+&lt;p&gt;在 &lt;code&gt;with&lt;/code&gt; 或者 &lt;code&gt;foreach&lt;/code&gt;  中，用户自定义的绑定可以改变它的后代元素的绑定上下文，或者通过扩展绑定上下文对象来提供特殊属性。详细了解，&lt;a href=&quot;http://knockoutjs.com/documentation/custom-bindings-controlling-descendant-bindings.html&quot;&gt;猛戳这里&lt;/a&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>attr bind</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/attr-bind"/>
+   <updated>2015-11-25T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/attr-bind</id>
+   <content type="html">
+&lt;h1 id=&quot;attr-&quot;&gt;attr 绑定&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;attr绑定提供一个通用的方法来给DOM绑定动态添加改变attr的属性值。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;示例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;a data-bind=&quot;attr: { href: url, title: details ,target:target }&quot;&amp;gt;
+    Report
+&amp;lt;/a&amp;gt;
+&amp;lt;sctipt&amp;gt;
+var viewModel = {
+        url: ko.observable(&quot;http://codepen.io/wikieswan/blog/the-css-binding&quot;),
+        details: ko.observable(&quot;Report including final year-end statistics&quot;),
+        target:ko.observable(&#39;_blank&#39;)
+    };
+ko.applyBindings(viewModel);
+&amp;lt;/sctipt&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;a标签会根据js中的值绑定上对应的值。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;参数说明&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;data-bind&lt;/code&gt; 接受一个js对象作为参数，这个对象的属性名是attr的值，属性名的值是attr的值。&lt;/p&gt;
+
+&lt;h2 id=&quot;attrjs&quot;&gt;注意1 绑定的attr属性名是js合法的变量名称&lt;/h2&gt;
+
+&lt;p&gt;如果你需要绑定属性 &lt;code&gt;data-something&lt;/code&gt; ,你不可以像下面这样写&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;attr: { data-something: someValue }&quot;&amp;gt;...&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为 &lt;code&gt;data-something&lt;/code&gt; 不是合法的js变量。解决方案是用引号括起来，像下面这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div data-bind=&quot;attr: { &#39;data-something&#39;: someValue }&quot;&amp;gt;...&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;js&quot;&gt;注意2 旧版本浏览器中的js保留字&lt;/h2&gt;
+
+&lt;p&gt;在老版本的浏览器（ie8以下），使用js中的保留字作为DOM属性名，会导致程序出错。解决方式也是给属性名加上引号。像下面这样写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;input data-bind=&quot;attr: { &#39;for&#39;: someValue }&quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 </content>
  </entry>
  

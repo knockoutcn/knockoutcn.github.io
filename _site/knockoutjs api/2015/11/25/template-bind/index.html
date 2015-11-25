@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>template bind</title>
+    <meta name="description" content="">
+    <meta name="author" content="wikieswan">
+
+    <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/bootstrap-3/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="http://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">  
+
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">knockout 中文</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/archive.html">所有文章</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">分类</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">标签</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>template bind </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="section">模板绑定</h1>
+
+<h2 id="section-1">作用</h2>
+
+<p>模板绑定 <code>template</code> 用渲染模板的结果来填充相关的DOM元素。模板是构建负责UI结构（可能是重复的或者嵌套的代码块）的一种简单、方便的方式，就想视图模型对象的一个函数。</p>
+
+<p>有两种方式来使用模板：</p>
+
+<ul>
+  <li>本地模板是支撑  <code>foreach</code>, <code>if</code>, <code>with</code>和其他控制流绑定的机制。控制流绑定的内部机制：控制流绑定获取HTML标签，然后用把它当做一个模板用数据来渲染。这个特征是KO内建机制，不需要依赖其他库。</li>
+  <li>基于字符串的模板是联系KO和某个第三方模板引擎的桥梁。KO会吧模型属性传递给外部的模板引擎，然后把结果注入到HTML文件流中。下面的例子来展示使用 <code>jquery.tmpl</code> 和 Underscore 模板引擎 。</li>
+</ul>
+
+<h2 id="section-2">参数</h2>
+
+<h3 id="section-3">1 快捷方式</h3>
+
+<p>如果你仅应用一个字符串值，KO会把它当成一个要渲染模板的ID。当前模型对象是渲染模板需要的数据。</p>
+
+<h3 id="section-4">2 完整方式</h3>
+
+<p>下面是传递js对象的属性：</p>
+
+<ul>
+  <li><code>name</code> - 包含模板的DOM元素的id</li>
+  <li><code>nodes</code> - 直接传递一个DOM节点数组作为一个模板。这样会生成一个非观察者数组对象。需要说明的是，这些元素如果有父元素的话，会被从他们当前父元素中移除。如果你已经使用了 <code>name</code> 属性，这个属性会被忽略。</li>
+  <li><code>data</code> - 渲染模板的数据。如果省略这个参数，KO会查找 <code>foreach</code> 参数，或者使用当前数据模型。</li>
+  <li><code>if</code> - 如果有这个属性，那么模板只有当js表达式的结果是 <code>true</code> （或者是非 <code>false</code> ）的时候才会被渲染。这样可以避免把一个值为null的对象渲染到一个模板上。</li>
+  <li><code>foreach</code> - 只是KO以循环模式渲染模板。</li>
+  <li><code>as</code> - 和<code>foreach</code> 结合使用，定义别名。</li>
+  <li><code>afterRender</code>, <code>afterAdd</code>, 或者 <code>beforeRemove</code> - 渲染DOM时的回调函数。</li>
+</ul>
+
+<h2 id="section-5">注意1 渲染一个有名字的模板</h2>
+
+<p>通常，当使用控制流绑定（<code>foreach</code>, <code>with</code>, <code>if</code>,等）时，就不需要为模板命名：这些模板会被隐式的定义并以匿名方式标记到DOM元素中。但是如果你想的话。你可以把模板放到几个相互分离的元素中然后用name关联他们。</p>
+
+<pre><code>&lt;h2&gt;Participants&lt;/h2&gt;
+Here are the participants:
+&lt;div data-bind="template: { name: 'person-template', data: buyer }"&gt;&lt;/div&gt;
+&lt;div data-bind="template: { name: 'person-template', data: seller }"&gt;&lt;/div&gt;
+ 
+&lt;script type="text/html" id="person-template"&gt;
+    &lt;h3 data-bind="text: name"&gt;&lt;/h3&gt;
+    &lt;p&gt;Credits: &lt;span data-bind="text: credits"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/script&gt;
+ 
+&lt;script type="text/javascript"&gt;
+     function MyViewModel() {
+         this.buyer = { name: 'Franklin', credits: 250 };
+         this.seller = { name: 'Mario', credits: 5800 };
+     }
+     ko.applyBindings(new MyViewModel());
+&lt;/script&gt;
+</code></pre>
+
+<p>需要为模板命名的情况很少，但是使用的时候它会减少重复代码的使用。</p>
+
+<h2 id="foreach">注意2 为命名模板使用“foreach”选项</h2>
+
+<p>下面使用模板的方式和<code>foreach</code>绑定等效：</p>
+
+<pre><code>&lt;h2&gt;Participants&lt;/h2&gt;
+Here are the participants:
+&lt;div data-bind="template: { name: 'person-template', foreach: people }"&gt;&lt;/div&gt;
+ 
+&lt;script type="text/html" id="person-template"&gt;
+    &lt;h3 data-bind="text: name"&gt;&lt;/h3&gt;
+    &lt;p&gt;Credits: &lt;span data-bind="text: credits"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/script&gt;
+ 
+ function MyViewModel() {
+     this.people = [
+         { name: 'Franklin', credits: 250 },
+         { name: 'Mario', credits: 5800 }
+     ]
+ }
+ ko.applyBindings(new MyViewModel());
+</code></pre>
+
+<p>等价于<code>foreach</code>下面这样的写法:</p>
+
+<pre><code>&lt;div data-bind="foreach: people"&gt;
+    &lt;h3 data-bind="text: name"&gt;&lt;/h3&gt;
+    &lt;p&gt;Credits: &lt;span data-bind="text: credits"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h2 id="asforeach-">注意3 使用 “as”给“foreach” 的项目起别名</h2>
+
+<p>当嵌套使用<code>foreach</code>模板时，在层次结构中获取更高层次的项目是很有用的。一种做法是使用<code>$parent</code>或者其他的<a href="https://github.com/knockoutcn/knockoutcn.github.io/issues/11">绑定上下文</a>.</p>
+
+<p>然而一个更简单、更优雅的方式是用<code>as</code>为循环迭代项目起个别名。例如：</p>
+
+<pre><code>&lt;ul data-bind="template: { name: 'employeeTemplate',
+                              foreach: employees,
+                              as: 'employee' }"&gt;&lt;/ul&gt;
+</code></pre>
+
+<p>用<code>as</code>起的别名<code>'employee'</code> ，现在在<code>foreach</code>循环中，就可以用<code>employee</code>来访问相关的employee 对象了。</p>
+
+<p>在嵌套<code>foreach</code>循环中，这样做很有有用，因为这样你可以明确的访问更高层的任意被命名的对象。下面有个复杂的例子，展示在渲染模板<code>month</code>时，season ```是如何被访问到的。</p>
+
+<pre><code>&lt;ul data-bind="template: { name: 'seasonTemplate', foreach: seasons, as: 'season' }"&gt;&lt;/ul&gt;
+ 
+&lt;script type="text/html" id="seasonTemplate"&gt;
+    &lt;li&gt;
+        &lt;strong data-bind="text: name"&gt;&lt;/strong&gt;
+        &lt;ul data-bind="template: { name: 'monthTemplate', foreach: months, as: 'month' }"&gt;&lt;/ul&gt;
+    &lt;/li&gt;
+&lt;/script&gt;
+ 
+&lt;script type="text/html" id="monthTemplate"&gt;
+    &lt;li&gt;
+        &lt;span data-bind="text: month"&gt;&lt;/span&gt;
+        is in
+        &lt;span data-bind="text: season.name"&gt;&lt;/span&gt;
+    &lt;/li&gt;
+&lt;/script&gt;
+ 
+&lt;script&gt;
+    var viewModel = {
+        seasons: ko.observableArray([
+            { name: 'Spring', months: [ 'March', 'April', 'May' ] },
+            { name: 'Summer', months: [ 'June', 'July', 'August' ] },
+            { name: 'Autumn', months: [ 'September', 'October', 'November' ] },
+            { name: 'Winter', months: [ 'December', 'January', 'February' ] }
+        ])
+    };
+    ko.applyBindings(viewModel);
+&lt;/script&gt;
+</code></pre>
+
+<p>小提示：给<code>as</code>传参时，要使用字符串，例如<code>as: 'season'</code>，而不是<code>as: season</code> ，这是因为你为一个新的变量传递一个名称，而不是读取一个已经存在的变量。</p>
+
+<h2 id="afterrender-afteradd--beforeremove">注意4 使用“afterRender”, “afterAdd”, 和 “beforeRemove”</h2>
+
+<p>有时候在生成模板后需要运行自定义的业务逻辑。</p>
+
+<p>通常最好的方式是编写自定义绑定，但是也可以<code>afterRender</code>。</p>
+
+<p>传递一个函数引用，在渲染解说或者重新渲染你的模板时，KO会调用它。如果你使用<code>foreach</code>,当每一个项目被添加到你的观察者上时，KO会调用一次<code>afterRender</code>。例如</p>
+
+<pre><code>&lt;div data-bind='template: { name: "personTemplate",
+                        data: myData,
+                        afterRender: myPostProcessingLogic }'&gt; &lt;/div&gt;
+</code></pre>
+
+<p>…然后在你的视图模型上定义一个函数</p>
+
+<p><code>javascript
+viewModel.myPostProcessingLogic = function(elements) {
+    // "elements" is an array of DOM nodes just rendered by the template
+    // You can add custom post-processing logic here
+}
+</code></p>
+
+<p>如果使用<code>foreach</code>，仅仅想获取那些被添加或者被移除的元素的通知，可以使用<code>afterAdd</code> 和 <code>beforeRemove</code> 。详细请看 <a href="https://github.com/knockoutcn/knockoutcn.github.io/issues/9">foreach 绑定</a></p>
+
+<h2 id="section-6">注意5 动态选择使用哪一种模板</h2>
+
+<p>如果你有多个命名的模板，你可以为<code>name</code>选项传递一个观察者。当观察者的值发生变化，利用模板，元素的内容会重新被渲染。另外你可以传递一个回调函数来决定使用哪一个模板。如果你使用<code>foreach</code>模板模式，KO会为数组里每一个项目执行一次回调函数，并把项目的值作为唯一的参数传递给回调函数。否则，<code>data</code>的值会被传递给回调函数，或者把整个视图模型传递给回调函数。</p>
+
+<p>例如：</p>
+
+<pre><code>&lt;ul data-bind='template: { name: displayMode,
+                           foreach: employees }'&gt; &lt;/ul&gt;
+ 
+&lt;script&gt;
+    var viewModel = {
+        employees: ko.observableArray([
+            { name: "Kari", active: ko.observable(true) },
+            { name: "Brynn", active: ko.observable(false) },
+            { name: "Nora", active: ko.observable(false) }
+        ]),
+        displayMode: function(employee) {
+            // Initially "Kari" uses the "active" template, while the others use "inactive"
+            return employee.active() ? "active" : "inactive";
+        }
+    };
+ 
+    // ... then later ...
+    viewModel.employees()[1].active(true); // Now "Brynn" is also rendered using the "active" template.
+&lt;/script&gt;
+</code></pre>
+
+<p>如果你的函数指向一个观察者变量，那么只要这些观察者的值发生变化，绑定会就更新。这样就用模板重新渲染数据了。</p>
+
+<p>如果你的函数接受第二个参数，那么它就是整个绑定的上下文。你可以使用<code>$parent</code>或者其他任何上下文变量来动态选择模板。例如，你可以像下面这样修改上面的代码：</p>
+
+<p><code>javascript
+displayMode: function(employee, bindingContext) {
+    // Now return a template name string based on properties of employee or bindingContext
+}
+</code></p>
+
+<h2 id="jquerytmpl-">　注意6 使用jQuery.tmpl-外部的模板引擎</h2>
+
+<p>在绝大多数情况下，<code>foreach</code>, <code>with</code>, <code>if</code>和其他控制流绑定可以满足你构建UI应用的所有需求。但是如果你想使用第三方模板库，比如 <a href="http://documentcloud.github.io/underscore/#template">Underscore template engine</a> 或者 <a href="http://api.jquery.com/jquery.tmpl/">jquery.tmpl</a>, KO也会支持。</p>
+
+<p>我们介绍KO中使用<a href="http://api.jquery.com/jquery.tmpl/">jquery.tmpl</a>。首先需要按照顺序引入库：</p>
+
+<pre><code>&lt;!-- First jQuery --&gt;     &lt;script src="http://code.jquery.com/jquery-1.7.1.min.js"&gt;&lt;/script&gt;
+&lt;!-- Then jQuery.tmpl --&gt; &lt;script src="jquery.tmpl.js"&gt;&lt;/script&gt;
+&lt;!-- Then Knockout --&gt;    &lt;script src="knockout-x.y.z.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>然后使用jquery.tmpl作为你的模板引擎：</p>
+
+<pre><code>&lt;h1&gt;People&lt;/h1&gt;
+&lt;div data-bind="template: 'peopleList'"&gt;&lt;/div&gt;
+ 
+&lt;script type="text/html" id="peopleList"&gt;
+    
+        &lt;p&gt;
+            &lt;b&gt;${name}&lt;/b&gt; is ${age} years old
+        &lt;/p&gt;
+    
+&lt;/script&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        people: ko.observableArray([
+            { name: 'Rod', age: 123 },
+            { name: 'Jane', age: 125 },
+        ])
+    }
+    ko.applyBindings(viewModel);
+&lt;/script&gt;
+</code></pre>
+
+<p><code>{ {each ...} }</code> 和 <code>${ ... }</code>都是jquery.tmpl语法。</p>
+
+<h2 id="underscorejs-">注意7 使用 Underscore.js 模板引擎</h2>
+
+<pre><code>&lt;script type="text/html" id="peopleList"&gt;
+    &lt;% _.each(people(), function(person) { %&gt;
+        &lt;li&gt;
+            &lt;b&gt;&lt;%= person.name %&gt;&lt;/b&gt; is &lt;%= person.age %&gt; years old
+        &lt;/li&gt;
+    &lt;% }) %&gt;
+&lt;/script&gt;
+</code></pre>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs api-ref">
+    		knockoutjs api <span>16</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>18</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/submit-bind" title="submit bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/text-bind" title="text bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'wikieswan'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+
+    
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>  
+    <script>hljs.initHighlightingOnLoad();</script>  
+  </body>
+</html>
+

@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>标签</title>
-    
+    <title>event bind</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -114,7 +114,7 @@
     
       
       	
-      	<li class="active"><a href="/tags.html" class="active">标签</a></li>
+      	<li><a href="/tags.html">标签</a></li>
       	
       
     
@@ -130,16 +130,82 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>标签 </h1>
+  <h1>event bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
-    
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="event-">event 绑定</h1>
 
-<ul class="tag_box inline">
+<p><code>event</code>绑定允许为特殊的事件添加事件句柄，这样DOM元素上绑定的事件被触发了之后，js函数就会执行。它适用任何事件类型，比如 <code>keypress</code>, <code>mouseover</code> 或 <code>mouseout</code>。</p>
+
+<p>例子</p>
+
+<pre><code>&lt;div&gt;
+    &lt;div data-bind="event: { mouseover: enableDetails, mouseout: disableDetails }"&gt;
+        Mouse over me
+    &lt;/div&gt;
+    &lt;div data-bind="visible: detailsEnabled"&gt;
+        Details
+    &lt;/div&gt;
+&lt;/div&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        detailsEnabled: ko.observable(false),
+        enableDetails: function() {
+            this.detailsEnabled(true);
+        },
+        disableDetails: function() {
+            this.detailsEnabled(false);
+        }
+    };
+    ko.applyBindings(viewModel);
+&lt;/script&gt;
+</code></pre>
+
+<h2 id="section">参数</h2>
+
+<ul>
+  <li>传递一个js对象，对象的属性名对应事件名，并且对象值对应绑定到事件上的函数。</li>
+  <li>可以引用任何js函数 - 它可以不是视图模型上得函数对象。</li>
+  <li>可以引用任何对象的函数 - 像这样写 <code>event : { mouseover: someObject.someFunction }</code></li>
+</ul>
+
+<h2 id="click">注意事项参照 <code>click</code>绑定。</h2>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs api-ref">
+    		knockoutjs api <span>16</span>
+    	</a></li>
     
   
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
 
   
@@ -150,165 +216,39 @@
 
 
 
-</ul>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/enalble-bind" title="enalble bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/knockoutjs%20api/2015/11/25/foreach-bind" title="foreach bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
 
- 
-  <h2 id="knockoutjs API-ref">knockoutjs API</h2>
-  <ul>
-      
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'wikieswan'; // required: replace example with your forum shortname
     
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/with-bind">with bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/2015/11/25/visible-bind">visible bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/value-bind">value bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/2015/11/25/text-bind">text bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/template-bind">template bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/submit-bind">submit bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/style-bind">style bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/html-bind">html bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work">knockoutjs怎样工作并且它能给我们带来什么好处</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/foreach-bind">foreach bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/event-bind">event bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/enalble-bind">enalble bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs">下载和安装</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/css-bind">css bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/component-bind">component bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/click-bind">click bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/bind-context"> bind context</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/attr-bind">attr bind</a></li>
-      	
-      
-    
-  
-
-
-
-  </ul>
 
 
   </div>

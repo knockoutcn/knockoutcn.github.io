@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>knockoutjs怎样工作并且它能给我们带来什么好处</title>
+    <meta name="description" content="">
+    <meta name="author" content="wikieswan">
+
+    <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/bootstrap-3/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="http://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">  
+
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">knockout 中文</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/archive.html">所有文章</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">分类</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">标签</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>knockoutjs怎样工作并且它能给我们带来什么好处 </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="knockoutjs">knockoutjs怎样工作并且它能给我们带来什么好处？</h1>
+
+<h2 id="section">介绍</h2>
+<p>Knockout是一个以干净的数据模型（data model）为基础的能够帮助你创建富文本，响应显示和编辑用户界面的JavaScript类库。任何时候你的UI部分需要动态更新（比如：更新取决于用户的操作或外部数据源变化）。KO可以帮助你实现由于它更简单并且很容易维护。</p>
+
+<h2 id="section-1">重要特性</h2>
+
+<ul>
+  <li>
+    <p>优雅的依赖跟踪-无论何时你的数据模型改变你的需要变化的UI部分都会自动更新。</p>
+  </li>
+  <li>
+    <p>声明式绑定-通过一种简单易懂的方式连接你的数据模型到你的UI部分。你可以非常容易的运用任意的嵌套绑定上下文的方式来构建一个复杂的动态界面。</p>
+  </li>
+  <li>
+    <p>傻瓜式扩展-仅仅短短几行代码就可以做出可重用的新声明式绑定来实现用户自定义行为</p>
+  </li>
+</ul>
+
+<h2 id="section-2">额外的好处</h2>
+
+<ul>
+  <li>纯净的javascript库：兼容所有的服务器端和客户端技术。</li>
+  <li>可以轻松添加到已有的web程序顶部：而不需要大的架构改变。</li>
+  <li>简洁的：压缩后只有13kb</li>
+  <li>兼容任何主流浏览器 (IE 6+、Firefox 2+、Chrome、Safari、其它)。</li>
+  <li>统一的规范(采用行为驱动开发) 意味着在新的浏览器和平台上可以正确的运行。</li>
+</ul>
+
+<p>开发者如果熟悉Ruby on Rails (是一个可以使你开发，部署，维护 web 应用程序变得简单的框架。)或其它MVC技术可能会发现它是一个带有声明式语法的MVC实时form。从另一个意义上讲,你能想到可以把KO作为一种编辑JSON数据的方法而不用在乎它怎么工作。</p>
+
+<p>OK，但是我们怎么使用它呢？
+开始的最快和最有趣的方式是通过互动教程。一旦你掌握了基本知识,然后在一个自己的项目中运用它了。</p>
+
+<p>KO和jquery是对立关系，还是相互协作呢？</p>
+
+<p>所有人都喜欢jQuery! 它是一个在页面里操作元素和事件的框架，非常出色并且易使用，在DOM操作上肯定使用jQuery，KO解决不同的问题。</p>
+
+<p>如果页面要求复杂，仅仅使用jQuery需要花费更多的代码。 例如：一个表格里显示一个列表，然后统计列表的数量，Add按钮在数据行TR小于5调的时候启用，否则就禁用。jQuery 没有基本的数据模型的概念，所以需要获取数据的数量（从table/div或者专门定义的CSS class），如果需要在某些SPAN里显示数据的数量，当添加新数据的时候，你还要记得更新这个SPAN的text。当然，你还要判断当总数&gt;=5条的时候禁用Add按钮。 然后，如果还要实现Delete功能的时候，你不得不指出哪一个DOM元素被点击以后需要改变。</p>
+
+<h2 id="knockout">Knockout的实现有何不同？</h2>
+
+<p>使用KO非常简单。将你的数据描绘成一个JavaScript数组对象myItems，然后使用模板（template）转化这个数组到表格里（或者一组DIV）。不管什么时候数组改变， UI界面也会响应改变（不用指出如何插入新行&lt;tr&gt;或在哪里插入），剩余的工作就是同步了。例如：你可以声明绑定如下一个SPAN显示数据数量（可以放在页面的任何地方，不一定非要在template里）：</p>
+
+<pre><code>There are &lt;span data-bind="text: myItems().count"&gt;&lt;/span&gt; items
+</code></pre>
+
+<p>就是这些！你不需要写代码去更新它，它的更新依赖于数组<code>myItems</code>的改变。同样， Add按钮的启用和禁用依赖于数组<code>myItems</code>的长度，如下：</p>
+
+<pre><code>&lt;button data-bind="enable: myItems().count &lt; 5"&gt;Add&lt;/button&gt;
+</code></pre>
+
+<p>之后，如果你要实现Delete功能，不必指出如何操作UI元素，只需要修改数据模型就可以了。</p>
+
+<p>总结：KO没有和jQuery或类似的DOM 操作API对抗竞争。KO提供了一个关联数据模型和用户界面的高级功能。KO本身不依赖jQuery，但是你可以一起同时使用jQuery， 生动平缓的UI改变需要真正使用jQuery。</p>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs api-ref">
+    		knockoutjs api <span>16</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>18</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/foreach-bind" title="foreach bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/knockoutjs%20api/2015/11/25/html-bind" title="html bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'wikieswan'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+
+    
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>  
+    <script>hljs.initHighlightingOnLoad();</script>  
+  </body>
+</html>
+

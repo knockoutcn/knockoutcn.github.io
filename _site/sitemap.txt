@@ -1,4 +1,5 @@
 
+http://knockoutcn.github.io/api.html
 http://knockoutcn.github.io/archive.html
 http://knockoutcn.github.io/atom.xml
 http://knockoutcn.github.io/categories.html
@@ -9,9 +10,9 @@ http://knockoutcn.github.io/sitemap.txt
 http://knockoutcn.github.io/tags.html
 
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/with-bind
-http://knockoutcn.github.io/2015/11/25/visible-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/visible-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/value-bind
-http://knockoutcn.github.io/2015/11/25/text-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/text-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/template-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/submit-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/style-bind

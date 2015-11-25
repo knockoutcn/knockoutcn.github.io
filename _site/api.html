@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>visible bind</title>
-    <meta name="description" content="knockoutjs API">
+    <title>API</title>
+    
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -74,6 +74,14 @@
     
       
       	
+      	<li class="active"><a href="/api.html" class="active">API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
       	<li><a href="/archive.html">所有文章</a></li>
       	
       
@@ -130,125 +138,93 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>visible bind </h1>
+  <h1>API </h1>
 </div>
 
-<div class="row post-full">
+<div class="row">
   <div class="col-xs-12">
-    <div class="date">
-      <span>25 November 2015</span>
-    </div>
-    <div class="content">
-      
-<h1 id="visible-">1 visible 绑定</h1>
-
-<p>作用</p>
-
-<p>visible 根据变量值的true或者false来控制DOM元素的显示或者隐藏。</p>
-
-<p>示例</p>
-
-<pre><code>&lt;div data-bind="visible: shouldShowMessage"&gt;
-    You will see this message only when "shouldShowMessage" holds a true value.
-&lt;/div&gt;
-
-var viewModel = {
-    shouldShowMessage: ko.observable(true) // Message initially visible
-};
-//viewModel.shouldShowMessage(false); // ... now it's hidden
-viewModel.shouldShowMessage(true); // ... now it's visible again
-ko.applyBindings(viewModel);
-</code></pre>
-
-<p>参数说明</p>
-
-<p>主要参数</p>
-
-<p>参数值为类似false值（eg，false、0、null、undefined）把yourElement.style.display设置为none，元素就隐藏了。</p>
-
-<p>参数值为类似true值（eg，true、非null 的对象），则元素会显示。</p>
-
-<p>如果参数是一个observable 变量，无论参数的值什么时候发生变化，元素的visible属性也会发生改变的。如果参数不是一个observable 变量，那么只会在第一次绑定的时候控制元素的visible属性，之后元素的visible属性不会发生变化。</p>
-
-<p>其他参数</p>
-
-<p>无</p>
-
-<p>注意 使用函数或者表达式控制元素的显示或者隐藏</p>
-
-<p>可以是用javascript函数或者表达式作为参数；knockout会运行函数或者表达式，用返回值来作为参数，从而觉得元素的显示或者隐藏。</p>
-
-<p>e.g.</p>
-
-<pre><code>&lt;div data-bind="visible: myValues().length &gt; 0"&gt;
-  You will see this message only when 'myValues' has at least one member.
-&lt;/div&gt;
-
-var viewModel = {
-    myValues: ko.observableArray([]) // Initially empty, so message hidden
-};
-viewModel.myValues.push("some value"); // Now visible
-ko.applyBindings(viewModel);
-</code></pre>
-
-<p>依赖</p>
-
-<p>无</p>
-
-    </div>
-
     
 
-  
-    <ul class="tag_box inline">
-      <li><i class="glyphicon glyphicon-tags"></i></li>
-      
-      
+<h2>knockoutjs 中文 api 目录</h2>
+<h3>开始</h3>
+<ul>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work" target="_blank">knockoutjs 如何工作的</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs" target="_blank">下载安装</a>
+	</li>
+</ul>
 
 
-  
-     
-    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>18</span></a></li>
-    
-  
+<h3>文本和显示</h3>
+<ul>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/attr-bind" target="_blank">attr bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/css-bind" target="_blank">css bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/html-bind" target="_blank">html bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/style-bind" target="_blank">style bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/text-bind" target="_blank">text bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/visible-bind" target="_blank">visible bind</a>
+	</li>
+</ul>
 
+<h3>控制流</h3>
+<ul>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/foreach-bind" target="_blank">foreach bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/with-bind" target="_blank">with bind</a>
+	</li>
+</ul>
 
+<h3>表单绑定</h3>
+<ul>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/click-bind" target="_blank">click bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/enalble-bind" target="_blank">enable bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/event-bind" target="_blank">event bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/submit-bind" target="_blank">submit bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/value-bind" target="_blank">value bind</a>
+	</li>
+	
+</ul>
 
-    </ul>
-    
-  
-    <hr>
-    <ul class="pagination">
-    
-      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/value-bind" title="value bind">&laquo; Previous</a></li>
-    
-      <li><a href="/archive.html">Archive</a></li>
-    
-      <li class="next"><a href="/knockoutjs%20api/2015/11/25/with-bind" title="with bind">Next &raquo;</a></li>
-    
-    </ul>
-    <hr>
-    
+<h3>模板渲染</h3>
+<ul>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/template-bind" target="_blank">template bind</a>
+	</li>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/component-bind" target="_blank">component bind</a>
+	</li>
+</ul>
 
-
-  <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'wikieswan'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-
+<h3>绑定语法</h3>
+<ul>
+	<li>
+		<a href="knockoutjs%20api/2015/11/25/bind-context" target="_blank">bind context</a>
+	</li>
+</ul>
   </div>
 </div>
 

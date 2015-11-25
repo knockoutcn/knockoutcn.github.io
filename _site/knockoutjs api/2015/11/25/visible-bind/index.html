@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>text bind</title>
+    <title>visible bind</title>
     <meta name="description" content="knockoutjs API">
     <meta name="author" content="wikieswan">
 
@@ -74,6 +74,14 @@
     
       
       	
+      	<li><a href="/api.html">API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
       	<li><a href="/archive.html">所有文章</a></li>
       	
       
@@ -130,7 +138,7 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>text bind </h1>
+  <h1>visible bind </h1>
 </div>
 
 <div class="row post-full">
@@ -140,108 +148,80 @@
     </div>
     <div class="content">
       
-<h1 id="text-">text 绑定</h1>
+<h1 id="visible-">1 visible 绑定</h1>
 
-<h2 id="section">作用</h2>
+<p>作用</p>
 
-<p>text 绑定让DOM元素显示参数的值。对于 span 、 em 这些常用来表示文本的标签起作用，但是你想绑定在其他标签上也是可以的。</p>
+<p>visible 根据变量值的true或者false来控制DOM元素的显示或者隐藏。</p>
 
-<h2 id="section-1">示例</h2>
+<p>示例</p>
 
-<pre><code>Today's message is: &lt;span data-bind="text: myMessage"&gt;&lt;/span&gt;
+<pre><code>&lt;div data-bind="visible: shouldShowMessage"&gt;
+    You will see this message only when "shouldShowMessage" holds a true value.
+&lt;/div&gt;
 
 var viewModel = {
-    myMessage: ko.observable() // Initially blank
+    shouldShowMessage: ko.observable(true) // Message initially visible
 };
-viewModel.myMessage("Hello, world!"); // Text appears
+//viewModel.shouldShowMessage(false); // ... now it's hidden
+viewModel.shouldShowMessage(true); // ... now it's visible again
 ko.applyBindings(viewModel);
 </code></pre>
 
-<h2 id="section-2">参数说明</h2>
+<p>参数说明</p>
 
-<h3 id="section-3">主要参数</h3>
+<p>主要参数</p>
 
-<p>Knockout 用参数的值设置DOM元素的text属性值；DOM元素原先的值会被复写。</p>
+<p>参数值为类似false值（eg，false、0、null、undefined）把yourElement.style.display设置为none，元素就隐藏了。</p>
 
-<p>如果参数是一个observable变量，那么一旦参数的值发生变化，页面上绑定的值都会立即改变；如果不是，那么只会在第一次绑定的时候改变页面元素的文本值，页面上的值之后就不会再被改变。</p>
+<p>参数值为类似true值（eg，true、非null 的对象），则元素会显示。</p>
 
-<p>如果参数的类型不是number或者string（e.g., 对象或者数组），那么页面上展示的文本是对象到字符串等效转化的值，相当于yourParameter.toString()</p>
+<p>如果参数是一个observable 变量，无论参数的值什么时候发生变化，元素的visible属性也会发生改变的。如果参数不是一个observable 变量，那么只会在第一次绑定的时候控制元素的visible属性，之后元素的visible属性不会发生变化。</p>
 
-<h3 id="section-4">其他参数</h3>
+<p>其他参数</p>
 
 <p>无</p>
 
-<h2 id="section-5">注意1：使用函数和表达式获取文本的值</h2>
+<p>注意 使用函数或者表达式控制元素的显示或者隐藏</p>
 
-<p>如果想通过程序方式确定文本的值，那么需要用到可计算的observable,用可以返回文本的函数名作为参数。</p>
+<p>可以是用javascript函数或者表达式作为参数；knockout会运行函数或者表达式，用返回值来作为参数，从而觉得元素的显示或者隐藏。</p>
 
 <p>e.g.</p>
 
-<pre><code>The item is &lt;span data-bind="text: priceRating"&gt;&lt;/span&gt; today.
+<pre><code>&lt;div data-bind="visible: myValues().length &gt; 0"&gt;
+  You will see this message only when 'myValues' has at least one member.
+&lt;/div&gt;
 
 var viewModel = {
-    price: ko.observable(24.95)
+    myValues: ko.observableArray([]) // Initially empty, so message hidden
 };
-viewModel.priceRating = ko.pureComputed(function() {
-    return this.price() &gt; 50 ? "expensive" : "affordable";
-}, viewModel);
+viewModel.myValues.push("some value"); // Now visible
 ko.applyBindings(viewModel);
 </code></pre>
 
-<p>那么文本的值就会根据price 的变化而取 “expensive” 或者 “affordable” 。</p>
+<p>依赖</p>
 
-<p>另外，如果像下面那样只做简单的逻辑处理的话，是不需要创建可计算的observable的函数的。你可以传递任何的javascript表达式作为数据绑定。e.g.</p>
-
-<pre><code>The item is &lt;span data-bind="text: price() &gt; 50 ? 'expensive' : 'affordable'"&gt;&lt;/span&gt; today.
-</code></pre>
-
-<h3 id="html">注意2 HTML编码</h3>
-
-<p>既然绑定是用文本节点的值来设置页面上文本的值的，那么为了安全起见，设置任何字符串值的时候都应该避免HTML或者script注入。</p>
-
-<p>e.g.</p>
-
-<pre><code>viewModel.myMessage("&lt;i&gt;Hello, world!&lt;/i&gt;");
-</code></pre>
-
-<p>这段代码不会在页面上渲染出斜体文本，（即html标签不会被浏览器解析渲染），而是在页面上直接原样显示。</p>
-
-<p>如果你要在数据模型中设置html代码，请看下文关于html绑定的说明。</p>
-
-<h3 id="html-1">注意3 不适用html元素完成文本绑定</h3>
-
-<p>有时候，你想完成数据绑定而不引入额外的HTML元素。例如，在option标签中引入额外的元素是不可以的，像下面的代码是不会生效的：</p>
-
-<pre><code>&lt;select data-bind="foreach: items"&gt;
-  &lt;option&gt;Item &lt;span data-bind="text: name"&gt;&lt;/span&gt;&lt;/option&gt;
-&lt;/select&gt;
-</code></pre>
-
-<p>为了处理这种情况，需要引入无容器的语法 – 文本注释标签</p>
-
-<pre><code>&lt;select data-bind="foreach: items"&gt;
-	&lt;option&gt;Item &lt;!--ko text: name--&gt;&lt;!--/ko--&gt;&lt;/option&gt;
-&lt;/select&gt;
-</code></pre>
-
-<p><code>&lt;!--ko--&gt;</code>和<code>&lt;!--/ko--&gt;</code>表示注释区域的开始和结束。用这种方式定义了“虚拟元素”，里面包含了标记绑定。Knockout 会理解这种虚拟元素语法，并且会完成数据绑定。</p>
-
-<h3 id="ie-6">注意4 IE 6下怪异的空格</h3>
-
-<p>IE 6会忽略紧跟在span标签后面的空格。例如</p>
-
-<pre><code>Welcome, &lt;span data-bind="text: userName"&gt;&lt;/span&gt; to our web site.
-</code></pre>
-
-<p>在IE 6下 to our web site前面的空格不会显示出来，解决这个问题的办法是在span标签里面加上 例如</p>
-
-<pre><code>Welcome, &lt;span data-bind="text: userName"&gt;&amp;nbsp;&lt;/span&gt; to our web site.
-</code></pre>
-
-<p>在新版本的IE浏览器或者其他浏览器没有这个问题。</p>
+<p>无</p>
 
     </div>
 
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs api-ref">
+    		knockoutjs api <span>18</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
     
 
   
@@ -265,11 +245,11 @@ ko.applyBindings(viewModel);
     <hr>
     <ul class="pagination">
     
-      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/template-bind" title="template bind">&laquo; Previous</a></li>
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/value-bind" title="value bind">&laquo; Previous</a></li>
     
       <li><a href="/archive.html">Archive</a></li>
     
-      <li class="next"><a href="/knockoutjs%20api/2015/11/25/value-bind" title="value bind">Next &raquo;</a></li>
+      <li class="next"><a href="/knockoutjs%20api/2015/11/25/with-bind" title="with bind">Next &raquo;</a></li>
     
     </ul>
     <hr>

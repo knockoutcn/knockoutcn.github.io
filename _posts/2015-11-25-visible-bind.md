@@ -2,7 +2,7 @@
 layout: post
 title: "visible bind"
 description: "knockoutjs API"
-category: 
+category: knockoutjs API
 tags: [knockoutjs API]
 ---
 {% include JB/setup %}

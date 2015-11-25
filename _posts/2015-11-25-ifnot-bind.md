@@ -2,8 +2,8 @@
 layout: post
 title: "ifnot bind"
 description: ""
-category: 
-tags: []
+category: knockoutjs API
+tags: [knockoutjs API]
 ---
 {% include JB/setup %}
 

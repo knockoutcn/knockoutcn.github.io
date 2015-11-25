@@ -8,4 +8,21 @@ http://knockoutcn.github.io/rss.xml
 http://knockoutcn.github.io/sitemap.txt
 http://knockoutcn.github.io/tags.html
 
-http://knockoutcn.github.io/2015/11/23/how-to-use-rjs-to-packet-requirejs-modules
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/with-bind
+http://knockoutcn.github.io/2015/11/25/visible-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/value-bind
+http://knockoutcn.github.io/2015/11/25/text-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/template-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/submit-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/style-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/html-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/foreach-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/event-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/enalble-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/css-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/component-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/click-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/bind-context
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/attr-bind

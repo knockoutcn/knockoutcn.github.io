@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>标签</title>
-    
+    <title>enalble bind</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -114,7 +114,7 @@
     
       
       	
-      	<li class="active"><a href="/tags.html" class="active">标签</a></li>
+      	<li><a href="/tags.html">标签</a></li>
       	
       
     
@@ -130,16 +130,84 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>标签 </h1>
+  <h1>enalble bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
-    
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="enable-">enable 绑定</h1>
 
-<ul class="tag_box inline">
+<p><code>enable</code>绑定，只有当参数值为<code>true</code><code>时，才会把DOM元素设置为 enable 。通常适用于类似 </code><code>input</code><code>, </code><code>select</code><code>, 和 </code><code>textarea</code>`元素。</p>
+
+<p>例子</p>
+
+<pre><code>&lt;p&gt;
+    &lt;input type='checkbox' data-bind="checked: hasCellphone" /&gt;
+    I have a cellphone
+&lt;/p&gt;
+&lt;p&gt;
+    Your cellphone number:
+    &lt;input type='text' data-bind="value: cellphoneNumber, enable: hasCellphone" /&gt;
+&lt;/p&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        hasCellphone : ko.observable(false),
+        cellphoneNumber: ""
+    };
+&lt;/script&gt;
+</code></pre>
+
+<p>当checkbox选中的时候，input可用。</p>
+
+<h2 id="section">参数</h2>
+
+<ul>
+  <li>控制DOM元素是否可用的值</li>
+  <li>非<code>bool</code>型值被当转义成bool型。<code>0</code>，<code>null</code>会当做<code>false</code>，<code>21</code>和非空对象被当做 <code>true</code>。</li>
+</ul>
+
+<p>## 注意: 使用任意js表达式</p>
+
+<p>可以使用任何js表达式来控制元素的enable属性</p>
+
+<pre><code>&lt;button data-bind="enable: parseAreaCode(viewModel.cellphoneNumber()) != '555'"&gt;
+    Do something
+&lt;/button&gt;
+</code></pre>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs api-ref">
+    		knockoutjs api <span>16</span>
+    	</a></li>
     
   
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
 
   
@@ -150,165 +218,39 @@
 
 
 
-</ul>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs" title="下载和安装">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/knockoutjs%20api/2015/11/25/event-bind" title="event bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
 
- 
-  <h2 id="knockoutjs API-ref">knockoutjs API</h2>
-  <ul>
-      
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'wikieswan'; // required: replace example with your forum shortname
     
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/with-bind">with bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/2015/11/25/visible-bind">visible bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/value-bind">value bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/2015/11/25/text-bind">text bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/template-bind">template bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/submit-bind">submit bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/style-bind">style bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/html-bind">html bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work">knockoutjs怎样工作并且它能给我们带来什么好处</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/foreach-bind">foreach bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/event-bind">event bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/enalble-bind">enalble bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs">下载和安装</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/css-bind">css bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/component-bind">component bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/click-bind">click bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/bind-context"> bind context</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/attr-bind">attr bind</a></li>
-      	
-      
-    
-  
-
-
-
-  </ul>
 
 
   </div>

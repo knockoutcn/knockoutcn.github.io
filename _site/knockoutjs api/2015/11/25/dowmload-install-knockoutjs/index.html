@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>标签</title>
-    
+    <title>下载和安装</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -114,7 +114,7 @@
     
       
       	
-      	<li class="active"><a href="/tags.html" class="active">标签</a></li>
+      	<li><a href="/tags.html">标签</a></li>
       	
       
     
@@ -130,16 +130,78 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>标签 </h1>
+  <h1>下载和安装 </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
-    
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="section">下载和安装</h1>
 
-<ul class="tag_box inline">
+<p>Knockout是在以下三个功能上建立起来的：</p>
+
+<ul>
+  <li>
+    <p>1.监控属性和依赖跟踪</p>
+  </li>
+  <li>
+    <p>2.声明式绑定</p>
+  </li>
+  <li>
+    <p>3.模板</p>
+
+    <p>这一节，你讲学到3个功能中的第一个。 在这之前， 我们先来解释一下MVVM模式和view model的概念。</p>
+  </li>
+</ul>
+
+<h2 id="mvvm-and-view-models">MVVM and View Models</h2>
+
+<p>Model-View-View Model (MVVM) 是一种构建用户界面的设计模式。它描述了如果把一个复杂的UI分成三部分：</p>
+
+<ul>
+  <li>
+    <p>A model： 你的应用程序存储的数据。这个数据表示对象和业务领域的操作(比如银行业务-可以执行转账)，并且它独立于任何UI。当你使用KO的时候，model通常指的是利用ajax从服务器端读取和写入进去的数据模型。</p>
+  </li>
+  <li>
+    <p>A view model: 一些纯粹的代码表示UI层面的数据和操作。例如，你正在实现列表编辑，你的视图模型就是列表项目对象和增删改查操作方法。</p>
+
+    <p>注意这不是UI本身：它不包含任何按钮的概念或者显示风格。它也不是持续数据模型 – 包含用户正在使用的未保存数据。使用KO的时候，你的view models是不包含任何HTML知识的纯JavaScript 对象。保持view model抽象可以保持简单，以便你能管理更复杂的行为。</p>
+  </li>
+  <li>
+    <p>view: 一个可见的，交互式的，表示view model状态的UI。 从view model显示数据，发送命令到view model（例如：当用户click按钮的时候） ，任何view model状态改变的时候更新。</p>
+  </li>
+</ul>
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs api-ref">
+    		knockoutjs api <span>16</span>
+    	</a></li>
     
   
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
 
   
@@ -150,165 +212,39 @@
 
 
 
-</ul>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/css-bind" title="css bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/knockoutjs%20api/2015/11/25/enalble-bind" title="enalble bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
 
- 
-  <h2 id="knockoutjs API-ref">knockoutjs API</h2>
-  <ul>
-      
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'wikieswan'; // required: replace example with your forum shortname
     
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/with-bind">with bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/2015/11/25/visible-bind">visible bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/value-bind">value bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/2015/11/25/text-bind">text bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/template-bind">template bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/submit-bind">submit bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/style-bind">style bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/html-bind">html bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work">knockoutjs怎样工作并且它能给我们带来什么好处</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/foreach-bind">foreach bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/event-bind">event bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/enalble-bind">enalble bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs">下载和安装</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/css-bind">css bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/component-bind">component bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/click-bind">click bind</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/bind-context"> bind context</a></li>
-      	
-      
-    
-  
-    
-      
-      	
-      	<li><a href="/knockoutjs%20api/2015/11/25/attr-bind">attr bind</a></li>
-      	
-      
-    
-  
-
-
-
-  </ul>
 
 
   </div>

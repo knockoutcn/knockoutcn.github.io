@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title> bind context</title>
+    <title>ifnot bind</title>
     <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
@@ -138,7 +138,7 @@
       <div class="container">
         
 <div class="page-header">
-  <h1> bind context </h1>
+  <h1>ifnot bind </h1>
 </div>
 
 <div class="row post-full">
@@ -148,134 +148,24 @@
     </div>
     <div class="content">
       
-<h1 id="section">绑定的上下文</h1>
+<p>if 绑定的表达式取反</p>
 
-<p>绑定的上下文是一个对象，它保存了你可以从你的绑定中获取的数据。当使用绑定的时候，KO会自动创建并管理一个有层次结构的上下文环境。 它的根节点指向你在 js中 <code>ko.applyBindings(viewModel)</code> 执行绑定锁传递的参数 <code>viewModel</code> 。之后每次使用控制流绑定，比如 <code>with</code> 或者 <code>foreach</code> 的时候，就会创建一个子绑定的上下文，指向嵌套的视图模型的数据。</p>
-
-<p>绑定的上下文提供下面这些特殊的属性，你可以在任何绑定中使用。</p>
-
-<h2 id="parent">$parent</h2>
-
-<p>指向当前数据模型的父级上下文环境，在根节点上下文环境中，它是 <code>undefined</code> 。例子：</p>
-
-<pre><code>&lt;h1 data-bind="text: name"&gt;&lt;/h1&gt;
- 
-&lt;div data-bind="with: manager"&gt;
-    &lt;!-- Now we're inside a nested binding context --&gt;
-    &lt;span data-bind="text: name"&gt;&lt;/span&gt; is the
-    manager of &lt;span data-bind="text: $parent.name"&gt;&lt;/span&gt;
-&lt;/div&gt;
-</code></pre>
-
-<h2 id="parents">$parents</h2>
-
-<p>是一个数组对象，存储了当前对象的所有父级属相。（类似于jquery的parents）</p>
-
-<p><code>$parents[0]</code> 是直接父级上下文的视图模型（等价于上面的 <code>$parent</code> ）；</p>
-
-<p><code>$parents[1]</code> 是祖父级上下文的视图模型；</p>
-
-<p><code>$parents[2]</code> 是曾祖父级上下文视图模型；</p>
-
-<p>……以此类推吧。</p>
-
-<h2 id="root">$root</h2>
-
-<p>指向根级上下文环境，就是 <code>ko.applyBindings</code> 传递的参数。等同于 <code>$parents[$parents.length - 1]</code> .</p>
-
-<h2 id="component">$component</h2>
-
-<p>在组件模板的上下文中， <code>$component</code> 指向组件的视图模型。特殊情况下是等于 <code>$root</code> de 。在嵌套组件中， <code>$component</code> 指向最近的组件的视图模型。</p>
-
-<h2 id="data">$data</h2>
-
-<p>指向当前上下文环境中的视图模型。在根级上下文环境中 <code>$data</code> 和 <code>$root</code> 是相等的。 在嵌套绑定上下文中，<code>$data</code> 指向当前数据模型。<code>$data</code> 通常在要获取视图模型本身的时候使用。例子：</p>
-
-<pre><code>&lt;ul data-bind="foreach: ['cats', 'dogs', 'fish']"&gt;
-    &lt;li&gt;The value is &lt;span data-bind="text: $data"&gt;&lt;/span&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-
-<h2 id="indexforeach">$index(只在<code>foreach</code>绑定中使用)</h2>
-
-<p>一个从0开始的指向<code>foreach</code>的索引值。和其他绑定上下文属性不同的是，<code>$index</code> 是一个观察者并且只要数组对象的选项发生变化，它都会随之更新。</p>
-
-<h2 id="parentcontext">$parentContext</h2>
-
-<p>指向父级的上下文，它和<code>$parent</code> 是不同的。<code>$parent</code>指向的是父级的数据，而不是绑定的环境。如果你需要中<code>foreach</code> 内部一行的上下文中获取它外部的索引值，那么就需要用到它。例如<code>$parentContext.$index</code> .在根级上下文它是 <code>undefined</code> .</p>
-
-<h2 id="rawdata">$rawData</h2>
-
-<p>在行级数据模型中指向当前的上下文。通常它和 <code>$data</code> 是一样的，但是如果传递给KO的数据模型是包含在一个观察者中的， <code>$data</code> 指向的数据模型，而<code>$rawData</code> 指向这个观察者本身。</p>
-
-<h2 id="componenttemplatenodes">$componentTemplateNodes</h2>
-
-<p>在组件模板的上下文中，<code>$componentTemplateNodes</code> 是一个包含所有被传递到组件中的 DOM 节点。这样就很简单的创建一个组件来接受模板，比如说一个表格组件接受模板来定义它的行输出。</p>
-
-<p>下面这些属性在绑定中也是可用的，但是它们不是绑定上下文对象的一部分。</p>
-
-<h2 id="context">$context</h2>
-
-<p>指向当前绑定的上下文对象。当这些属性可能存在于视图模型中或者你想把上下文对象传递到你视图模型中的一个帮助函数中的时候，如果你想获得上线文对象的属性，那就需要使用 <code>$context</code> 。</p>
-
-<h2 id="element">$element</h2>
-
-<p>指向当前绑定的 DOM 节点对象。当你想获得当前元素的一些属性的时候，可以使用它。例子：</p>
-
-<pre><code>&lt;div id="item1" data-bind="text: $element.id"&gt;&lt;/div&gt;
-</code></pre>
-
-<h2 id="section-1">在自定义绑定中，控制或者修改绑定上下文</h2>
-
-<p>在 <code>with</code> 或者 <code>foreach</code>  中，用户自定义的绑定可以改变它的后代元素的绑定上下文，或者通过扩展绑定上下文对象来提供特殊属性。详细了解，<a href="http://knockoutjs.com/documentation/custom-bindings-controlling-descendant-bindings.html">猛戳这里</a></p>
+<p>恩 就这么简单！！！</p>
 
     </div>
 
-  
-    <ul class="tag_box inline">
-      <li><i class="glyphicon glyphicon-open"></i></li>
-      
-      
-
-
-  
-     
-    	<li><a href="/categories.html#knockoutjs api-ref">
-    		knockoutjs api <span>19</span>
-    	</a></li>
-    
-  
-
-
-    </ul>
     
 
-  
-    <ul class="tag_box inline">
-      <li><i class="glyphicon glyphicon-tags"></i></li>
-      
-      
-
-
-  
-     
-    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>19</span></a></li>
-    
-  
-
-
-
-    </ul>
     
   
     <hr>
     <ul class="pagination">
     
-      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/attr-bind" title="attr bind">&laquo; Previous</a></li>
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/if-bind" title="if bind">&laquo; Previous</a></li>
     
       <li><a href="/archive.html">Archive</a></li>
     
-      <li class="next"><a href="/knockoutjs%20api/2015/11/25/click-bind" title="click bind">Next &raquo;</a></li>
+      <li class="next"><a href="/share/2015/11/25/some-tips-when-using-knockoutjs" title="使用knockoutjs的一些注意点">Next &raquo;</a></li>
     
     </ul>
     <hr>

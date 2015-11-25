@@ -17,7 +17,7 @@ http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/template-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/submit-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/style-bind
 http://knockoutcn.github.io/share/2015/11/25/some-tips-when-using-knockoutjs
-http://knockoutcn.github.io/2015/11/25/ifnot-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/ifnot-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/if-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/html-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work

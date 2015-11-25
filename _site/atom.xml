@@ -4,7 +4,7 @@
  <title>knockout 中文</title>
  <link href="http://knockoutcn.github.io/" rel="self"/>
  <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-25T17:53:21+08:00</updated>
+ <updated>2015-11-25T17:55:26+08:00</updated>
  <id>http://knockoutcn.github.io</id>
  <author>
    <name>wikieswan</name>
@@ -1042,9 +1042,9 @@ viewModel.myMessage(&quot;Hello, world!&quot;); // Text appears
  
  <entry>
    <title>ifnot bind</title>
-   <link href="http://knockoutcn.github.io/2015/11/25/ifnot-bind"/>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/ifnot-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/2015/11/25/ifnot-bind</id>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/ifnot-bind</id>
    <content type="html">
 &lt;p&gt;if 绑定的表达式取反&lt;/p&gt;
 

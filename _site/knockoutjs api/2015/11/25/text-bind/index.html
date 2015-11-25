@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>css bind</title>
-    <meta name="description" content="">
+    <title>text bind</title>
+    <meta name="description" content="knockoutjs API">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -138,7 +138,7 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>css bind </h1>
+  <h1>text bind </h1>
 </div>
 
 <div class="row post-full">
@@ -148,107 +148,105 @@
     </div>
     <div class="content">
       
-<h1 id="css-">css 绑定</h1>
+<h1 id="text-">text 绑定</h1>
 
 <h2 id="section">作用</h2>
 
-<p>css 可以实现给指定DOM元素增加或者移除一个或者多个class。例如当参数值发生变化的时候，根据需要，给页面元素高亮成红色。</p>
+<p>text 绑定让DOM元素显示参数的值。对于 span 、 em 这些常用来表示文本的标签起作用，但是你想绑定在其他标签上也是可以的。</p>
 
-<h2 id="class">示例1 静态class</h2>
+<h2 id="section-1">示例</h2>
 
-<pre><code>&lt;div data-bind="css: { profitWarning: currentProfit() &lt; 0 }"&gt;
-   Profit Information
-&lt;/div&gt;
-
+<pre><code>Today's message is: &lt;span data-bind="text: myMessage"&gt;&lt;/span&gt;
 
 var viewModel = {
-    currentProfit: ko.observable(150000) // Positive value, so initially we don't apply the "profitWarning" class
+    myMessage: ko.observable() // Initially blank
 };
-viewModel.currentProfit(-50); // Causes the "profitWarning" class to be applied
-
+viewModel.myMessage("Hello, world!"); // Text appears
 ko.applyBindings(viewModel);
-
-
-.profitWarning{
-  color:#f00;
-}
 </code></pre>
 
-<p>当currentProfit 的值小于0的时候，元素会加上profitWarning 这个class</p>
+<h2 id="section-2">参数说明</h2>
 
-<h2 id="class-1">示例2 动态class</h2>
+<h3 id="section-3">主要参数</h3>
 
-<pre><code>&lt;div data-bind="css: profitStatus"&gt;
-    Profit Information
-&lt;/div&gt;
+<p>Knockout 用参数的值设置DOM元素的text属性值；DOM元素原先的值会被复写。</p>
 
+<p>如果参数是一个observable变量，那么一旦参数的值发生变化，页面上绑定的值都会立即改变；如果不是，那么只会在第一次绑定的时候改变页面元素的文本值，页面上的值之后就不会再被改变。</p>
 
-var viewModel = {
-    currentProfit: ko.observable(150000)
-};
- 
-// Evalutes to a positive value, so initially we apply the "profitPositive" class
-viewModel.profitStatus = ko.pureComputed(function() {
-    return this.currentProfit() &lt; 0 ? "profitWarning" : "profitPositive";
-}, viewModel);
- 
-// Causes the "profitPositive" class to be removed and "profitWarning" class to be added
-viewModel.currentProfit(-50);
-ko.applyBindings(viewModel);
+<p>如果参数的类型不是number或者string（e.g., 对象或者数组），那么页面上展示的文本是对象到字符串等效转化的值，相当于yourParameter.toString()</p>
 
-
-.profitWarning{
-  color:#f00;
-}
-.profitPositive{
-  color:#ff0;
-}
-</code></pre>
-
-<p>当currentProfit是正值的时候，元素会绑定profitPositive  class，否则绑定profitWarning class</p>
-
-<h2 id="section-1">参数说明</h2>
-
-<h3 id="section-2">主要参数</h3>
-
-<p>如果你使用静态的CSS class，然后传递一个属性名是CSS类名的javascript对象，根据是否加上CSS类的需求，把它们的值设置为true或者false。</p>
-
-<p>可以一次设置多个CSS 类。例如，如果数据模型中有一个属性<b>isSevere</b></p>
-
-<pre><code>&lt;div data-bind="css: { profitWarning: currentProfit() &lt; 0, majorHighlight: isSevere }"&gt;
-</code></pre>
-
-<p>用引号括起来多个CSS类，可以实现根据同一个条件来设置多个CSS 类。例如</p>
-
-<pre><code>&lt;div data-bind="css: { profitWarning: currentProfit() &lt; 0, 'major highlight': isSevere }"&gt;
-</code></pre>
-
-<p>非boolean 会被转化为boolean 型。例如0和null被转化为false；数字21或者非空对象被转化为true。</p>
-
-<p>如果参数是一个observable 参数，当参数值发生改变的时候，绑定元素会添加或者移除CSS类。如果不是，那么直会在第一次绑定的时候添加或者移除CSS类，之后不会改变。</p>
-
-<p>如果你想用动态的CSS类，（所谓动态是指参数去不同的值，元素会绑定不同的CSS类），你需要传递一个字符串，这个字符串用来表示将要添加到DOM上的CSS类名。</p>
-
-<p>如果参数是一个observable参数，绑定的时候会移除DOM原先的所有CSS类，然后根据参数的值给元素添加新的CSS类。</p>
-
-<p>通常，可以使用任意的javascript函数或者表达式作为参数。knockout会计算结果，然后根据逻辑决定添加或者移除CSS类。</p>
-
-<h3 id="section-3">其他参数</h3>
+<h3 id="section-4">其他参数</h3>
 
 <p>无</p>
 
-<p>注意 不能使用不合法的javascript变量名作为CSS类名</p>
+<h2 id="section-5">注意1：使用函数和表达式获取文本的值</h2>
 
-<p>如果你想使用<b>my-class</b>类名，你不能像下面这样写：</p>
+<p>如果想通过程序方式确定文本的值，那么需要用到可计算的observable,用可以返回文本的函数名作为参数。</p>
 
-<pre><code>&lt;div data-bind="css: { my-class: someValue }"&gt;&lt;/div&gt;
+<p>e.g.</p>
+
+<pre><code>The item is &lt;span data-bind="text: priceRating"&gt;&lt;/span&gt; today.
+
+var viewModel = {
+    price: ko.observable(24.95)
+};
+viewModel.priceRating = ko.pureComputed(function() {
+    return this.price() &gt; 50 ? "expensive" : "affordable";
+}, viewModel);
+ko.applyBindings(viewModel);
 </code></pre>
 
-<p>因为这时<b>my-class</b>不是合法的标示符。解决方案很简单，用引号括起来就可以了。这样CSS类名变成了一个简单的字符串文本，对于javascript对象来说这就是合法的属性名了。换句话说，javascript语言本身不支持带’-‘的属性名。
-例如</p>
+<p>那么文本的值就会根据price 的变化而取 “expensive” 或者 “affordable” 。</p>
 
-<pre><code>&lt;div data-bind="css: { 'my-class': someValue }"&gt;&lt;/div&gt;
+<p>另外，如果像下面那样只做简单的逻辑处理的话，是不需要创建可计算的observable的函数的。你可以传递任何的javascript表达式作为数据绑定。e.g.</p>
+
+<pre><code>The item is &lt;span data-bind="text: price() &gt; 50 ? 'expensive' : 'affordable'"&gt;&lt;/span&gt; today.
 </code></pre>
+
+<h3 id="html">注意2 HTML编码</h3>
+
+<p>既然绑定是用文本节点的值来设置页面上文本的值的，那么为了安全起见，设置任何字符串值的时候都应该避免HTML或者script注入。</p>
+
+<p>e.g.</p>
+
+<pre><code>viewModel.myMessage("&lt;i&gt;Hello, world!&lt;/i&gt;");
+</code></pre>
+
+<p>这段代码不会在页面上渲染出斜体文本，（即html标签不会被浏览器解析渲染），而是在页面上直接原样显示。</p>
+
+<p>如果你要在数据模型中设置html代码，请看下文关于html绑定的说明。</p>
+
+<h3 id="html-1">注意3 不适用html元素完成文本绑定</h3>
+
+<p>有时候，你想完成数据绑定而不引入额外的HTML元素。例如，在option标签中引入额外的元素是不可以的，像下面的代码是不会生效的：</p>
+
+<pre><code>&lt;select data-bind="foreach: items"&gt;
+  &lt;option&gt;Item &lt;span data-bind="text: name"&gt;&lt;/span&gt;&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+
+<p>为了处理这种情况，需要引入无容器的语法 – 文本注释标签</p>
+
+<pre><code>&lt;select data-bind="foreach: items"&gt;
+	&lt;option&gt;Item &lt;!--ko text: name--&gt;&lt;!--/ko--&gt;&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+
+<p><code>&lt;!--ko--&gt;</code>和<code>&lt;!--/ko--&gt;</code>表示注释区域的开始和结束。用这种方式定义了“虚拟元素”，里面包含了标记绑定。Knockout 会理解这种虚拟元素语法，并且会完成数据绑定。</p>
+
+<h3 id="ie-6">注意4 IE 6下怪异的空格</h3>
+
+<p>IE 6会忽略紧跟在span标签后面的空格。例如</p>
+
+<pre><code>Welcome, &lt;span data-bind="text: userName"&gt;&lt;/span&gt; to our web site.
+</code></pre>
+
+<p>在IE 6下 to our web site前面的空格不会显示出来，解决这个问题的办法是在span标签里面加上 例如</p>
+
+<pre><code>Welcome, &lt;span data-bind="text: userName"&gt;&amp;nbsp;&lt;/span&gt; to our web site.
+</code></pre>
+
+<p>在新版本的IE浏览器或者其他浏览器没有这个问题。</p>
 
     </div>
 
@@ -292,11 +290,11 @@ ko.applyBindings(viewModel);
     <hr>
     <ul class="pagination">
     
-      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/component-bind" title="component bind">&laquo; Previous</a></li>
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/template-bind" title="template bind">&laquo; Previous</a></li>
     
       <li><a href="/archive.html">Archive</a></li>
     
-      <li class="next"><a href="/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs" title="下载和安装">Next &raquo;</a></li>
+      <li class="next"><a href="/knockoutjs%20api/2015/11/25/value-bind" title="value bind">Next &raquo;</a></li>
     
     </ul>
     <hr>

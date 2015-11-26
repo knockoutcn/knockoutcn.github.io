@@ -4,7 +4,7 @@
  <title>knockout 中文</title>
  <link href="http://knockoutcn.github.io/" rel="self"/>
  <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-26T15:14:43+08:00</updated>
+ <updated>2015-11-26T15:52:03+08:00</updated>
  <id>http://knockoutcn.github.io</id>
  <author>
    <name>wikieswan</name>
@@ -212,6 +212,58 @@
 &amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
+</content>
+ </entry>
+ 
+ <entry>
+   <title>knockoutjs 如何处理 select 元素的change事件</title>
+   <link href="http://knockoutcn.github.io/share/2015/11/26/how-to-handle-select-change-event"/>
+   <updated>2015-11-26T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/share/2015/11/26/how-to-handle-select-change-event</id>
+   <content type="html">
+&lt;p&gt;关于knockoutjs 如何处理 select 元素的change事件，看到群里一直有人在提问，这里做一次小结。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;思路：&lt;/h2&gt;
+
+&lt;p&gt;每次用户操作select，选择了某一项，那么select的值会发生变化，并且新的值是用户选择的值。那么我只要知道select的值变化情况，就知道select的change事件了。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;代码实现&lt;/h2&gt;
+
+&lt;p&gt;既然有思路了，那就写code吧&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;
+    Destination country:
+    &amp;lt;select data-bind=&quot;options: availableCountries,value: country&quot;&amp;gt;&amp;lt;/select&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+	
+    var viewModel = {
+        country: ko.observable(),
+        availableCountries: ko.observableArray([&#39;France&#39;, &#39;Germany&#39;, &#39;Spain&#39;])
+    };
+    ko.applyBindings(viewModel);
+
+    viewModel.country.subscribe(function(newValue) {
+        alert(&quot;The person&#39;s new name is &quot; + newValue);
+    });
+
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;把上面的代码拷贝到你的文本编辑器中，记得引入knockoutjs，就可以查看效果了。可以看到，每次选择select，并发生变化，都会alert选择的值。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;代码解读&lt;/h2&gt;
+
+&lt;p&gt;那么上面代码怎么运行的呢？&lt;/p&gt;
+
+&lt;p&gt;可以看到，我给 select绑定了两个值，分别是 options和 value，前者是用来绑定要展示的select option，后者是记录select的值的。每次选择select，那么select的值会发生变化，那么我跟踪select的value变化就可以了。&lt;/p&gt;
+
+&lt;p&gt;那么是如何跟踪select值的变化的呢？&lt;/p&gt;
+
+&lt;p&gt;subscribe 这个函数，针对observable，你可以指定一个订阅，当 observable 变量发生变化，就会对外发送消息，这时候注册subscribe订阅的地方就可以收到变化的通知了。&lt;/p&gt;
+
+&lt;p&gt;完。&lt;/p&gt;
 </content>
  </entry>
  

@@ -19,6 +19,8 @@ tagline: knockoutjs 中文
 
 我们的github地址 [https://github.com/knockoutcn/knockoutcn.github.io](https://github.com/knockoutcn/knockoutcn.github.io)
 
+我们的网址 [http://knockoutjs.site/](http://knockoutjs.site/)
+
 有不正确的地方，欢迎指正。感谢网友们的共同支持。
 
 ### 贡献code方式：

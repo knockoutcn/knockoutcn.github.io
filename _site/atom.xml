@@ -4,7 +4,7 @@
  <title>knockout 中文</title>
  <link href="http://knockoutcn.github.io/" rel="self"/>
  <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-26T15:01:36+08:00</updated>
+ <updated>2015-11-26T15:14:43+08:00</updated>
  <id>http://knockoutcn.github.io</id>
  <author>
    <name>wikieswan</name>
@@ -222,6 +222,34 @@
    <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind</id>
    <content type="html">
 &lt;p&gt;enable bind 绑定取反。&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>knockoutjs 浏览器支持</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/broser-support"/>
+   <updated>2015-11-26T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/broser-support</id>
+   <content type="html">
+&lt;h2 id=&quot;pc&quot;&gt;pc&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Mozilla Firefox (versions 3.5 - current)
+Google Chrome (current)
+Microsoft Edge (current)
+Microsoft Internet Explorer (versions 6 - 11)
+Apple Safari for Mac OS (current)
+Apple Safari for iOS (versions 6 - 8)
+Opera (current version)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;mobile&quot;&gt;mobile&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Google Android OS browser
+Opera Mini
+Google Chrome 5+
+iOS Safari 5
+Mac OS X Safari 3.1.2+
+&lt;/code&gt;&lt;/pre&gt;
 </content>
  </entry>
  

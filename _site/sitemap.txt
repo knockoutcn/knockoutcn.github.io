@@ -9,6 +9,8 @@ http://knockoutcn.github.io/rss.xml
 http://knockoutcn.github.io/sitemap.txt
 http://knockoutcn.github.io/tags.html
 
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/options-bind
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/with-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/visible-bind
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/value-bind

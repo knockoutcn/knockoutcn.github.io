@@ -5,10 +5,223 @@
         <description>knockout 中文 - wikieswan</description>
         <link>http://knockoutcn.github.io</link>
         <link>http://knockoutcn.github.io</link>
-        <lastBuildDate>2015-11-25T17:55:26+08:00</lastBuildDate>
-        <pubDate>2015-11-25T17:55:26+08:00</pubDate>
+        <lastBuildDate>2015-11-26T15:01:36+08:00</lastBuildDate>
+        <pubDate>2015-11-26T15:01:36+08:00</pubDate>
         <ttl>1800</ttl>
 
+
+        <item>
+                <title>options bind</title>
+                <description>
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;控制下拉框（&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;）或者 multi-select 多选择框（&lt;code&gt;&amp;lt;select size=&#39;6&#39;&amp;gt;&lt;/code&gt;）显示哪些选项。这个绑定只适用于&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;元素。&lt;/p&gt;
+
+&lt;p&gt;options 绑定的值必须是一个数组（或者是 observable 数组），然后&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;元素会展示数组中每一个元素。&lt;/p&gt;
+
+&lt;p&gt;注意：对于 multi-select ，要设置哪个选项被选中或者获取选中的选项，需要使用 selectedOptions binding 。 对于 single-selec ，也可以使用 value bind 来设置或者获取选中的选项。&lt;/p&gt;
+
+&lt;h3 id=&quot;drop-down-list&quot;&gt;例子1 Drop-down list&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;
+    Destination country:
+    &amp;lt;select data-bind=&quot;options: availableCountries&quot;&amp;gt;&amp;lt;/select&amp;gt;
+&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        // These are the initial options
+        availableCountries: ko.observableArray([&#39;France&#39;, &#39;Germany&#39;, &#39;Spain&#39;])
+    };
+ 
+    // ... then later ...
+    viewModel.availableCountries.push(&#39;China&#39;); // Adds another option
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;multi-select-list&quot;&gt;例子2 Multi-select list&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;
+    Choose some countries you would like to visit:
+    &amp;lt;select data-bind=&quot;options: availableCountries&quot; size=&quot;5&quot; multiple=&quot;true&quot;&amp;gt;&amp;lt;/select&amp;gt;
+&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        availableCountries: ko.observableArray([&#39;France&#39;, &#39;Germany&#39;, &#39;Spain&#39;])
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;js--string&quot;&gt;例子3 下拉框展示复杂的js 对象，不仅仅是 string&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;
+    Your country:
+    &amp;lt;select data-bind=&quot;options: availableCountries,
+                       optionsText: &#39;countryName&#39;,
+                       value: selectedCountry,
+                       optionsCaption: &#39;Choose...&#39;&quot;&amp;gt;&amp;lt;/select&amp;gt;
+&amp;lt;/p&amp;gt;
+ 
+&amp;lt;div data-bind=&quot;visible: selectedCountry&quot;&amp;gt; &amp;lt;!-- Appears when you select something --&amp;gt;
+    You have chosen a country with population
+    &amp;lt;span data-bind=&quot;text: selectedCountry() ? selectedCountry().countryPopulation : &#39;unknown&#39;&quot;&amp;gt;&amp;lt;/span&amp;gt;.
+&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    // Constructor for an object with two properties
+    var Country = function(name, population) {
+        this.countryName = name;
+        this.countryPopulation = population;
+    };
+ 
+    var viewModel = {
+        availableCountries : ko.observableArray([
+            new Country(&quot;UK&quot;, 65000000),
+            new Country(&quot;USA&quot;, 320000000),
+            new Country(&quot;Sweden&quot;, 29000000)
+        ]),
+        selectedCountry : ko.observable() // Nothing selected by default
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;js&quot;&gt;例子4 下拉框展示复杂的js对象，展示的文本是函数的返回值&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- Same as example 3, except the &amp;lt;select&amp;gt; box expressed as follows: --&amp;gt;
+&amp;lt;select data-bind=&quot;options: availableCountries,
+                   optionsText: function(item) {
+                       return item.countryName + &#39; (pop: &#39; + item.countryPopulation + &#39;)&#39;
+                   },
+                   value: selectedCountry,
+                   optionsCaption: &#39;Choose...&#39;&quot;&amp;gt;&amp;lt;/select&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意，例子3和4的区别在于 optionsText 属性值得到方式不一样。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参数&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;主要参数&lt;/h3&gt;
+
+&lt;p&gt;一个数组对象。对数组中每一项，knockoutjs 会添加一个 &lt;code&gt;&amp;lt;option&amp;gt;&lt;/code&gt; ，然后追加在 &lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;节点中。&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;原先的内容会被移除。&lt;/p&gt;
+
+&lt;p&gt;如果参数是一个string类型的简单数组对象，你就不需要添加其他额外的参数。&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;会展示出来数组中的每一个对象。如果是一个任意js对象数组（不仅仅是字符串），那么就看下面的  optionsText 和 optionsValue 参数。&lt;/p&gt;
+
+&lt;p&gt;如果参数是一个 observable 变量，那么当变量值发生变化的时候，元素的option选项也会发生变化。否则，元素的option只在初始化的时候变化。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;附加参数&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;optionsCaption&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;有的时候，你不想让 selec 元素默认选择某个选项，但是  single-select  下拉框通常会默认选择某个选项，那么我们怎么避免这种情况呢？ 通常的解决方案是在选项中添加一个空的选项，文本类似于“请选择”，然后让它默认选中。&lt;/p&gt;
+
+&lt;p&gt;这很容易：添加一个参数叫 optionsCaption ，它的值就是要展示的值。例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;select data-bind=&#39;options: myOptions, optionsCaption: &quot;Select an item...&quot;, value: myChosenValue&#39;&amp;gt;&amp;lt;/select&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;knockoutjs会在selec上添加 “Select an item…” 作为默认选项文本，它的值是 undefined 。那么，如果 变量 myChosenValue 的值是 undefined ，那么默认选项就被选中 。 如果 optionsCaption 是一个 observable 变量，那么它的值还是可以改变的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;optionsText&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;例子3中展示了 optionsText 如何展示js对象数组的文本显示的。你需要决定js对象哪个属性是需要作为文本显示出来的。&lt;/p&gt;
+
+&lt;p&gt;如果你不想简单显示js对象某个属性值，还可以通过函数计算来展示它的返回值。可以看例子4.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;optionsValue&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;和 optionsText 相似，你可以用一个任意js数组对象作为参数，然后用 optionsValue 来表示用对象的哪个属性作为选项的值。还可以用一个函数发返回值。&lt;/p&gt;
+
+&lt;p&gt;使用 optionsValue 是当更改选项数组值的时候，为了让knockoutjs 可以展示正确的选项。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;optionsIncludeDestroyed&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;有时候，你想把一个数组的入口删除了，但是又不想删除它的内容。这就是非破坏性删除。&lt;/p&gt;
+
+&lt;p&gt;默认情况下， options bind 会掉过（ie下是隐藏）任何被标记为销毁的数组入口。如果想展示被销毁的入口，那么就像下面这样添加参数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;select data-bind=&#39;options: myOptions, optionsIncludeDestroyed: true&#39;&amp;gt;&amp;lt;/select&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;optionsAfterRender&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你想运行一些自定义的逻辑来生成 option 元素，可以使用 optionsAfterRender 回调函数。 看下面的注意2。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;selectedOptions&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对于 multi-select ，你可以用 selectedOptions 来读写选项的状态。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;valueAllowUnset&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;可以查看value bind 。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;注意1 当设置或者改变选项的时候，选项被保存&lt;/h2&gt;
+
+&lt;p&gt;当 option bind 改变 select 元素的选项时候，knockoutjs 会让用户的选择不会发生变化。所以，对于 single-select 下拉框，预先选择的选项仍会被选择，对于 multi-select 下拉框，预先选择的选项仍会被选择。（除非你把选中的选项删除了）&lt;/p&gt;
+
+&lt;p&gt;这是因为 options bind 依赖 value bind （single-select）和 selectedOptions bind （multi-select ）&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;注意2 程序生成选项&lt;/h2&gt;
+
+&lt;p&gt;如果你想用程序生成 option ，你可以使用 optionsAfterRender 回调函数。每次 option 元素被插入到列表中，回调函数就会执行一次。需要下面参数：&lt;/p&gt;
+
+&lt;p&gt;1 被插入的 option 元素&lt;/p&gt;
+
+&lt;p&gt;2 绑定的值或者 undefined&lt;/p&gt;
+
+&lt;p&gt;这有一个例子，可以感受下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;select size=3 data-bind=&quot;
+    options: myItems,
+    optionsText: &#39;name&#39;,
+    optionsValue: &#39;id&#39;,
+    optionsAfterRender: setOptionDisable&quot;&amp;gt;
+&amp;lt;/select&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var vm = {
+        myItems: [
+            { name: &#39;Item 1&#39;, id: 1, disable: ko.observable(false)},
+            { name: &#39;Item 3&#39;, id: 3, disable: ko.observable(true)},
+            { name: &#39;Item 4&#39;, id: 4, disable: ko.observable(false)}
+        ],
+        setOptionDisable: function(option, item) {
+            ko.applyBindingsToNode(option, {disable: item.disable}, item);
+        }
+    };
+    ko.applyBindings(vm);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+</description>
+                <link>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/options-bind</link>
+                <guid>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/options-bind</guid>
+                <pubDate>2015-11-26T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>disable bind</title>
+                <description>
+&lt;p&gt;enable bind 绑定取反。&lt;/p&gt;
+</description>
+                <link>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind</link>
+                <guid>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind</guid>
+                <pubDate>2015-11-26T00:00:00+08:00</pubDate>
+        </item>
 
         <item>
                 <title>with bind</title>

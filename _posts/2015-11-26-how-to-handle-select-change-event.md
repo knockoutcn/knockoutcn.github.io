@@ -31,7 +31,7 @@ tags: [share]
 	    ko.applyBindings(viewModel);
 
 	    viewModel.country.subscribe(function(newValue) {
-	        alert("The person's new name is " + newValue);
+	        alert("The select's new name is " + newValue);
 	    });
 
 	</script>

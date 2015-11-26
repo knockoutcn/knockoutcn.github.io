@@ -5,8 +5,8 @@
         <description>knockout 中文 - wikieswan</description>
         <link>http://knockoutcn.github.io</link>
         <link>http://knockoutcn.github.io</link>
-        <lastBuildDate>2015-11-26T15:01:36+08:00</lastBuildDate>
-        <pubDate>2015-11-26T15:01:36+08:00</pubDate>
+        <lastBuildDate>2015-11-26T15:14:43+08:00</lastBuildDate>
+        <pubDate>2015-11-26T15:14:43+08:00</pubDate>
         <ttl>1800</ttl>
 
 
@@ -220,6 +220,34 @@
 </description>
                 <link>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind</link>
                 <guid>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind</guid>
+                <pubDate>2015-11-26T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>knockoutjs 浏览器支持</title>
+                <description>
+&lt;h2 id=&quot;pc&quot;&gt;pc&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Mozilla Firefox (versions 3.5 - current)
+Google Chrome (current)
+Microsoft Edge (current)
+Microsoft Internet Explorer (versions 6 - 11)
+Apple Safari for Mac OS (current)
+Apple Safari for iOS (versions 6 - 8)
+Opera (current version)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;mobile&quot;&gt;mobile&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Google Android OS browser
+Opera Mini
+Google Chrome 5+
+iOS Safari 5
+Mac OS X Safari 3.1.2+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+                <link>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/broser-support</link>
+                <guid>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/broser-support</guid>
                 <pubDate>2015-11-26T00:00:00+08:00</pubDate>
         </item>
 

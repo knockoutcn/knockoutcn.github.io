@@ -10,6 +10,7 @@ http://knockoutcn.github.io/sitemap.txt
 http://knockoutcn.github.io/tags.html
 
 http://knockoutcn.github.io/share/2015/11/27/observable-senior
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/computeed-observable
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/options-bind
 http://knockoutcn.github.io/share/2015/11/26/how-to-handle-select-change-event
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind

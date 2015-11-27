@@ -4,7 +4,7 @@
  <title>knockout 中文</title>
  <link href="http://knockoutcn.github.io/" rel="self"/>
  <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-27T11:51:52+08:00</updated>
+ <updated>2015-11-27T16:33:12+08:00</updated>
  <id>http://knockoutcn.github.io</id>
  <author>
    <name>wikieswan</name>
@@ -120,6 +120,132 @@ myViewModel.personName.extend({ rateLimit: 50 });
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;那么像这样做就ok了。&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>computeed observable</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/computeed-observable"/>
+   <updated>2015-11-27T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/computeed-observable</id>
+   <content type="html">
+&lt;p&gt;computeed observable 的作用就是计算一些 observable 变量，然后把返回值作为一个 observable对象，提供给UI使用。这样当 computeed observable 依赖的 observable 变量发生变化的时候，它会自动计算新的值。&lt;/p&gt;
+
+&lt;p&gt;有这样一个对象，firstName lastName ，&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function AppViewModel() {
+    this.firstName = ko.observable(&#39;Bob&#39;);
+    this.lastName = ko.observable(&#39;Smith&#39;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是UI需要展示 fullName ，就可以这么做，&lt;/p&gt;
+
+&lt;p&gt;function AppViewModel() {
+    // … leave firstName and lastName unchanged …&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;this.fullName = ko.computed(function() {
+    return this.firstName() + &quot; &quot; + this.lastName();
+}, this); }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样在UI就可以这么写了&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;The name is &amp;lt;span data-bind=&quot;text: fullName&quot;&amp;gt;&amp;lt;/span&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样，只要 firstName lastName 发生变化，那么 fullName就会重新计算。&lt;/p&gt;
+
+&lt;h2 id=&quot;this&quot;&gt;管理 this&lt;/h2&gt;
+
+&lt;p&gt;ko.computed 第二个参数是 this 定义了计算 observable 时的 this 。如果不传递 this 参数 ，knockoutjs 就不能 找到 this.firstName() this.lastName() 。通常传递的this 就是你的 viewmodel 引用 。 如果不传递 this ，ko.computed 中计算时就用它自己作用域的 this 而不是 viewmodel 的了。&lt;/p&gt;
+
+&lt;p&gt;为了避免 this 混论，我们有一个公约，就是用 一个变量，比如 self 来缓存 this。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function AppViewModel() {
+    var self = this;
+ 
+    self.firstName = ko.observable(&#39;Bob&#39;);
+    self.lastName = ko.observable(&#39;Smith&#39;);
+    self.fullName = ko.computed(function() {
+        return self.firstName() + &quot; &quot; + self.lastName();
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样，及时不向ko.computed 传递第二个参数 this ，因为用了 self 缓存了 this ，那么也不会引起 this混乱 。&lt;/p&gt;
+
+&lt;h2 id=&quot;pure-computed-observable&quot;&gt;pure computed observable&lt;/h2&gt;
+
+&lt;p&gt;如果是简单的计算并返回 observable 对象的值，那么请使用 ko.pureComputed 来代替 ko.computed 。&lt;/p&gt;
+
+&lt;p&gt;例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;this.fullName = ko.pureComputed(function() {
+    return this.firstName() + &quot; &quot; + this.lastName();
+}, this);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为使用了 pureComputed ，那么knockoutjs 可以更高效的管理内存。（计算时不会去直接修改其他对象或者状态）
+如果没有其他代码在内存中以来这个 pureComputed 对象，那么knockoutjs 就是自动释放这部分内存。&lt;a href=&quot;http://knockoutjs.com/documentation/computed-pure.html&quot;&gt;know more&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;computed-observable-&quot;&gt;强制 computed observable 一直发出通知&lt;/h2&gt;
+
+&lt;p&gt;如果 computed 返回一个原始类型的值(a number, string, boolean, or null)，只有当值真正发生变化时才会发出通知。可以用 extend({ notify: ‘always’ }) 来强制通知 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;myViewModel.fullName = ko.pureComputed(function() {
+    return myViewModel.firstName() + &quot; &quot; + myViewModel.lastName();
+}).extend({ notify: &#39;always&#39; });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;延迟或者抑制通知&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;// Ensure updates no more than once per 50-millisecond period
+myViewModel.fullName.extend({ rateLimit: 50 });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;computed-observable--1&quot;&gt;判断某个属性是否在 computed observable 中&lt;/h2&gt;
+
+&lt;p&gt;有时候，你需要知道你用的对象是否是一个 computed observable 对象，可以使用  ko.isComputed 函数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for (var prop in myObject) {
+    if (myObject.hasOwnProperty(prop) &amp;amp;&amp;amp; !ko.isComputed(myObject[prop])) {
+        result[prop] = myObject[prop];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;knockoutjs 还提供其他类似功能的接口函数&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;ko.isObservable 如果是 observable 、 observable 数组 或者 computed observable 就返回 true&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ko.isWritableObservable 如果是 observable 、 observable 数组 或者 可写的 computed observable 就返回 true （它的另一个别名 ko.isWriteableObservable）&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;ui--computed-observable&quot;&gt;仅仅在 UI 上使用 computed observable&lt;/h2&gt;
+
+&lt;p&gt;可以像下面这样定义&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function AppViewModel() {
+    // ... leave firstName and lastName unchanged ...
+ 
+    this.fullName = function() {
+        return this.firstName() + &quot; &quot; + this.lastName();
+    };
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么UI可以这样写&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;The name is &amp;lt;span data-bind=&quot;text: fullName()&quot;&amp;gt;&amp;lt;/span&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;knockoutjs 会自动加上 computed observable ，当相关的UI元素被移除的时候，会释放变量内存。&lt;/p&gt;
 
 </content>
  </entry>

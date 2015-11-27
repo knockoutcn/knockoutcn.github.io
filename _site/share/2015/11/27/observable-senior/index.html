@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>knockoutjs 如何处理 select 元素的change事件</title>
+    <title>observable 高级用法</title>
     <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
@@ -138,59 +138,119 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>knockoutjs 如何处理 select 元素的change事件 </h1>
+  <h1>observable 高级用法 </h1>
 </div>
 
 <div class="row post-full">
   <div class="col-xs-12">
     <div class="date">
-      <span>26 November 2015</span>
+      <span>27 November 2015</span>
     </div>
     <div class="content">
       
-<p>关于knockoutjs 如何处理 select 元素的change事件，看到群里一直有人在提问，这里做一次小结。</p>
+<p>observable 函数声明的变量两个特征：</p>
 
-<h2 id="section">思路：</h2>
+<ul>
+  <li>
+    <p>被声明的变量返回是一个函数</p>
+  </li>
+  <li>
+    <p>实现knockoutjs 双向绑定的关键，是 view 和 viewmodel 双向绑定的桥梁</p>
+  </li>
+</ul>
 
-<p>每次用户操作select，选择了某一项，那么select的值会发生变化，并且新的值是用户选择的值。那么我只要知道select的值变化情况，就知道select的change事件了。</p>
+<p>ps：observable 变量的读写都是以函数的形式。</p>
 
-<h2 id="section-1">代码实现</h2>
+<h3 id="observable-">observable 变量声明</h3>
 
-<p>既然有思路了，那就写code吧</p>
-
-<pre><code>&lt;p&gt;
-    Destination country:
-    &lt;select data-bind="options: availableCountries,value: country"&gt;&lt;/select&gt;
-&lt;/p&gt;
-
-&lt;script type="text/javascript"&gt;
-	
-    var viewModel = {
-        country: ko.observable(),
-        availableCountries: ko.observableArray(['France', 'Germany', 'Spain'])
-    };
-    ko.applyBindings(viewModel);
-
-    viewModel.country.subscribe(function(newValue) {
-        alert("The select's new name is " + newValue);
-    });
-
-&lt;/script&gt;
+<pre><code>var myViewModel = {
+    personName: ko.observable('Bob'),
+    personAge: ko.observable(123)
+};
 </code></pre>
 
-<p>把上面的代码拷贝到你的文本编辑器中，记得引入knockoutjs，就可以查看效果了。可以看到，每次选择select，并发生变化，都会alert选择的值。</p>
+<h3 id="observable">读 observable</h3>
 
-<h2 id="section-2">代码解读</h2>
+<p>ko.observable 对象都是函数。所以读取对象的值是如下这种方式</p>
 
-<p>那么上面代码怎么运行的呢？</p>
+<pre><code>myViewModel.personName();
+//'Bob'
+</code></pre>
 
-<p>可以看到，我给 select绑定了两个值，分别是 options和 value，前者是用来绑定要展示的select option，后者是记录select的值的。每次选择select，那么select的值会发生变化，那么我跟踪select的value变化就可以了。</p>
+<h3 id="observable-1">写 observable</h3>
 
-<p>那么是如何跟踪select值的变化的呢？</p>
+<p>函数传参的形式</p>
 
-<p>subscribe 这个函数，针对observable，你可以指定一个订阅，当 observable 变量发生变化，就会对外发送消息，这时候注册subscribe订阅的地方就可以收到变化的通知了。</p>
+<pre><code>myViewModel.personName('Mary');
+</code></pre>
 
-<p>完。</p>
+<h3 id="observable--1">支持链式方式来修改observable 对象</h3>
+
+<p>链式写法可以同时修改多个observable 对象</p>
+
+<pre><code> myViewModel.personName('Mary').personAge(50)
+</code></pre>
+
+<h2 id="observable--2">订阅observable 对象的消息</h2>
+
+<p>有这样的场景，需要知道某个 observable 变量什么时候发生变化，并且做一些操作。这时候就用到 subscribe 函数了。</p>
+
+<pre><code>myViewModel.personName.subscribe(function(newValue) {
+    alert("The person's new name is " + newValue);
+});
+</code></pre>
+
+<p>上面的代码表示当 	personName 的值发生改变的时候，就出发一个回调函数。</p>
+
+<p>subscribe 函数是knockoutjs 内部工作原理。只有这个消息机制，knockoutjs 才能什么时候进行双向绑定的更新操作。</p>
+
+<p>subscribe 的参数</p>
+
+<ul>
+  <li>
+    <p>callback 回调函数是当有消息返回是触发</p>
+  </li>
+  <li>
+    <p>target 定义 callback 函数中的 this</p>
+  </li>
+  <li>
+    <p>event 触发通知的事件类型，默认是 change 。 beforeChange change afterChange</p>
+  </li>
+</ul>
+
+<p>订阅是可以终止的。第一次订阅会返回一个变量，然后调用 dispose 函数。如下</p>
+
+<pre><code>var subscription = myViewModel.personName.subscribe(function(newValue) { /* do stuff */ });
+// ...then later...
+subscription.dispose(); // I no longer want notifications
+</code></pre>
+
+<p>是不是看着很熟悉，这种形式和dom 事件的侦听和取消侦听一样的。 dispose 函数是用了释放ko对象用的。</p>
+
+<p>如果需要在对象变化前获取事件，可以像下面这样</p>
+
+<pre><code>myViewModel.personName.subscribe(function(oldValue) {
+    alert("The person's previous name is " + oldValue);
+}, null, "beforeChange");
+</code></pre>
+
+<h2 id="observable--3">强制 observable 对象每次都触发通知</h2>
+
+<p>正常情况下，只有放observable 变量的值真实发生变化时（新老值不一样）才触发通知。如果加上 extend({ notify: ‘always’ }) 扩展，那么只要修改 observable 对象就触发通知，不管它的值是否发生变化。</p>
+
+<pre><code>myViewModel.personName.extend({ notify: 'always' });
+</code></pre>
+
+<h2 id="change-">延迟或者抑制 change 通知</h2>
+
+<p>正常情况下，只要 observable 发生变化，会立即发出通知。但是如果一个 observable 持续发火说呢过变化，那么就会一直发出通知，这样大量的通知可能会触发性能问题。典型的应用场景是 input 输入框的联想查询，当用户输入间隔300 ms时触发查询，不然会产生大量的ajax 请求。</p>
+
+<pre><code>// Ensure it notifies about changes no more than once per 50-millisecond period
+myViewModel.personName.extend({ rateLimit: 50 });
+</code></pre>
+
+<p>那么像这样做就ok了。</p>
+
 
     </div>
 
@@ -234,11 +294,11 @@
     <hr>
     <ul class="pagination">
     
-      <li class="prev"><a href="/knockoutjs%20api/2015/11/26/disable-bind" title="disable bind">&laquo; Previous</a></li>
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/26/options-bind" title="options bind">&laquo; Previous</a></li>
     
       <li><a href="/archive.html">Archive</a></li>
     
-      <li class="next"><a href="/knockoutjs%20api/2015/11/26/options-bind" title="options bind">Next &raquo;</a></li>
+      <li class="next disabled"><a>Next &rarr;</a>
     
     </ul>
     <hr>

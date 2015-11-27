@@ -4,13 +4,147 @@
  <title>knockout 中文</title>
  <link href="http://knockoutcn.github.io/" rel="self"/>
  <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-27T17:23:01+08:00</updated>
+ <updated>2015-11-27T18:04:14+08:00</updated>
  <id>http://knockoutcn.github.io</id>
  <author>
    <name>wikieswan</name>
    <email>wikinjoel@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>writable computed observables</title>
+   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/writable-computed-observables"/>
+   <updated>2015-11-27T00:00:00+08:00</updated>
+   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/writable-computed-observables</id>
+   <content type="html">
+&lt;p&gt;正常情况下，computed observable 的值是其他 observable 对象计算得来的，computed observable 是只读的。 但是有办法让 computed observable 变量可写。你只需要在回调函数中实现一些写操作的方法就可以了。&lt;/p&gt;
+
+&lt;p&gt;你可以像使用正常 observable 对象那样使用一个可写的 computed observable 对象。读写规则都是自己实现的。还可以用链式写法给多个 observable 对象赋值。&lt;/p&gt;
+
+&lt;p&gt;可写的 computed observable 对象有强大的特征，用途广泛。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;例子1&lt;/h2&gt;
+
+&lt;p&gt;回顾经典例子 first name + last name = full name ，你可以把等式倒过来，让 fullname 可写，那么当修改了 fullname ，那么 firstname lastname 都会发生变化。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;First name: &amp;lt;span data-bind=&quot;text: firstName&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;Last name: &amp;lt;span data-bind=&quot;text: lastName&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div class=&quot;heading&quot;&amp;gt;Hello, &amp;lt;input data-bind=&quot;textInput: fullName&quot;/&amp;gt;&amp;lt;/div&amp;gt;
+
+
+function MyViewModel() {
+    this.firstName = ko.observable(&#39;Planet&#39;);
+    this.lastName = ko.observable(&#39;Earth&#39;);
+ 
+    this.fullName = ko.pureComputed({
+        read: function () {
+            return this.firstName() + &quot; &quot; + this.lastName();
+        },
+        write: function (value) {
+            var lastSpacePos = value.lastIndexOf(&quot; &quot;);
+            if (lastSpacePos &amp;gt; 0) { // Ignore values with no space character
+                this.firstName(value.substring(0, lastSpacePos)); // Update &quot;firstName&quot;
+                this.lastName(value.substring(lastSpacePos + 1)); // Update &quot;lastName&quot;
+            }
+        },
+        owner: this
+    });
+}
+ 
+ko.applyBindings(new MyViewModel());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;checkbox-&quot;&gt;例子2  checkbox 级联&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;heading&quot;&amp;gt;
+    &amp;lt;input type=&quot;checkbox&quot; data-bind=&quot;checked: selectedAllProduce&quot; title=&quot;Select all/none&quot;/&amp;gt; Produce
+&amp;lt;/div&amp;gt;
+&amp;lt;div data-bind=&quot;foreach: produce&quot;&amp;gt;
+    &amp;lt;label&amp;gt;
+        &amp;lt;input type=&quot;checkbox&quot; data-bind=&quot;checkedValue: $data, checked: $parent.selectedProduce&quot;/&amp;gt;
+        &amp;lt;span data-bind=&quot;text: $data&quot;&amp;gt;&amp;lt;/span&amp;gt;
+    &amp;lt;/label&amp;gt;
+&amp;lt;/div&amp;gt;
+
+function MyViewModel() {
+    this.produce = [ &#39;Apple&#39;, &#39;Banana&#39;, &#39;Celery&#39;, &#39;Corn&#39;, &#39;Orange&#39;, &#39;Spinach&#39; ];
+    this.selectedProduce = ko.observableArray([ &#39;Corn&#39;, &#39;Orange&#39; ]);
+    this.selectedAllProduce = ko.pureComputed({
+        read: function () {
+            // Comparing length is quick and is accurate if only items from the
+            // main array are added to the selected array.
+            return this.selectedProduce().length === this.produce.length;
+        },
+        write: function (value) {
+            this.selectedProduce(value ? this.produce.slice(0) : []);
+        },
+        owner: this
+    });
+}
+ko.applyBindings(new MyViewModel());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例子3 值转化&lt;/p&gt;
+
+&lt;p&gt;有时候，值需要进行转化，例如钱的数额表示，需要加前缀并取两位小数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;Enter bid price: &amp;lt;input data-bind=&quot;textInput: formattedPrice&quot;/&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;(Raw value: &amp;lt;span data-bind=&quot;text: price&quot;&amp;gt;&amp;lt;/span&amp;gt;)&amp;lt;/div&amp;gt;
+
+function MyViewModel() {
+    this.price = ko.observable(25.99);
+ 
+    this.formattedPrice = ko.pureComputed({
+        read: function () {
+            return &#39;$&#39; + this.price().toFixed(2);
+        },
+        write: function (value) {
+            // Strip out unwanted characters, parse as float, then write the 
+            // raw data back to the underlying &quot;price&quot; observable
+            value = parseFloat(value.replace(/[^\.\d]/g, &quot;&quot;));
+            this.price(isNaN(value) ? 0 : value); // Write to underlying storage
+        },
+        owner: this
+    });
+}
+ 
+ko.applyBindings(new MyViewModel());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;例子4 过滤和校验用户输入&lt;/h2&gt;
+
+&lt;p&gt;例子1 中，我们把用户输入的值根据空格分成两部分，得到用户输入的值对应的 firstname lastname 。更深入的想下，如果用户这是后加入一些校验逻辑，那么可以做的事情就更多了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;Enter a numeric value: &amp;lt;input data-bind=&quot;textInput: attemptedValue&quot;/&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div class=&quot;error&quot; data-bind=&quot;visible: !lastInputWasValid()&quot;&amp;gt;That&#39;s not a number!&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;(Accepted value: &amp;lt;span data-bind=&quot;text: acceptedNumericValue&quot;&amp;gt;&amp;lt;/span&amp;gt;)&amp;lt;/div&amp;gt;
+
+function MyViewModel() {
+    this.acceptedNumericValue = ko.observable(123);
+    this.lastInputWasValid = ko.observable(true);
+ 
+    this.attemptedValue = ko.pureComputed({
+        read: this.acceptedNumericValue,
+        write: function (value) {
+            if (isNaN(value))
+                this.lastInputWasValid(false);
+            else {
+                this.lastInputWasValid(true);
+                this.acceptedNumericValue(value); // Write to underlying storage
+            }
+        },
+        owner: this
+    });
+}
+ 
+ko.applyBindings(new MyViewModel());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意，这个例子只是为了说明可写的 computed observable 有这种特征，但是实际上并不适合在生产中这么做。这种情况下用jquery更方便哦。&lt;/p&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>observable 高级用法</title>

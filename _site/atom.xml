@@ -4,7 +4,7 @@
  <title>knockout 中文</title>
  <link href="http://knockoutcn.github.io/" rel="self"/>
  <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-27T11:01:55+08:00</updated>
+ <updated>2015-11-27T11:51:52+08:00</updated>
  <id>http://knockoutcn.github.io</id>
  <author>
    <name>wikieswan</name>
@@ -84,7 +84,7 @@
     &lt;p&gt;target 定义 callback 函数中的 this&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;event 触发通知的事件类型，默认是 change 。 beforeChange change afterChange&lt;/p&gt;
+    &lt;p&gt;event 触发通知的事件类型，默认是 change 。 beforeChange change&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 

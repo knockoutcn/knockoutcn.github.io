@@ -62,7 +62,7 @@ subscribe 的参数
 
 + target 定义 callback 函数中的 this
 
-+ event 触发通知的事件类型，默认是 change 。 beforeChange change afterChange
++ event 触发通知的事件类型，默认是 change 。 beforeChange change 
 
 订阅是可以终止的。第一次订阅会返回一个变量，然后调用 dispose 函数。如下
 

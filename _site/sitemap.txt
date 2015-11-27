@@ -9,6 +9,7 @@ http://knockoutcn.github.io/rss.xml
 http://knockoutcn.github.io/sitemap.txt
 http://knockoutcn.github.io/tags.html
 
+http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/writable-computed-observables
 http://knockoutcn.github.io/share/2015/11/27/observable-senior
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/computeed-observable
 http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/options-bind

@@ -18,13 +18,13 @@ computeed observable 的作用就是计算一些 observable 变量，然后把�
 
 但是UI需要展示 fullName ，就可以这么做，
 
-function AppViewModel() {
-    // ... leave firstName and lastName unchanged ...
- 
-    this.fullName = ko.computed(function() {
-        return this.firstName() + " " + this.lastName();
-    }, this);
-}
+	function AppViewModel() {
+	    // ... leave firstName and lastName unchanged ...
+	 
+	    this.fullName = ko.computed(function() {
+	        return this.firstName() + " " + this.lastName();
+	    }, this);
+	}
 
 这样在UI就可以这么写了
 

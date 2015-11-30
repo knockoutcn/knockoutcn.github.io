@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
  
- <title>knockout 中文</title>
- <link href="http://knockoutcn.github.io/" rel="self"/>
- <link href="http://knockoutcn.github.io"/>
- <updated>2015-11-27T18:04:14+08:00</updated>
- <id>http://knockoutcn.github.io</id>
+ <title>knockoutjs 中文</title>
+ <link href="http://knockoutjs.site/" rel="self"/>
+ <link href="http://knockoutjs.site"/>
+ <updated>2015-11-30T10:47:19+08:00</updated>
+ <id>http://knockoutjs.site</id>
  <author>
    <name>wikieswan</name>
    <email>wikinjoel@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>writable computed observables</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/writable-computed-observables"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/27/writable-computed-observables"/>
    <updated>2015-11-27T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/writable-computed-observables</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/27/writable-computed-observables</id>
    <content type="html">
 &lt;p&gt;正常情况下，computed observable 的值是其他 observable 对象计算得来的，computed observable 是只读的。 但是有办法让 computed observable 变量可写。你只需要在回调函数中实现一些写操作的方法就可以了。&lt;/p&gt;
 
@@ -148,9 +148,9 @@ ko.applyBindings(new MyViewModel());
  
  <entry>
    <title>observable 高级用法</title>
-   <link href="http://knockoutcn.github.io/share/2015/11/27/observable-senior"/>
+   <link href="http://knockoutjs.site/share/2015/11/27/observable-senior"/>
    <updated>2015-11-27T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/share/2015/11/27/observable-senior</id>
+   <id>http://knockoutjs.site/share/2015/11/27/observable-senior</id>
    <content type="html">
 &lt;p&gt;observable 函数声明的变量两个特征：&lt;/p&gt;
 
@@ -260,9 +260,9 @@ myViewModel.personName.extend({ rateLimit: 50 });
  
  <entry>
    <title>computeed observable</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/computeed-observable"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/27/computeed-observable"/>
    <updated>2015-11-27T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/27/computeed-observable</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/27/computeed-observable</id>
    <content type="html">
 &lt;p&gt;computeed observable 的作用就是计算一些 observable 变量，然后把返回值作为一个 observable对象，提供给UI使用。这样当 computeed observable 依赖的 observable 变量发生变化的时候，它会自动计算新的值。&lt;/p&gt;
 
@@ -276,12 +276,13 @@ myViewModel.personName.extend({ rateLimit: 50 });
 
 &lt;p&gt;但是UI需要展示 fullName ，就可以这么做，&lt;/p&gt;
 
-&lt;p&gt;function AppViewModel() {
-    // … leave firstName and lastName unchanged …&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;this.fullName = ko.computed(function() {
-    return this.firstName() + &quot; &quot; + this.lastName();
-}, this); }
+&lt;pre&gt;&lt;code&gt;function AppViewModel() {
+    // ... leave firstName and lastName unchanged ...
+ 
+    this.fullName = ko.computed(function() {
+        return this.firstName() + &quot; &quot; + this.lastName();
+    }, this);
+}
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;这样在UI就可以这么写了&lt;/p&gt;
@@ -386,9 +387,9 @@ myViewModel.fullName.extend({ rateLimit: 50 });
  
  <entry>
    <title>options bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/options-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/26/options-bind"/>
    <updated>2015-11-26T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/options-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/26/options-bind</id>
    <content type="html">
 &lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
 
@@ -589,9 +590,9 @@ myViewModel.fullName.extend({ rateLimit: 50 });
  
  <entry>
    <title>knockoutjs 如何处理 select 元素的change事件</title>
-   <link href="http://knockoutcn.github.io/share/2015/11/26/how-to-handle-select-change-event"/>
+   <link href="http://knockoutjs.site/share/2015/11/26/how-to-handle-select-change-event"/>
    <updated>2015-11-26T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/share/2015/11/26/how-to-handle-select-change-event</id>
+   <id>http://knockoutjs.site/share/2015/11/26/how-to-handle-select-change-event</id>
    <content type="html">
 &lt;p&gt;关于knockoutjs 如何处理 select 元素的change事件，看到群里一直有人在提问，这里做一次小结。&lt;/p&gt;
 
@@ -641,9 +642,9 @@ myViewModel.fullName.extend({ rateLimit: 50 });
  
  <entry>
    <title>disable bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/26/disable-bind"/>
    <updated>2015-11-26T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/disable-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/26/disable-bind</id>
    <content type="html">
 &lt;p&gt;enable bind 绑定取反。&lt;/p&gt;
 </content>
@@ -651,9 +652,9 @@ myViewModel.fullName.extend({ rateLimit: 50 });
  
  <entry>
    <title>knockoutjs 浏览器支持</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/broser-support"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/26/broser-support"/>
    <updated>2015-11-26T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/26/broser-support</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/26/broser-support</id>
    <content type="html">
 &lt;h2 id=&quot;pc&quot;&gt;pc&lt;/h2&gt;
 
@@ -679,9 +680,9 @@ Mac OS X Safari 3.1.2+
  
  <entry>
    <title>with bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/with-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/with-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/with-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/with-bind</id>
    <content type="html">
 &lt;h1 id=&quot;with-&quot;&gt;with 绑定说明&lt;/h1&gt;
 
@@ -790,9 +791,9 @@ ko.applyBindings(new AppViewModel());
  
  <entry>
    <title>visible bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/visible-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/visible-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/visible-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/visible-bind</id>
    <content type="html">
 &lt;h1 id=&quot;visible-&quot;&gt;1 visible 绑定&lt;/h1&gt;
 
@@ -853,9 +854,9 @@ ko.applyBindings(viewModel);
  
  <entry>
    <title>value bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/value-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/value-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/value-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/value-bind</id>
    <content type="html">
 &lt;h1 id=&quot;value-&quot;&gt;value 绑定&lt;/h1&gt;
 
@@ -992,9 +993,9 @@ ko.applyBindings(viewModel);
  
  <entry>
    <title>text bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/text-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/text-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/text-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/text-bind</id>
    <content type="html">
 &lt;h1 id=&quot;text-&quot;&gt;text 绑定&lt;/h1&gt;
 
@@ -1100,9 +1101,9 @@ ko.applyBindings(viewModel);
  
  <entry>
    <title>template bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/template-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/template-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/template-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/template-bind</id>
    <content type="html">
 &lt;h1 id=&quot;section&quot;&gt;模板绑定&lt;/h1&gt;
 
@@ -1353,9 +1354,9 @@ displayMode: function(employee, bindingContext) {
  
  <entry>
    <title>submit bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/submit-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/submit-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/submit-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/submit-bind</id>
    <content type="html">
 &lt;h1 id=&quot;submit-&quot;&gt;submit 绑定&lt;/h1&gt;
 
@@ -1407,9 +1408,9 @@ displayMode: function(employee, bindingContext) {
  
  <entry>
    <title>style bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/style-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/style-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/style-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/style-bind</id>
    <content type="html">
 &lt;h1 id=&quot;style-&quot;&gt;style 绑定&lt;/h1&gt;
 
@@ -1475,9 +1476,9 @@ displayMode: function(employee, bindingContext) {
  
  <entry>
    <title>使用knockoutjs的一些注意点</title>
-   <link href="http://knockoutcn.github.io/share/2015/11/25/some-tips-when-using-knockoutjs"/>
+   <link href="http://knockoutjs.site/share/2015/11/25/some-tips-when-using-knockoutjs"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/share/2015/11/25/some-tips-when-using-knockoutjs</id>
+   <id>http://knockoutjs.site/share/2015/11/25/some-tips-when-using-knockoutjs</id>
    <content type="html">
 &lt;p&gt;knockoutjs 使用也有一段时间了，总结了一些坑，希望对你有帮助。&lt;/p&gt;
 
@@ -1707,9 +1708,9 @@ viewModel.myMessage(&quot;Hello, world!&quot;); // Text appears
  
  <entry>
    <title>ifnot bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/ifnot-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/ifnot-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/ifnot-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/ifnot-bind</id>
    <content type="html">
 &lt;p&gt;if 绑定的表达式取反&lt;/p&gt;
 
@@ -1719,9 +1720,9 @@ viewModel.myMessage(&quot;Hello, world!&quot;); // Text appears
  
  <entry>
    <title>if bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/if-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/if-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/if-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/if-bind</id>
    <content type="html">
 &lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
 
@@ -1796,9 +1797,9 @@ ko.applyBindings({
  
  <entry>
    <title>html bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/html-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/html-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/html-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/html-bind</id>
    <content type="html">
 &lt;h1 id=&quot;html-&quot;&gt;html 绑定&lt;/h1&gt;
 
@@ -1833,16 +1834,16 @@ ko.applyBindings(viewModel);
 
 &lt;h2 id=&quot;html--1&quot;&gt;注意 HTML 编码&lt;/h2&gt;
 
-&lt;p&gt;既然HTML绑定是用&lt;code&gt;innerHTML&lt;/code&gt;来实现的，那么使用的时候要小心，别引入不被信任的代码片段，因为这可能导致&lt;code&gt;script&lt;/code&gt;注入攻击。如果你不能确认引用的模块是否安全，可以使用&lt;code&gt;text``绑定，而它的原理使用&lt;/code&gt;innerText&lt;code&gt;或者&lt;/code&gt;textContent ```来实现内容绑定的。&lt;/p&gt;
+&lt;p&gt;既然HTML绑定是用&lt;code&gt;innerHTML&lt;/code&gt;来实现的，那么使用的时候要小心，别引入不被信任的代码片段，因为这可能导致&lt;code&gt;script&lt;/code&gt;注入攻击。如果你不能确认引用的模块是否安全，可以使用&lt;code&gt;text&lt;/code&gt;绑定，而它的原理使用&lt;code&gt;innerText&lt;/code&gt; 或者&lt;code&gt;textContent&lt;/code&gt;来实现内容绑定的。&lt;/p&gt;
 
 </content>
  </entry>
  
  <entry>
    <title>knockoutjs怎样工作并且它能给我们带来什么好处</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/how-dose-knockoutjs-work</id>
    <content type="html">
 &lt;h1 id=&quot;knockoutjs&quot;&gt;knockoutjs怎样工作并且它能给我们带来什么好处？&lt;/h1&gt;
 
@@ -1905,9 +1906,9 @@ ko.applyBindings(viewModel);
  
  <entry>
    <title>foreach bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/foreach-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/foreach-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/foreach-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/foreach-bind</id>
    <content type="html">
 &lt;h1 id=&quot;foreach-&quot;&gt;foreach 绑定&lt;/h1&gt;
 
@@ -2159,9 +2160,9 @@ ko.applyBindings(new AppViewModel());
  
  <entry>
    <title>event bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/event-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/event-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/event-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/event-bind</id>
    <content type="html">
 &lt;h1 id=&quot;event-&quot;&gt;event 绑定&lt;/h1&gt;
 
@@ -2207,9 +2208,9 @@ ko.applyBindings(new AppViewModel());
  
  <entry>
    <title>enalble bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/enalble-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/enalble-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/enalble-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/enalble-bind</id>
    <content type="html">
 &lt;h1 id=&quot;enable-&quot;&gt;enable 绑定&lt;/h1&gt;
 
@@ -2257,9 +2258,9 @@ ko.applyBindings(new AppViewModel());
  
  <entry>
    <title>下载和安装</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs</id>
    <content type="html">
 &lt;h1 id=&quot;section&quot;&gt;下载和安装&lt;/h1&gt;
 
@@ -2301,9 +2302,9 @@ ko.applyBindings(new AppViewModel());
  
  <entry>
    <title>css bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/css-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/css-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/css-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/css-bind</id>
    <content type="html">
 &lt;h1 id=&quot;css-&quot;&gt;css 绑定&lt;/h1&gt;
 
@@ -2411,9 +2412,9 @@ ko.applyBindings(viewModel);
  
  <entry>
    <title>component bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/component-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/component-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/component-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/component-bind</id>
    <content type="html">
 &lt;h1 id=&quot;component&quot;&gt;组件绑定 component&lt;/h1&gt;
 
@@ -2530,10 +2531,9 @@ ko.applyBindings();
 
 &lt;h2 id=&quot;section-7&quot;&gt;注意2：不带包含元素使用组件绑定&lt;/h2&gt;
 
-&lt;p&gt;&lt;code&gt;html
-&amp;lt;!-- ko component: &quot;message-editor&quot; --&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- ko component: &quot;message-editor&quot; --&amp;gt;
 &amp;lt;!-- /ko --&amp;gt;
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;和其他虚拟元素绑定一样的用法。&lt;/p&gt;
 
@@ -2622,9 +2622,9 @@ ko.components.register(&#39;your-component-name&#39;, {
  
  <entry>
    <title>click bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/click-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/click-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/click-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/click-bind</id>
    <content type="html">
 &lt;h1 id=&quot;click-&quot;&gt;click 绑定&lt;/h1&gt;
 
@@ -2756,9 +2756,9 @@ ko.components.register(&#39;your-component-name&#39;, {
  
  <entry>
    <title> bind context</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/bind-context"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/bind-context"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/bind-context</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/bind-context</id>
    <content type="html">
 &lt;h1 id=&quot;section&quot;&gt;绑定的上下文&lt;/h1&gt;
 
@@ -2845,9 +2845,9 @@ ko.components.register(&#39;your-component-name&#39;, {
  
  <entry>
    <title>attr bind</title>
-   <link href="http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/attr-bind"/>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/25/attr-bind"/>
    <updated>2015-11-25T00:00:00+08:00</updated>
-   <id>http://knockoutcn.github.io/knockoutjs%20api/2015/11/25/attr-bind</id>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/25/attr-bind</id>
    <content type="html">
 &lt;h1 id=&quot;attr-&quot;&gt;attr 绑定&lt;/h1&gt;
 

@@ -59,7 +59,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">knockout 中文</a>
+          <a class="navbar-brand" href="/">knockoutjs 中文</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -160,12 +160,13 @@
 
 <p>但是UI需要展示 fullName ，就可以这么做，</p>
 
-<p>function AppViewModel() {
-    // … leave firstName and lastName unchanged …</p>
-
-<pre><code>this.fullName = ko.computed(function() {
-    return this.firstName() + " " + this.lastName();
-}, this); }
+<pre><code>function AppViewModel() {
+    // ... leave firstName and lastName unchanged ...
+ 
+    this.fullName = ko.computed(function() {
+        return this.firstName() + " " + this.lastName();
+    }, this);
+}
 </code></pre>
 
 <p>这样在UI就可以这么写了</p>

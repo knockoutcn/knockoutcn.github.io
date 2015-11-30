@@ -10,6 +10,9 @@ http://knockoutjs.site/rss.xml
 http://knockoutjs.site/sitemap.txt
 http://knockoutjs.site/tags.html
 
+http://knockoutjs.site/knockoutjs%20api/2015/11/30/textinput-bind
+http://knockoutjs.site/knockoutjs%20api/2015/11/30/hasfocus-bind
+http://knockoutjs.site/knockoutjs%20api/2015/11/30/checked-bind
 http://knockoutjs.site/knockoutjs%20api/2015/11/27/writable-computed-observables
 http://knockoutjs.site/share/2015/11/27/observable-senior
 http://knockoutjs.site/knockoutjs%20api/2015/11/27/computeed-observable

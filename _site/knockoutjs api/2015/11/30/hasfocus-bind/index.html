@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>css bind</title>
+    <title>hasFocus bind</title>
     <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
@@ -146,117 +146,58 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>css bind </h1>
+  <h1>hasFocus bind </h1>
 </div>
 
 <div class="row post-full">
   <div class="col-xs-12">
     <div class="date">
-      <span>25 November 2015</span>
+      <span>30 November 2015</span>
     </div>
     <div class="content">
       
-<h1 id="css-">css 绑定</h1>
-
 <h2 id="section">作用</h2>
 
-<p>css 可以实现给指定DOM元素增加或者移除一个或者多个class。例如当参数值发生变化的时候，根据需要，给页面元素高亮成红色。</p>
+<p>hasFocus 绑定，关联了 DOM 元素的焦点状态和viewmodel 中的属性值。 它是一个双向绑定。</p>
 
-<h2 id="class">示例1 静态class</h2>
+<h2 id="section-1">例子1</h2>
 
-<pre><code>&lt;div data-bind="css: { profitWarning: currentProfit() &lt; 0 }"&gt;
-   Profit Information
-&lt;/div&gt;
-
-
-var viewModel = {
-    currentProfit: ko.observable(150000) // Positive value, so initially we don't apply the "profitWarning" class
-};
-viewModel.currentProfit(-50); // Causes the "profitWarning" class to be applied
-
-ko.applyBindings(viewModel);
-
-
-.profitWarning{
-  color:#f00;
-}
-</code></pre>
-
-<p>当currentProfit 的值小于0的时候，元素会加上profitWarning 这个class</p>
-
-<h2 id="class-1">示例2 动态class</h2>
-
-<pre><code>&lt;div data-bind="css: profitStatus"&gt;
-    Profit Information
-&lt;/div&gt;
-
+<pre><code>&lt;input data-bind="hasFocus: isSelected" /&gt;
+&lt;button data-bind="click: setIsSelected"&gt;Focus programmatically&lt;/button&gt;
+&lt;span data-bind="visible: isSelected"&gt;The textbox has focus&lt;/span&gt;
 
 var viewModel = {
-    currentProfit: ko.observable(150000)
+    isSelected: ko.observable(false),
+    setIsSelected: function() { this.isSelected(true) }
 };
- 
-// Evalutes to a positive value, so initially we apply the "profitPositive" class
-viewModel.profitStatus = ko.pureComputed(function() {
-    return this.currentProfit() &lt; 0 ? "profitWarning" : "profitPositive";
-}, viewModel);
- 
-// Causes the "profitPositive" class to be removed and "profitWarning" class to be added
-viewModel.currentProfit(-50);
 ko.applyBindings(viewModel);
+</code></pre>
 
+<h2 id="section-2">点击编辑</h2>
 
-.profitWarning{
-  color:#f00;
+<pre><code>&lt;p&gt;
+    Name: 
+    &lt;b data-bind="visible: !editing(), text: name, click: edit"&gt;&amp;nbsp;&lt;/b&gt;
+    &lt;input data-bind="visible: editing, value: name, hasFocus: editing" /&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Click the name to edit it; click elsewhere to apply changes.&lt;/em&gt;&lt;/p&gt;
+
+function PersonViewModel(name) {
+    // Data
+    this.name = ko.observable(name);
+    this.editing = ko.observable(false);
+         
+    // Behaviors
+    this.edit = function() { this.editing(true) }
 }
-.profitPositive{
-  color:#ff0;
-}
+ 
+ko.applyBindings(new PersonViewModel("Bert Bertington"));
 </code></pre>
 
-<p>当currentProfit是正值的时候，元素会绑定profitPositive  class，否则绑定profitWarning class</p>
+<h2 id="section-3">参数</h2>
 
-<h2 id="section-1">参数说明</h2>
+<p>true 或者 false</p>
 
-<h3 id="section-2">主要参数</h3>
-
-<p>如果你使用静态的CSS class，然后传递一个属性名是CSS类名的javascript对象，根据是否加上CSS类的需求，把它们的值设置为true或者false。</p>
-
-<p>可以一次设置多个CSS 类。例如，如果数据模型中有一个属性<b>isSevere</b></p>
-
-<pre><code>&lt;div data-bind="css: { profitWarning: currentProfit() &lt; 0, majorHighlight: isSevere }"&gt;
-</code></pre>
-
-<p>用引号括起来多个CSS类，可以实现根据同一个条件来设置多个CSS 类。例如</p>
-
-<pre><code>&lt;div data-bind="css: { profitWarning: currentProfit() &lt; 0, 'major highlight': isSevere }"&gt;
-</code></pre>
-
-<p>非boolean 会被转化为boolean 型。例如0和null被转化为false；数字21或者非空对象被转化为true。</p>
-
-<p>如果参数是一个observable 参数，当参数值发生改变的时候，绑定元素会添加或者移除CSS类。如果不是，那么直会在第一次绑定的时候添加或者移除CSS类，之后不会改变。</p>
-
-<p>如果你想用动态的CSS类，（所谓动态是指参数去不同的值，元素会绑定不同的CSS类），你需要传递一个字符串，这个字符串用来表示将要添加到DOM上的CSS类名。</p>
-
-<p>如果参数是一个observable参数，绑定的时候会移除DOM原先的所有CSS类，然后根据参数的值给元素添加新的CSS类。</p>
-
-<p>通常，可以使用任意的javascript函数或者表达式作为参数。knockout会计算结果，然后根据逻辑决定添加或者移除CSS类。</p>
-
-<h3 id="section-3">其他参数</h3>
-
-<p>无</p>
-
-<p>注意 不能使用不合法的javascript变量名作为CSS类名</p>
-
-<p>如果你想使用<b>my-class</b>类名，你不能像下面这样写：</p>
-
-<pre><code>&lt;div data-bind="css: { my-class: someValue }"&gt;&lt;/div&gt;
-</code></pre>
-
-<p>因为这时<b>my-class</b>不是合法的标示符。解决方案很简单，用引号括起来就可以了。这样CSS类名变成了一个简单的字符串文本，对于javascript对象来说这就是合法的属性名了。换句话说，javascript语言本身不支持带’-‘的属性名。
-例如</p>
-
-<pre><code>&lt;div data-bind="css: { 'my-class': someValue }"&gt;&lt;/div&gt;
-</code></pre>
 
     </div>
 
@@ -300,18 +241,18 @@ ko.applyBindings(viewModel);
     <hr>
     <ul class="pagination">
     
-      <li class="prev"><a href="/knockoutjs%20api/2015/11/25/component-bind" title="component bind">&laquo; Previous</a></li>
+      <li class="prev"><a href="/knockoutjs%20api/2015/11/30/checked-bind" title="checked bind">&laquo; Previous</a></li>
     
       <li><a href="/archive.html">Archive</a></li>
     
-      <li class="next"><a href="/knockoutjs%20api/2015/11/25/dowmload-install-knockoutjs" title="下载和安装">Next &raquo;</a></li>
+      <li class="next"><a href="/knockoutjs%20api/2015/11/30/textinput-bind" title="textInput bind">Next &raquo;</a></li>
     
     </ul>
     <hr>
     
 
 
-  <div id="ds-thread" class="ds-thread" data-url="/knockoutjs%20api/2015/11/25/css-bind" data-title="css bind" data-thread-key="css bind"></div>
+  <div id="ds-thread" class="ds-thread" data-url="/knockoutjs%20api/2015/11/30/hasfocus-bind" data-title="hasFocus bind" data-thread-key="hasFocus bind"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name: 'wan'};
 (function() {

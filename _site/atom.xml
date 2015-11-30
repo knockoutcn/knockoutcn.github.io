@@ -4,13 +4,230 @@
  <title>knockoutjs 中文</title>
  <link href="http://knockoutjs.site/" rel="self"/>
  <link href="http://knockoutjs.site"/>
- <updated>2015-11-30T13:13:12+08:00</updated>
+ <updated>2015-11-30T16:08:39+08:00</updated>
  <id>http://knockoutjs.site</id>
  <author>
    <name>wikieswan</name>
    <email>wikinjoel@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>textInput bind</title>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/30/textinput-bind"/>
+   <updated>2015-11-30T00:00:00+08:00</updated>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/30/textinput-bind</id>
+   <content type="html">
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;textInput 绑定以双向绑定的方式把 viewmodel 的值和 input 或者 textarea 输入框进行关联。和 value 绑定不一样的是，对于用户任意输入， textInput 绑定会立即更新，包括自动补齐、拖拽和剪切板事件等。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;例子&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;Login name: &amp;lt;input data-bind=&quot;textInput: userName&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;Password: &amp;lt;input type=&quot;password&quot; data-bind=&quot;textInput: userPassword&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+ 
+ViewModel:
+&amp;lt;pre data-bind=&quot;text: ko.toJSON($root, null, 2)&quot;&amp;gt;&amp;lt;/pre&amp;gt;
+ 
+&amp;lt;script&amp;gt;
+    ko.applyBindings({
+        userName: ko.observable(&quot;&quot;),        // Initially blank
+        userPassword: ko.observable(&quot;abc&quot;)  // Prepopulate
+    });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;参数&lt;/h2&gt;
+
+&lt;p&gt;可以是 observable 对象或者是非 observable 变量。如果参数不是数值或者字符串类型的，就ko会调用 yourParameter.toString() 方法 。&lt;/p&gt;
+
+&lt;p&gt;无论什么时候用户编辑输入框的值，ko 都会更新 viewmodel 中的属性值。 当输入框的值被用户或者DOM事件修改，KO 会去更新 viewmodel的值。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;注 1：&lt;/h2&gt;
+
+&lt;p&gt;尽管 value bind 也可以实现双向绑定，当时如果想立即更新，你应该使用 textInput 。原因如下：&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;立即更新&lt;/h3&gt;
+
+&lt;p&gt;value bind ，默认情况下，当用户离开输入框（失去焦点）才更新 viewmodel的值。&lt;/p&gt;
+
+&lt;p&gt;textInput 会立即更新 viewmodel ，只要用户按下键盘或者其他方式输入文本（复制黏贴或者拖拽）&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;浏览器事件怪异处理&lt;/h3&gt;
+
+&lt;p&gt;多种浏览器对不寻常的文本输入（复制黏贴、拖拽、自动补齐等）事件处理不一致。 value bind 不能在所有的浏览器上兼容这些场景。&lt;/p&gt;
+
+&lt;p&gt;记住，不要把 value bind 和 textInput 一块使用，否则不起作用。&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>hasFocus bind</title>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/30/hasfocus-bind"/>
+   <updated>2015-11-30T00:00:00+08:00</updated>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/30/hasfocus-bind</id>
+   <content type="html">
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;hasFocus 绑定，关联了 DOM 元素的焦点状态和viewmodel 中的属性值。 它是一个双向绑定。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;例子1&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;input data-bind=&quot;hasFocus: isSelected&quot; /&amp;gt;
+&amp;lt;button data-bind=&quot;click: setIsSelected&quot;&amp;gt;Focus programmatically&amp;lt;/button&amp;gt;
+&amp;lt;span data-bind=&quot;visible: isSelected&quot;&amp;gt;The textbox has focus&amp;lt;/span&amp;gt;
+
+var viewModel = {
+    isSelected: ko.observable(false),
+    setIsSelected: function() { this.isSelected(true) }
+};
+ko.applyBindings(viewModel);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;点击编辑&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;
+    Name: 
+    &amp;lt;b data-bind=&quot;visible: !editing(), text: name, click: edit&quot;&amp;gt;&amp;amp;nbsp;&amp;lt;/b&amp;gt;
+    &amp;lt;input data-bind=&quot;visible: editing, value: name, hasFocus: editing&quot; /&amp;gt;
+&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;em&amp;gt;Click the name to edit it; click elsewhere to apply changes.&amp;lt;/em&amp;gt;&amp;lt;/p&amp;gt;
+
+function PersonViewModel(name) {
+    // Data
+    this.name = ko.observable(name);
+    this.editing = ko.observable(false);
+         
+    // Behaviors
+    this.edit = function() { this.editing(true) }
+}
+ 
+ko.applyBindings(new PersonViewModel(&quot;Bert Bertington&quot;));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;参数&lt;/h2&gt;
+
+&lt;p&gt;true 或者 false&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>checked bind</title>
+   <link href="http://knockoutjs.site/knockoutjs%20api/2015/11/30/checked-bind"/>
+   <updated>2015-11-30T00:00:00+08:00</updated>
+   <id>http://knockoutjs.site/knockoutjs%20api/2015/11/30/checked-bind</id>
+   <content type="html">
+&lt;h2 id=&quot;section&quot;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;用viewmodel 控制checkbox或者 radio 的选中状态。双向绑定。&lt;/p&gt;
+
+&lt;h2 id=&quot;checkbox-&quot;&gt;checkbox 例子&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;Send me spam: &amp;lt;input type=&quot;checkbox&quot; data-bind=&quot;checked: wantsSpam&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        wantsSpam: ko.observable(true) // Initially checked
+    };
+ 
+    // ... then later ...
+    viewModel.wantsSpam(false); // The checkbox becomes unchecked
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;checkbox--1&quot;&gt;添加 checkbox 数组绑定&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;Send me spam: &amp;lt;input type=&quot;checkbox&quot; data-bind=&quot;checked: wantsSpam&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;div data-bind=&quot;visible: wantsSpam&quot;&amp;gt;
+    Preferred flavors of spam:
+    &amp;lt;div&amp;gt;&amp;lt;input type=&quot;checkbox&quot; value=&quot;cherry&quot; data-bind=&quot;checked: spamFlavors&quot; /&amp;gt; Cherry&amp;lt;/div&amp;gt;
+    &amp;lt;div&amp;gt;&amp;lt;input type=&quot;checkbox&quot; value=&quot;almond&quot; data-bind=&quot;checked: spamFlavors&quot; /&amp;gt; Almond&amp;lt;/div&amp;gt;
+    &amp;lt;div&amp;gt;&amp;lt;input type=&quot;checkbox&quot; value=&quot;msg&quot; data-bind=&quot;checked: spamFlavors&quot; /&amp;gt; Monosodium Glutamate&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        wantsSpam: ko.observable(true),
+        spamFlavors: ko.observableArray([&quot;cherry&quot;,&quot;almond&quot;]) // Initially checks the Cherry and Almond checkboxes
+    };
+ 
+    // ... then later ...
+    viewModel.spamFlavors.push(&quot;msg&quot;); // Now additionally checks the Monosodium Glutamate checkbox
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;radio-&quot;&gt;添加 radio 按钮例子&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;p&amp;gt;Send me spam: &amp;lt;input type=&quot;checkbox&quot; data-bind=&quot;checked: wantsSpam&quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;div data-bind=&quot;visible: wantsSpam&quot;&amp;gt;
+    Preferred flavor of spam:
+    &amp;lt;div&amp;gt;&amp;lt;input type=&quot;radio&quot; name=&quot;flavorGroup&quot; value=&quot;cherry&quot; data-bind=&quot;checked: spamFlavor&quot; /&amp;gt; Cherry&amp;lt;/div&amp;gt;
+    &amp;lt;div&amp;gt;&amp;lt;input type=&quot;radio&quot; name=&quot;flavorGroup&quot; value=&quot;almond&quot; data-bind=&quot;checked: spamFlavor&quot; /&amp;gt; Almond&amp;lt;/div&amp;gt;
+    &amp;lt;div&amp;gt;&amp;lt;input type=&quot;radio&quot; name=&quot;flavorGroup&quot; value=&quot;msg&quot; data-bind=&quot;checked: spamFlavor&quot; /&amp;gt; Monosodium Glutamate&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        wantsSpam: ko.observable(true),
+        spamFlavor: ko.observable(&quot;almond&quot;) // Initially selects only the Almond radio button
+    };
+ 
+    // ... then later ...
+    viewModel.spamFlavor(&quot;msg&quot;); // Now only Monosodium Glutamate is checked
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参数&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;主要参数&lt;/h3&gt;
+
+&lt;p&gt;ko 根据参数的值设置元素的选中状态。元素原先的选择状态都会被重置。绑定的方式和你要绑定的元素是有关系的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;checkbox ，ko 根据参数的值为 true 或者 false 来设置元素是都选中，如果参数不是 bool 类型，ko做弱类型转换。这意味着非0数字和非null对象和非空字符串被转换成 true；0，null，undefined和空字符串会转换成 false。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当用户选择或者取消选中checkbox时，KO会设置 viewmodel对应的属性值为 true或者 false。&lt;/p&gt;
+
+&lt;p&gt;特别注明，如果参数是一个数组，那么如果DOM的value值等于数组的元素，那么就会被选中，否则不选中。当用户选中或者取消checkbox时，KO会添加或者移除数组中的元素值。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;radio 只有当参数的值等于 radio 的 value 属性值或者使用 checkedValue 参数，KO才会设置元素选中状态。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当用户切换了 radio， KO会让 viewmodel 的值属性值等于用户选择的 radio 的值。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;其他参数&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;checkedValue&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果使用 checkedValue 绑定，那么 checked 绑定就根据 checkedValue来设置而不是使用元素的 value值来设置了。 如果绑定的对象不是一个字符串或者动态设置绑定的值，那么可以使用 checkedValue 参数。&lt;/p&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- ko foreach: items --&amp;gt;
+    &amp;lt;input type=&quot;checkbox&quot; data-bind=&quot;checkedValue: $data, checked: $root.chosenItems&quot; /&amp;gt;
+    &amp;lt;span data-bind=&quot;text: itemName&quot;&amp;gt;&amp;lt;/span&amp;gt;
+&amp;lt;!-- /ko --&amp;gt;
+ 
+&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    var viewModel = {
+        items: ko.observableArray([
+            { itemName: &#39;Choice 1&#39; },
+            { itemName: &#39;Choice 2&#39; }
+        ]),
+        chosenItems: ko.observableArray()
+    };
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>writable computed observables</title>

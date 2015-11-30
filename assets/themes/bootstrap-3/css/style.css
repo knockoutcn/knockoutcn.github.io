@@ -13,9 +13,42 @@
 /*.navbar .nav {
   float: right; }*/
 
+/** duoshuo **/
+#ds-reset .ds-avatar img {
+  width: 54px !important;
+  height: 54px !important;
+  -webkit-border-radius: 27px !important;
+  -moz-border-radius: 27px !important;
+  border-radius: 27px !important;
+  -webkit-transition: -webkit-transform 0.4s ease-out;
+  -moz-transition: -moz-transform 0.4s ease-out;
+  transition: transform 0.4s ease-out;
+}
+#ds-reset .ds-avatar img:hover {
+  -webkit-transform: rotateZ(360deg);
+  -moz-transform: rotateZ(360deg);
+  transform: rotateZ(360deg);
+}  
+
+
 /* Jekyll Bootstrap Colors f22430 mod */
 h1, h2, h3, h4 {
   color: #333;
+}
+h1{
+  font-size: 2.5rem;
+}
+h2{
+  font-size: 2rem;
+}
+h3{
+  font-size: 1.8rem;
+}
+h4{
+  font-size: 1.6rem;
+}
+body{
+  font-size: 1.4rem;
 }
 #footer {
   background-color: #ECECEA;

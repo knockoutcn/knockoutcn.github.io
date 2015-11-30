@@ -1,0 +1,37 @@
+---
+layout: page
+title : 分享
+header : knockoutjs 分享
+group: navigation
+---
+{% include JB/setup %}
+
+{% for tag in site.tags %} 
+	{% if(tag[0] == 'share') %}
+		<h2 id="{{ tag[0] }}-ref">{{ tag[0] }}</h2>
+		<ul>
+			{% assign pages_list = tag[1] %}  
+			{% include JB/pages_list %}
+		</ul>
+	{% endif %}
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

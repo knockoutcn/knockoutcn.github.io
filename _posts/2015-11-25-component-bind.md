@@ -105,10 +105,8 @@ tags: [knockoutjs API]
 
 ## 注意2：不带包含元素使用组件绑定
 
-```html
-<!-- ko component: "message-editor" -->
-<!-- /ko -->
-```
+	<!-- ko component: "message-editor" -->
+	<!-- /ko -->
 
 和其他虚拟元素绑定一样的用法。
 

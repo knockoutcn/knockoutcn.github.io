@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
+        <loc>http://knockoutjs.site/2015/12/01/pure-computed-observable</loc>
+    </url>
+
+    <url>
         <loc>http://knockoutjs.site/2015/12/01/hello</loc>
     </url>
 

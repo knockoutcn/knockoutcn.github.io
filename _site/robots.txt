@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: <http://knockoutjs.site/sitemap.xml>

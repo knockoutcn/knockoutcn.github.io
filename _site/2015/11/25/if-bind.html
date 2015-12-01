@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>knockoutjs</title>
-    
+    <title>if bind</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -146,64 +146,150 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>knockoutjs  <small>knockoutjs 中文</small></h1>
+  <h1>if bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h2 id="section">作用</h2>
+
+<p>if 绑定控制文档的一块区域显示，if 表达式为 true时显示，否则不显示。</p>
+
+<p>if 和 visible bind 作用相似。区别在于，visible包含DOM代码，只是利用css来控制DOM显示与否；但是if 绑定是如果表达式为false，就移除了改DOM节点，如果为 true 就展示出来。</p>
+
+<h3 id="section-1">例子 1</h3>
+
+<pre><code>&lt;label&gt;&lt;input type="checkbox" data-bind="checked: displayMessage" /&gt; Display message&lt;/label&gt;
+
+&lt;div data-bind="if: displayMessage"&gt;Here is a message. Astonishing.&lt;/div&gt;
+
+
+ko.applyBindings({
+    displayMessage: ko.observable(false)
+});
+</code></pre>
+
+<h3 id="section-2">例子2</h3>
+
+<pre><code>&lt;ul data-bind="foreach: planets"&gt;
+    &lt;li&gt;
+        Planet: &lt;b data-bind="text: name"&gt; &lt;/b&gt;
+        &lt;div data-bind="if: capital"&gt;
+            Capital: &lt;b data-bind="text: capital.cityName"&gt; &lt;/b&gt;
+        &lt;/div&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;script&gt;
+    ko.applyBindings({
+        planets: [
+            { name: 'Mercury', capital: null }, 
+            { name: 'Earth', capital: { cityName: 'Barnsley' } }        
+        ]
+    });
+&lt;/script&gt;	
+</code></pre>
+
+<p>例子2 中，只有当 capital 有对象的时候，才会有子节点的代码执行。</p>
+
+<p>if 绑定是很重要的，它能让代码正常工作。 比如上面的例子，如果没有 if 绑定， 那么当 capital 为空的时候， 子节点 capital.cityName 这个属性是不存在的，代码会报错。</p>
+
+<h2 id="section-3">参数</h2>
+
+<p>js表达式，返回true或者false</p>
+
+<p>如果表达式包含 observable 变量，那么当变量值重新计算时，表达式的值也会被重新计算。相应的，当表达式的值被重新计算后 ，if 里面的代码块会被重新添加或者移除 。当重新添加代码块时，data-bind 属性会被应用到原来代码的新拷贝上。</p>
+
+<h2 id="if-">注意 使用 if 时不要使用包含元素</h2>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;This item always appears&lt;/li&gt;
+    &lt;li&gt;I want to make this item present/absent dynamically&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>加入li需要 if 来控制显示与否，而ul中又不允许使用其他元素，那么这时候可以用虚拟元素绑定，像下面这样。</p>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;This item always appears&lt;/li&gt;
+    &lt;!-- ko if: someExpressionGoesHere --&gt;
+        &lt;li&gt;I want to make this item present/absent dynamically&lt;/li&gt;
+    &lt;!-- /ko --&gt;
+&lt;/ul&gt;
+</code></pre>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
     
-<h1 id="knockoutjs-">knockoutjs 中文站</h1>
+  
 
-<h3 id="section">这里有</h3>
 
-<ul>
-  <li>
-    <p>knockoutjs 最新的官方文档翻译</p>
-  </li>
-  <li>
-    <p>knockoutjs 技术分享、讨论</p>
-  </li>
-  <li>
-    <p>knockoutjs 爱好者</p>
-  </li>
-</ul>
+    </ul>
+    
 
-<p>我们的github地址 <a href="https://github.com/knockoutcn/knockoutcn.github.io">https://github.com/knockoutcn/knockoutcn.github.io</a></p>
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
-<p>我们的网址 <a href="http://knockoutjs.site">http://knockoutjs.site</a></p>
 
-<p>有不正确的地方，欢迎指正。感谢网友们的共同支持。</p>
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
 
-<h3 id="code">贡献code方式：</h3>
 
-<ul>
-  <li>
-    <p>github fork me</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-</ul>
 
-<h3 id="section-1">联系我们</h3>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/html-bind" title="html bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/ifnot-bind" title="ifnot bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
-<p>QQ群：121399064 KnockoutJS技术高级群</p>
 
-<h3 id="section-2">讨论方式</h3>
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/if-bind" data-title="if bind" data-thread-key="if bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
 
-<ul>
-  <li>
-    <p>文章底部评论</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-  <li>
-    <p>QQ群</p>
-  </li>
-</ul>
-
-<p>我们是一群热爱knockoutjs技术的人，我们欢迎你的加入。</p>
 
 
   </div>

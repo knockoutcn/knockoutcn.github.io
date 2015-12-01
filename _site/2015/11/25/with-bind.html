@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>with bind</title>
+    <meta name="description" content="">
+    <meta name="author" content="wikieswan">
+
+    <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/bootstrap-3/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="http://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">  
+
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">knockoutjs 中文</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/api">API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/aqshare">分享</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive">所有文章</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories">分类</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages">所有页面</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags">标签</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>with bind </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="with-">with 绑定说明</h1>
+
+<h2 id="section">作用</h2>
+
+<p><code>with</code> 绑定创建了一个新的的绑定上下文，这样在被绑定对象的后代元素也就绑定到上下文中了。</p>
+
+<p>当然你也可以把 <code>with</code>绑定和其他控制流绑定一起结合使用，比如<code>if</code> 和 <code>foreach</code>。</p>
+
+<h2 id="section-1">样例1 静态绑定</h2>
+
+<p>这里有一个简单例子来说明把绑定的上下文切换到一个孩子对象上。注意：在<code>data-bind</code>属性中，没有必要给<code>latitude</code>或者<code>longitude</code>加上<code>coords</code>前缀。</p>
+
+<pre><code>&lt;h1 data-bind="text: city"&gt; &lt;/h1&gt;
+&lt;p data-bind="with: coords"&gt;
+    Latitude: &lt;span data-bind="text: latitude"&gt; &lt;/span&gt;,
+    Longitude: &lt;span data-bind="text: longitude"&gt; &lt;/span&gt;
+&lt;/p&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    ko.applyBindings({
+        city: "London",
+        coords: {
+            latitude:  51.5001524,
+            longitude: -0.1262362
+        }
+    });
+&lt;/script&gt;
+</code></pre>
+
+<h2 id="section-2">样例2 动态双向绑定</h2>
+
+<p>这个例子说明：</p>
+
+<p>1 <code>with</code>绑定能够动态的添加或者删除绑定对象的后代元素取决于是否把相关的后代值设为<code>null</code>/<code>undefined</code> 。</p>
+
+<p>2 如果你想从父对象绑定上下文中获取 <code>data</code>/<code>function</code> ，你可以使用特殊的上下文属性，比如 <code>$parent</code>和<code>$root</code></p>
+
+<p>view 代码</p>
+
+<pre><code>&lt;form data-bind="submit: getTweets"&gt;
+    Twitter account:
+    &lt;input data-bind="value: twitterName" /&gt;
+    &lt;button type="submit"&gt;Get tweets&lt;/button&gt;
+&lt;/form&gt;
+ 
+&lt;div data-bind="with: resultData"&gt;
+    &lt;h3&gt;Recent tweets fetched at &lt;span data-bind="text: retrievalDate"&gt; &lt;/span&gt;&lt;/h3&gt;
+    &lt;ol data-bind="foreach: topTweets"&gt;
+        &lt;li data-bind="text: text"&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+ 
+    &lt;button data-bind="click: $parent.clearResults"&gt;Clear tweets&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>View model 代码</p>
+
+<pre><code>function AppViewModel() {
+    var self = this;
+    self.twitterName = ko.observable('@example');
+    self.resultData = ko.observable(); // No initial value
+ 
+    self.getTweets = function() {
+        var name = self.twitterName(),
+            simulatedResults = [
+                { text: name + ' What a nice day.' },
+                { text: name + ' Building some cool apps.' },
+                { text: name + ' Just saw a famous celebrity eating lard. Yum.' }
+            ];
+ 
+        self.resultData({ retrievalDate: new Date(), topTweets: simulatedResults });
+    }
+ 
+    self.clearResults = function() {
+        self.resultData(undefined);
+    }
+}
+ 
+ko.applyBindings(new AppViewModel());
+</code></pre>
+
+<h2 id="section-3">参数</h2>
+
+<p>一个你想用来绑定到上下文中的对象</p>
+
+<p>如果对象值为 <code>null</code>/<code>undefined</code>，那么它的后代元素的都不会被绑定，但是也不会被从文档中移除。</p>
+
+<p>如果这个对象表达式中包含观察者变量，那么无论什么时候这些观察者变量发生变化，这个表达式都会被重新计算值。然后所有的后代元素都会被清除，并且被标记对象一份新的备份值会被添加到文档中，用表达式的新值绑定到上下文中去。</p>
+
+<h2 id="with"><code>with</code>不带元素的绑定</h2>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;Header element&lt;/li&gt;
+    &lt;!-- ko with: outboundFlight --&gt;
+        ...
+    &lt;!-- /ko --&gt;
+    &lt;!-- ko with: inboundFlight --&gt;
+        ...
+    &lt;!-- /ko --&gt;
+&lt;/ul&gt;
+</code></pre>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/visible-bind" title="visible bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/26/broser-support" title="knockoutjs 浏览器支持">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/with-bind" data-title="with bind" data-thread-key="with bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p>&copy; 2015 wikieswan 欢迎分享，转载请注明出处。
+      </div>
+    </div>
+
+
+    
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>  
+    <script>hljs.initHighlightingOnLoad();</script>  
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-70707595-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  </body>
+</html>
+

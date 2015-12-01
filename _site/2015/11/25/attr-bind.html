@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>knockoutjs</title>
-    
+    <title>attr bind</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -146,64 +146,127 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>knockoutjs  <small>knockoutjs 中文</small></h1>
+  <h1>attr bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="attr-">attr 绑定</h1>
+
+<h2 id="section">作用</h2>
+
+<p>attr绑定提供一个通用的方法来给DOM绑定动态添加改变attr的属性值。</p>
+
+<h2 id="section-1">示例</h2>
+
+<pre><code>&lt;a data-bind="attr: { href: url, title: details ,target:target }"&gt;
+    Report
+&lt;/a&gt;
+&lt;sctipt&gt;
+var viewModel = {
+        url: ko.observable("http://codepen.io/wikieswan/blog/the-css-binding"),
+        details: ko.observable("Report including final year-end statistics"),
+        target:ko.observable('_blank')
+    };
+ko.applyBindings(viewModel);
+&lt;/sctipt&gt;
+</code></pre>
+
+<p>a标签会根据js中的值绑定上对应的值。</p>
+
+<h2 id="section-2">参数说明</h2>
+
+<p><code>data-bind</code> 接受一个js对象作为参数，这个对象的属性名是attr的值，属性名的值是attr的值。</p>
+
+<h2 id="attrjs">注意1 绑定的attr属性名是js合法的变量名称</h2>
+
+<p>如果你需要绑定属性 <code>data-something</code> ,你不可以像下面这样写</p>
+
+<pre><code>&lt;div data-bind="attr: { data-something: someValue }"&gt;...&lt;/div&gt;
+</code></pre>
+
+<p>因为 <code>data-something</code> 不是合法的js变量。解决方案是用引号括起来，像下面这样：</p>
+
+<pre><code>&lt;div data-bind="attr: { 'data-something': someValue }"&gt;...&lt;/div&gt;
+</code></pre>
+
+<h2 id="js">注意2 旧版本浏览器中的js保留字</h2>
+
+<p>在老版本的浏览器（ie8以下），使用js中的保留字作为DOM属性名，会导致程序出错。解决方式也是给属性名加上引号。像下面这样写：</p>
+
+<pre><code>&lt;input data-bind="attr: { 'for': someValue }" /&gt;
+</code></pre>
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
     
-<h1 id="knockoutjs-">knockoutjs 中文站</h1>
+  
 
-<h3 id="section">这里有</h3>
 
-<ul>
-  <li>
-    <p>knockoutjs 最新的官方文档翻译</p>
-  </li>
-  <li>
-    <p>knockoutjs 技术分享、讨论</p>
-  </li>
-  <li>
-    <p>knockoutjs 爱好者</p>
-  </li>
-</ul>
+    </ul>
+    
 
-<p>我们的github地址 <a href="https://github.com/knockoutcn/knockoutcn.github.io">https://github.com/knockoutcn/knockoutcn.github.io</a></p>
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
-<p>我们的网址 <a href="http://knockoutjs.site">http://knockoutjs.site</a></p>
 
-<p>有不正确的地方，欢迎指正。感谢网友们的共同支持。</p>
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
 
-<h3 id="code">贡献code方式：</h3>
 
-<ul>
-  <li>
-    <p>github fork me</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-</ul>
 
-<h3 id="section-1">联系我们</h3>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev disabled"><a>&larr; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/bind-context" title=" bind context">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
-<p>QQ群：121399064 KnockoutJS技术高级群</p>
 
-<h3 id="section-2">讨论方式</h3>
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/attr-bind" data-title="attr bind" data-thread-key="attr bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
 
-<ul>
-  <li>
-    <p>文章底部评论</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-  <li>
-    <p>QQ群</p>
-  </li>
-</ul>
-
-<p>我们是一群热爱knockoutjs技术的人，我们欢迎你的加入。</p>
 
 
   </div>

@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>knockoutjs</title>
-    
+    <title>submit bind</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -146,64 +146,127 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>knockoutjs  <small>knockoutjs 中文</small></h1>
+  <h1>submit bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="submit-">submit 绑定</h1>
+
+<p><code>submit</code> 绑定添加事件句柄这样的话当DOM元素被提交的时候，绑定的js函数会被触发。通常只在 <code>form</code> 元素中使用。</p>
+
+<p>当在form中使用<code>submit</code> 绑定时，knockout会阻止浏览器默认的submit行为。换句话说，浏览器会调用句柄函数但是不会把form提交到服务器。 这种默认的设定很有用，因为当使用<code>submit</code> 绑定时，通常是你把form当做视图模型的界面来使用，而不是作为一个正常的 HTML from表单。如果你想让form正常的提交，在<code>submit</code> 绑定的函数中 返回一个 <code>true</code>。</p>
+
+<p>例子</p>
+
+<pre><code>&lt;form data-bind="submit: doSomething"&gt;
+    ... form contents go here ...
+    &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        doSomething : function(formElement) {
+            // ... now do something
+        }
+    };
+&lt;/script&gt;
+</code></pre>
+
+<p>例子的说明：knockout把form元素作为参数传递给句柄函数。你可以忽略这个参数，也可以用下面的方式使用它，例如：</p>
+
+<ul>
+  <li>从form元素中提取data或者状态</li>
+  <li>使用类似<code>jquery validation</code>库触发UI层的验证，大致代码如下; <code>if ($(formElement).valid()) { /* do something */ }</code></li>
+</ul>
+
+<h2 id="submit-click-">为什么不在submit的按钮上绑定一个 click 句柄</h2>
+
+<p>不用<code>submit</code>绑定的话，可以在 submit 按钮上用<code>click</code>绑定。然而，<code>submit</code> 的优势是它也会捕捉其他方式来提交form，例如，按下 enter 键触发。</p>
+
+<h2 id="section">参数</h2>
+
+<ul>
+  <li>绑定到<code>submit</code> 上得js函数</li>
+  <li>可以引用任何js函数 - 它可以不是视图模型上得函数对象。</li>
+  <li>视图模型上的函数可以简写属性名，例如，可以使用<code>submit: doSomething</code>，而不需要使用 <code>submit: viewModel.doSomething</code>（当然这样写也是可以的）</li>
+</ul>
+
+<p>## 注意</p>
+
+<p>更多参数传递方式信息，查看 [click 绑定]</p>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
     
-<h1 id="knockoutjs-">knockoutjs 中文站</h1>
+  
 
-<h3 id="section">这里有</h3>
 
-<ul>
-  <li>
-    <p>knockoutjs 最新的官方文档翻译</p>
-  </li>
-  <li>
-    <p>knockoutjs 技术分享、讨论</p>
-  </li>
-  <li>
-    <p>knockoutjs 爱好者</p>
-  </li>
-</ul>
+    </ul>
+    
 
-<p>我们的github地址 <a href="https://github.com/knockoutcn/knockoutcn.github.io">https://github.com/knockoutcn/knockoutcn.github.io</a></p>
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
-<p>我们的网址 <a href="http://knockoutjs.site">http://knockoutjs.site</a></p>
 
-<p>有不正确的地方，欢迎指正。感谢网友们的共同支持。</p>
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
 
-<h3 id="code">贡献code方式：</h3>
 
-<ul>
-  <li>
-    <p>github fork me</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-</ul>
 
-<h3 id="section-1">联系我们</h3>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/style-bind" title="style bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/template-bind" title="template bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
-<p>QQ群：121399064 KnockoutJS技术高级群</p>
 
-<h3 id="section-2">讨论方式</h3>
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/submit-bind" data-title="submit bind" data-thread-key="submit bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
 
-<ul>
-  <li>
-    <p>文章底部评论</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-  <li>
-    <p>QQ群</p>
-  </li>
-</ul>
-
-<p>我们是一群热爱knockoutjs技术的人，我们欢迎你的加入。</p>
 
 
   </div>

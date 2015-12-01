@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>knockoutjs</title>
-    
+    <title>html bind</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -146,64 +146,117 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>knockoutjs  <small>knockoutjs 中文</small></h1>
+  <h1>html bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="html-">html 绑定</h1>
+
+<p>html绑定让相关的DOM元素按照参数的内容展示html片段。</p>
+
+<h2 id="section">示例</h2>
+
+<pre><code>&lt;div data-bind="html: details"&gt;&lt;/div&gt;
+
+var viewModel = {
+    details: ko.observable() // Initially blank
+};
+viewModel.details("&lt;em&gt;For further details, view the report &lt;a href='report.html'&gt;here&lt;/a&gt;.&lt;/em&gt;"); // HTML content appears
+ko.applyBindings(viewModel);
+</code></pre>
+
+<h2 id="section-1">参数说明</h2>
+
+<h3 id="section-2">主要参数</h3>
+
+<p>knockout会先清除绑定元素中的html内容，然后根据情况把参数中的值设置为绑定元素的内容。</p>
+
+<p>这里的情况分为两种，如果页面中引入了jquery，那么ko会调用$.html()函数来设置值；如果没有，那么knockout会拷贝参数内容到绑定元素中，然后append到绑定元素上，作为绑定元素的子元素。</p>
+
+<p>如果参数是一个observable变量，那么无论时候变量发生变化，页面上的值也会随着变量一起变化；否则，只会在首次绑定的改变绑定元素的值，之后不会页面上的值不会随着参数变量值发生变化而变化。</p>
+
+<p>如果参数的类型不是number或者string（e.g., 对象或者数组），那么页面上展示的文本是对象到字符串等效转化的值，相当于<code>yourParameter.toString()</code></p>
+
+<h3 id="section-3">其他参数</h3>
+
+<p>无</p>
+
+<h2 id="html--1">注意 HTML 编码</h2>
+
+<p>既然HTML绑定是用<code>innerHTML</code>来实现的，那么使用的时候要小心，别引入不被信任的代码片段，因为这可能导致<code>script</code>注入攻击。如果你不能确认引用的模块是否安全，可以使用<code>text</code>绑定，而它的原理使用<code>innerText</code> 或者<code>textContent</code>来实现内容绑定的。</p>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
     
-<h1 id="knockoutjs-">knockoutjs 中文站</h1>
+  
 
-<h3 id="section">这里有</h3>
 
-<ul>
-  <li>
-    <p>knockoutjs 最新的官方文档翻译</p>
-  </li>
-  <li>
-    <p>knockoutjs 技术分享、讨论</p>
-  </li>
-  <li>
-    <p>knockoutjs 爱好者</p>
-  </li>
-</ul>
+    </ul>
+    
 
-<p>我们的github地址 <a href="https://github.com/knockoutcn/knockoutcn.github.io">https://github.com/knockoutcn/knockoutcn.github.io</a></p>
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
-<p>我们的网址 <a href="http://knockoutjs.site">http://knockoutjs.site</a></p>
 
-<p>有不正确的地方，欢迎指正。感谢网友们的共同支持。</p>
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
 
-<h3 id="code">贡献code方式：</h3>
 
-<ul>
-  <li>
-    <p>github fork me</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-</ul>
 
-<h3 id="section-1">联系我们</h3>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/how-dose-knockoutjs-work" title="knockoutjs怎样工作并且它能给我们带来什么好处">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/if-bind" title="if bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
-<p>QQ群：121399064 KnockoutJS技术高级群</p>
 
-<h3 id="section-2">讨论方式</h3>
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/html-bind" data-title="html bind" data-thread-key="html bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
 
-<ul>
-  <li>
-    <p>文章底部评论</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-  <li>
-    <p>QQ群</p>
-  </li>
-</ul>
-
-<p>我们是一群热爱knockoutjs技术的人，我们欢迎你的加入。</p>
 
 
   </div>

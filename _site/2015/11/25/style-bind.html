@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>knockoutjs</title>
-    
+    <title>style bind</title>
+    <meta name="description" content="">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -146,64 +146,141 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>knockoutjs  <small>knockoutjs 中文</small></h1>
+  <h1>style bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="style-">style 绑定</h1>
+
+<h2 id="section">作用</h2>
+
+<p><code>style</code> 绑定可以对DOM元素的<code>style</code>属性值进行动态的添加和移除。如果你不想改变元素的<code>style</code>属性，而是想通过 CSS的 <code>class</code>属性来改变样式，那么可以参考 <a href="https://github.com/knockoutcn/knockoutcn.github.io/issues/5">css绑定</a></p>
+
+<h2 id="section-1">样例</h2>
+
+<pre><code>&lt;div data-bind="style: { color: currentProfit() &lt; 0 ? 'red' : 'black' }"&gt;
+   Profit Information
+&lt;/div&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        currentProfit: ko.observable(150000) // Positive value, so initially black
+    };
+    viewModel.currentProfit(-50); // Causes the DIV's contents to go red
+&lt;/script&gt;
+</code></pre>
+
+<p>代码中文字的颜色样式根据 <code>currentProfit</code>变量的值取 <code>red</code> 或者 <code>black</code>。</p>
+
+<h2 id="section-2">参数</h2>
+
+<p>参数对象的属性名是需要设置的style属性，参数属性对应的值是要给style属性设置的值。<code>data-bind</code>的参数结构是</p>
+
+<pre><code>style:{
+	color:'#ccc',
+	background : '#fff',
+	fontWeight ： someValue 
+	....
+}
+</code></pre>
+
+<p>如果一次设置多个style属性值，可以用逗号间隔每个属性值，像下面这样：</p>
+
+<pre><code>&lt;div data-bind="style: { color: currentProfit() &lt; 0 ? 'red' : 'black', fontWeight: isSevere() ? 'bold' : '' }"&gt;...&lt;/div&gt;
+
+
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        currentProfit: ko.observable(1) ,
+        isSevere : false 
+    };
     
-<h1 id="knockoutjs-">knockoutjs 中文站</h1>
+&lt;/script&gt;
+</code></pre>
 
-<h3 id="section">这里有</h3>
+<p>在js代码中，对于用<code>ko.observable()</code>绑定的参数，会和页面上进行联动变化；否则只会在第一次执行的时候页面DOM的style发生变化，之后这个变量发生变化，都不会引起页面style的变化。</p>
 
-<ul>
-  <li>
-    <p>knockoutjs 最新的官方文档翻译</p>
-  </li>
-  <li>
-    <p>knockoutjs 技术分享、讨论</p>
-  </li>
-  <li>
-    <p>knockoutjs 爱好者</p>
-  </li>
-</ul>
+<p>通常可以用js表达式或者函数作为参数，KO会计算出结果然后决定DOM的style属性。</p>
 
-<p>我们的github地址 <a href="https://github.com/knockoutcn/knockoutcn.github.io">https://github.com/knockoutcn/knockoutcn.github.io</a></p>
+<h2 id="stylejs">注意 绑定的style属性名不是js合法的变量名称</h2>
 
-<p>我们的网址 <a href="http://knockoutjs.site">http://knockoutjs.site</a></p>
+<p>如果你绑定 <code>font-weight</code>  或者  <code>text-decoration</code>这样的style属性，或者其他类似的不是js合法变量的属性，那么你就必须用对应的js属性来代替。例如：</p>
 
-<p>有不正确的地方，欢迎指正。感谢网友们的共同支持。</p>
+<p>错误写法 ： <code>{ font-weight: someValue }</code> ； 正确写法 <code>{ fontWeight: someValue }</code></p>
 
-<h3 id="code">贡献code方式：</h3>
+<p>错误写法 ： <code>{ text-decoration: someValue }</code> ； 正确写法 <code>{ textDecoration: someValue }</code></p>
 
-<ul>
-  <li>
-    <p>github fork me</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-</ul>
+    </div>
 
-<h3 id="section-1">联系我们</h3>
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
 
-<p>QQ群：121399064 KnockoutJS技术高级群</p>
 
-<h3 id="section-2">讨论方式</h3>
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
+    
+  
 
-<ul>
-  <li>
-    <p>文章底部评论</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-  <li>
-    <p>QQ群</p>
-  </li>
-</ul>
 
-<p>我们是一群热爱knockoutjs技术的人，我们欢迎你的加入。</p>
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/some-tips-when-using-knockoutjs" title="使用knockoutjs的一些注意点">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/submit-bind" title="submit bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/style-bind" data-title="style bind" data-thread-key="style bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+
 
 
   </div>

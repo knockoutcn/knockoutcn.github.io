@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>component bind</title>
+    <meta name="description" content="">
+    <meta name="author" content="wikieswan">
+
+    <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/bootstrap-3/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="http://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">  
+
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">knockoutjs 中文</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/api">API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/aqshare">分享</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive">所有文章</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories">分类</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages">所有页面</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags">标签</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>component bind </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="component">组件绑定 component</h1>
+
+<p><code>component</code> 组件绑定把一个特定功能的组件注入到绑定元素中去，还可以向组件中传递参数。</p>
+
+<h2 id="section">组件绑定的示例</h2>
+
+<h3 id="section-1">视图层代码</h3>
+
+<pre><code>&lt;h4&gt;First instance, without parameters&lt;/h4&gt;
+&lt;div data-bind='component: "message-editor"'&gt;&lt;/div&gt;
+ 
+&lt;h4&gt;Second instance, passing parameters&lt;/h4&gt;
+&lt;div data-bind='component: {
+    name: "message-editor",
+    params: { initialText: "Hello, world!" }
+}'&gt;&lt;/div&gt;
+</code></pre>
+
+<h3 id="section-2">视图模型层代码</h3>
+
+<pre><code>ko.components.register('message-editor', {
+    viewModel: function(params) {
+        this.text = ko.observable(params &amp;&amp; params.initialText || '');
+    },
+    template: 'Message: &lt;input data-bind="value: text" /&gt; '
+            + '(length: &lt;span data-bind="text: text().length"&gt;&lt;/span&gt;)'
+});
+ 
+ko.applyBindings();
+</code></pre>
+
+<p>提示：在开发环境中，需要从外部加载组件文件，而不是在代码中注册它们。<a href="https://github.com/knockoutcn/knockoutcn.github.io/issues/17">详细了解请猛戳</a></p>
+
+<h2 id="api">API</h2>
+
+<p>有两种方式来使用 <code>component</code>  组件绑定。</p>
+
+<h3 id="section-3">1 快捷方式</h3>
+
+<p>传递一个组件的名称，那么这个组件就被注入到元素中去了。
+例如：</p>
+
+<pre><code>&lt;div data-bind='component: "my-component"'&gt;&lt;/div&gt;
+</code></pre>
+
+<p>快捷方式的值也可以是一个观察者。这个例子中，如果绑定组件发生变化，它会处理旧组件，然后注入新的变化之后的组件。例如</p>
+
+<pre><code>&lt;div data-bind='component: observableWhoseValueIsAComponentName'&gt;&lt;/div&gt;
+</code></pre>
+
+<h3 id="section-4">2 完整方式</h3>
+
+<p>用下面的属性可以把参数传递到组件中。</p>
+
+<ul>
+  <li><code>name</code> – 需要引入的组件的名称。再次说明，它是可以被观察的。</li>
+  <li><code>params</code> — 传递到组件中的参数对象。<code>key-value</code>的方式可以传递多个值对象；参数是被组件视图模型的构造函数接受的。</li>
+</ul>
+
+<p>例子</p>
+
+<pre><code>&lt;div data-bind='component: {
+    name: "shopping-cart",
+    params: { mode: "detailed-list", items: productsList }
+}'&gt;&lt;/div&gt;
+</code></pre>
+
+<h2 id="section-5">组件的生命周期</h2>
+
+<p>当一个组件绑定注入了一个组件</p>
+
+<ul>
+  <li>
+    <p>1.视图模型的工厂函数和模板需要组件的加载</p>
+  </li>
+  <li>
+    <p>2.组件模板被备份并注入到绑定的元素中</p>
+  </li>
+  <li>
+    <p>3.如果组件有视图模型，那么它会被实例化</p>
+  </li>
+  <li>
+    <p>4.视图模型会被绑定到视图上</p>
+  </li>
+  <li>
+    <p>5.组件是活动的</p>
+  </li>
+  <li>
+    <p>6.组件被关闭，它的视图模型被处理</p>
+  </li>
+</ul>
+
+<h2 id="section-6">注意1： 只有模板的组件</h2>
+
+<p>组件通常都有视图模型，但它们不是必须有的。一个组件可以只有模板。</p>
+
+<p>这种情况下，传递的参数会直接传递到模板中进行使用。例如：</p>
+
+<pre><code>ko.components.register('special-offer', {
+    template: '&lt;div class="offer-box" data-bind="text: productName"&gt;&lt;/div&gt;'
+});
+</code></pre>
+
+<p>…会像下面那样使用：</p>
+
+<pre><code>&lt;div data-bind='component: {
+     name: "special-offer-callout",
+     params: { productName: someProduct.name }
+}'&gt;&lt;/div&gt;
+</code></pre>
+
+<p>…更简单的用法 ，可以看 <a href="http://knockoutjs.com/documentation/component-custom-elements.html">自定义元素</a>.</p>
+
+<h2 id="section-7">注意2：不带包含元素使用组件绑定</h2>
+
+<pre><code>&lt;!-- ko component: "message-editor" --&gt;
+&lt;!-- /ko --&gt;
+</code></pre>
+
+<p>和其他虚拟元素绑定一样的用法。</p>
+
+<h2 id="section-8">注意3： 向组件传递标记</h2>
+
+<p>绑定组件的元素可能包含更多的标记，例如：</p>
+
+<pre><code>&lt;div data-bind="component: { name: 'my-special-list', params: { items: someArrayOfPeople } }"&gt;
+    &lt;!-- Look, here's some arbitrary markup. By default it gets stripped out
+         and is replaced by the component output. --&gt;
+    The person &lt;em data-bind="text: name"&gt;&lt;/em&gt;
+    is &lt;em data-bind="text: age"&gt;&lt;/em&gt; years old.
+&lt;/div&gt;
+</code></pre>
+
+<p>虽然绑定组件的元素内部的DOM节点会被剥离，默认并不会绑定，但是这些DOM不会消失。他们会被组件引用（例子中的<code>my-special-list</code>），组件的输出中会包含他们。</p>
+
+<p>它的使用场景：组件表现出绑定元素内的UI元素。比如：表格、列表、对话框或者tab set
+，这些都需要注入和绑定任意标签到一个公共的结构中。</p>
+
+<h2 id="dispose-">dispose 内存管理</h2>
+
+<p>你的视图模型类中可能含有一个<code>dispose</code>函数。如果有的话，只要组件被关闭并从DOM中移除（比如相应的组件被从<code>foreach</code>中移除或者<code>if</code>的绑定之变成了<code>false</code>），KO就会调用这个<code>dispose</code>函数。</p>
+
+<p>必须使用 <code>dispose</code> 来释放任何没有被垃圾回收器资源。例如:</p>
+
+<ul>
+  <li>
+    <p><code>setInterval</code> 的回调函数在显示清除之前是一直存在于内存中的。</p>
+
+    <p>要使用 <code>clearInterval(handle)</code> 来清除回调函数，否则视图模型会一直驻留在内存中。</p>
+  </li>
+  <li>
+    <p><code>ko.computed</code>  属性在显示释放前，会一直从它的依赖那里接收通知。</p>
+
+    <p>如果依赖是一个外部对象，<code>ko.computed</code> 属性需要调用 <code>.dispose()</code> ，否则它（也可能是视图模型对象）会一直驻留在内存中。</p>
+  </li>
+  <li>
+    <p>在显示释放之前，对于观察者的订阅会一直存在。</p>
+
+    <p>如果对一个外部对象订阅，那么订阅者需要调用 <code>.dispose()</code> ，否则订阅者的回调函数（也可能是视图模型对象）会一直驻留在内存中。</p>
+  </li>
+  <li>
+    <p><code>createViewModel</code> 函数在外部DOM元素上手动创建的事件句柄需要移除。</p>
+
+    <p>当然我们不需要关心释放任何事件以标准KO绑定创建的句柄，当元素被移除时，KO会自动取消注册他们。</p>
+  </li>
+</ul>
+
+<p>例子</p>
+
+<pre><code>var someExternalObservable = ko.observable(123);
+ 
+function SomeComponentViewModel() {
+    this.myComputed = ko.computed(function() {
+        return someExternalObservable() + 1;
+    }, this);
+ 
+    this.myPureComputed = ko.pureComputed(function() {
+        return someExternalObservable() + 2;
+    }, this);
+ 
+    this.mySubscription = someExternalObservable.subscribe(function(val) {
+        console.log('The external observable changed to ' + val);
+    }, this);
+ 
+    this.myIntervalHandle = window.setInterval(function() {
+        console.log('Another second passed, and the component is still alive.');
+    }, 1000);
+}
+ 
+SomeComponentViewModel.prototype.dispose = function() {
+    this.myComputed.dispose();
+    this.mySubscription.dispose();
+    window.clearInterval(this.myIntervalHandle);
+    // this.myPureComputed doesn't need to be manually disposed.
+}
+ 
+ko.components.register('your-component-name', {
+    viewModel: SomeComponentViewModel,
+    template: 'some template'
+});
+</code></pre>
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/click-bind" title="click bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/css-bind" title="css bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/component-bind" data-title="component bind" data-thread-key="component bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p>&copy; 2015 wikieswan 欢迎分享，转载请注明出处。
+      </div>
+    </div>
+
+
+    
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>  
+    <script>hljs.initHighlightingOnLoad();</script>  
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-70707595-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  </body>
+</html>
+

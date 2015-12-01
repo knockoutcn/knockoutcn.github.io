@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>computeed observable</title>
+    <meta name="description" content="">
+    <meta name="author" content="wikieswan">
+
+    <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/bootstrap-3/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="http://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">  
+
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">knockoutjs 中文</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/api">API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/aqshare">分享</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive">所有文章</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories">分类</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages">所有页面</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags">标签</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>computeed observable </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>27 November 2015</span>
+    </div>
+    <div class="content">
+      
+<p>computeed observable 的作用就是计算一些 observable 变量，然后把返回值作为一个 observable对象，提供给UI使用。这样当 computeed observable 依赖的 observable 变量发生变化的时候，它会自动计算新的值。</p>
+
+<p>有这样一个对象，firstName lastName ，</p>
+
+<pre><code>function AppViewModel() {
+    this.firstName = ko.observable('Bob');
+    this.lastName = ko.observable('Smith');
+}
+</code></pre>
+
+<p>但是UI需要展示 fullName ，就可以这么做，</p>
+
+<pre><code>function AppViewModel() {
+    // ... leave firstName and lastName unchanged ...
+ 
+    this.fullName = ko.computed(function() {
+        return this.firstName() + " " + this.lastName();
+    }, this);
+}
+</code></pre>
+
+<p>这样在UI就可以这么写了</p>
+
+<pre><code>The name is &lt;span data-bind="text: fullName"&gt;&lt;/span&gt;
+</code></pre>
+
+<p>这样，只要 firstName lastName 发生变化，那么 fullName就会重新计算。</p>
+
+<h2 id="this">管理 this</h2>
+
+<p>ko.computed 第二个参数是 this 定义了计算 observable 时的 this 。如果不传递 this 参数 ，knockoutjs 就不能 找到 this.firstName() this.lastName() 。通常传递的this 就是你的 viewmodel 引用 。 如果不传递 this ，ko.computed 中计算时就用它自己作用域的 this 而不是 viewmodel 的了。</p>
+
+<p>为了避免 this 混论，我们有一个公约，就是用 一个变量，比如 self 来缓存 this。</p>
+
+<pre><code>function AppViewModel() {
+    var self = this;
+ 
+    self.firstName = ko.observable('Bob');
+    self.lastName = ko.observable('Smith');
+    self.fullName = ko.computed(function() {
+        return self.firstName() + " " + self.lastName();
+    });
+}
+</code></pre>
+
+<p>这样，及时不向ko.computed 传递第二个参数 this ，因为用了 self 缓存了 this ，那么也不会引起 this混乱 。</p>
+
+<h2 id="pure-computed-observable">pure computed observable</h2>
+
+<p>如果是简单的计算并返回 observable 对象的值，那么请使用 ko.pureComputed 来代替 ko.computed 。</p>
+
+<p>例如</p>
+
+<pre><code>this.fullName = ko.pureComputed(function() {
+    return this.firstName() + " " + this.lastName();
+}, this);
+</code></pre>
+
+<p>因为使用了 pureComputed ，那么knockoutjs 可以更高效的管理内存。（计算时不会去直接修改其他对象或者状态）
+如果没有其他代码在内存中以来这个 pureComputed 对象，那么knockoutjs 就是自动释放这部分内存。<a href="http://knockoutjs.com/documentation/computed-pure.html">know more</a></p>
+
+<h2 id="computed-observable-">强制 computed observable 一直发出通知</h2>
+
+<p>如果 computed 返回一个原始类型的值(a number, string, boolean, or null)，只有当值真正发生变化时才会发出通知。可以用 extend({ notify: ‘always’ }) 来强制通知 。</p>
+
+<pre><code>myViewModel.fullName = ko.pureComputed(function() {
+    return myViewModel.firstName() + " " + myViewModel.lastName();
+}).extend({ notify: 'always' });
+</code></pre>
+
+<h2 id="section">延迟或者抑制通知</h2>
+
+<pre><code>// Ensure updates no more than once per 50-millisecond period
+myViewModel.fullName.extend({ rateLimit: 50 });
+</code></pre>
+
+<h2 id="computed-observable--1">判断某个属性是否在 computed observable 中</h2>
+
+<p>有时候，你需要知道你用的对象是否是一个 computed observable 对象，可以使用  ko.isComputed 函数。</p>
+
+<pre><code>for (var prop in myObject) {
+    if (myObject.hasOwnProperty(prop) &amp;&amp; !ko.isComputed(myObject[prop])) {
+        result[prop] = myObject[prop];
+    }
+}
+</code></pre>
+
+<p>knockoutjs 还提供其他类似功能的接口函数</p>
+
+<ul>
+  <li>
+    <p>ko.isObservable 如果是 observable 、 observable 数组 或者 computed observable 就返回 true</p>
+  </li>
+  <li>
+    <p>ko.isWritableObservable 如果是 observable 、 observable 数组 或者 可写的 computed observable 就返回 true （它的另一个别名 ko.isWriteableObservable）</p>
+  </li>
+</ul>
+
+<h2 id="ui--computed-observable">仅仅在 UI 上使用 computed observable</h2>
+
+<p>可以像下面这样定义</p>
+
+<pre><code>function AppViewModel() {
+    // ... leave firstName and lastName unchanged ...
+ 
+    this.fullName = function() {
+        return this.firstName() + " " + this.lastName();
+    };
+}
+</code></pre>
+
+<p>那么UI可以这样写</p>
+
+<pre><code>The name is &lt;span data-bind="text: fullName()"&gt;&lt;/span&gt;
+</code></pre>
+
+<p>knockoutjs 会自动加上 computed observable ，当相关的UI元素被移除的时候，会释放变量内存。</p>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/26/options-bind" title="options bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/27/observable-senior" title="observable 高级用法">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/27/computeed-observable" data-title="computeed observable" data-thread-key="computeed observable"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p>&copy; 2015 wikieswan 欢迎分享，转载请注明出处。
+      </div>
+    </div>
+
+
+    
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>  
+    <script>hljs.initHighlightingOnLoad();</script>  
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-70707595-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  </body>
+</html>
+

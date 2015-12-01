@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>click bind</title>
+    <meta name="description" content="">
+    <meta name="author" content="wikieswan">
+
+    <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/bootstrap-3/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="http://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">  
+
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">knockoutjs 中文</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/api">API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/aqshare">分享</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive">所有文章</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories">分类</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages">所有页面</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags">标签</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>click bind </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="click-">click 绑定</h1>
+
+<p><code>click</code> 绑定会添加事件处理句柄，这样当DOM元素被点击的时候，会触发绑定的js函数。常用的地方有<code>button</code>, ````input<code>,</code>a```标签。通常绑定在显示出来的DOM元素上。</p>
+
+<h2 id="section">例子</h2>
+
+<pre><code>&lt;div&gt;
+    You've clicked &lt;span data-bind="text: numberOfClicks"&gt;&lt;/span&gt; times
+    &lt;button data-bind="click: incrementClickCounter"&gt;Click me&lt;/button&gt;
+&lt;/div&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        numberOfClicks : ko.observable(0),
+        incrementClickCounter : function() {
+            var previousCount = this.numberOfClicks();
+            this.numberOfClicks(previousCount + 1);
+        }
+    };
+&lt;/script&gt;
+</code></pre>
+
+<p>每次点击按钮，都会触发模型的 <code>incrementClickCounter()</code>  函数。这个函数会改变视图模型的状态，这样UI就会更新。</p>
+
+<h2 id="section-1">参数</h2>
+
+<ul>
+  <li>绑定到元素 <code>click</code> 事件的函数</li>
+  <li>可以引用任何js函数 - 它可以不是视图模型上得函数对象。</li>
+  <li>可以引用任何对象的函数 - 像这样写 <code>click: someObject.someFunction</code></li>
+</ul>
+
+<p>## 注意1 ： 把当前条目作为参数传递到句柄函数</p>
+
+<p>当触发句柄，Knockout 支持把当前模型的值作为第一个参数。如果你逐一对集合每一个条目渲染UI的适合，这会很有用的， 这样点击的时候，你就可以知道那个条目被点击了。例如：</p>
+
+<pre><code>&lt;ul data-bind="foreach: places"&gt;
+    &lt;li&gt;
+        &lt;span data-bind="text: $data"&gt;&lt;/span&gt;
+        &lt;button data-bind="click: $parent.removePlace"&gt;Remove&lt;/button&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+ 
+ &lt;script type="text/javascript"&gt;
+     function MyViewModel() {
+         var self = this;
+         self.places = ko.observableArray(['London', 'Paris', 'Tokyo']);
+ 
+         // The current item will be passed as the first parameter, so we know which place to remove
+         self.removePlace = function(place) {
+             self.places.remove(place)
+         }
+     }
+     ko.applyBindings(new MyViewModel());
+&lt;/script&gt;
+</code></pre>
+
+<p>有两点需要指出来：</p>
+
+<ul>
+  <li>
+    <p>如果在嵌套绑定上下文中，比如 <code>foreach</code>或<code>with</code>中， 你的句柄函数是在根视图模型中或者在父级上下文中， 你需要用 <code>$parent</code>或者 <code>$root</code>来制定句柄函数。</p>
+  </li>
+  <li>
+    <p>在视图模型中用 <code>self</code>（或者其他变量）来缓存 <code>this</code>来避免 <code>this</code>混乱。</p>
+  </li>
+</ul>
+
+<h2 id="section-2">注意2：获取事件对象，或者传递更多的参数</h2>
+
+<p>在一些场景下，你可能需要获取你点击的DOM事件对象。Knockout 会把事件对象作为第二个参数传递给函数，例如：</p>
+
+<pre><code>&lt;button data-bind="click: myFunction"&gt;
+    Click me
+&lt;/button&gt;
+ 
+ &lt;script type="text/javascript"&gt;
+    var viewModel = {
+        myFunction: function(data, event) {
+            if (event.shiftKey) {
+                //do something different when user has shift key down
+            } else {
+                //do normal action
+            }
+        }
+    };
+    ko.applyBindings(viewModel);
+&lt;/script&gt;
+</code></pre>
+
+<p>如果你需要传递更多的参数，一个方式是用function关键字包裹句柄函数包，在function关键字中传递参数，例如：</p>
+
+<pre><code>&lt;button data-bind="click: function(data, event) { myFunction('param1', 'param2', data, event) }"&gt;
+    Click me
+&lt;/button&gt;
+</code></pre>
+
+<p>现在knockout 就会把data和event对象传递到你的function关键字中，这样句柄函数就可以获得这些参数。</p>
+
+<p>另外，如果不想在view中写function关键字，你可以使用 <code>bind</code> 函数来实现传参，例如：</p>
+
+<pre><code>&lt;button data-bind="click: myFunction.bind($data, 'param1', 'param2')"&gt;
+    Click me
+&lt;/button&gt;
+</code></pre>
+
+<h2 id="click">注意3 ： 允许默认的click操作</h2>
+
+<p>默认情况下，knockout会阻止click事件的默认行为。直白的说，就是你在<code>a</code>标签上使用 <code>click</code> 绑定，浏览器只会触犯绑定的函数，而不会跳转到<code>a</code>标签的 <code>href</code>属性。默认情况下这是很有用的，因为当使用 <code>click</code> 绑定的适合，通常只是使用<code>a</code>的样式而不是用它的链接属性。</p>
+
+<p>然而，如果你不想让默认click行为被阻止，那么只要在<code>click</code>句柄函数中返回<code>true</code>就可以了。</p>
+
+<h2 id="section-3">阻止事件冒泡</h2>
+
+<p>默认情况下，knockout 会允许click事件继续冒泡到更高层次的事件句柄中的。 例如，如果你的元素和它的父级元素都绑定 <code>click</code> 事件，那么两个绑定函数句柄都会被触发。 如果有必要，你可以通过引用一个叫 <code>clickBubble</code> 的额外的绑定，并且传递<code>false</code>值来阻止事件冒泡，例如：</p>
+
+<pre><code>&lt;div data-bind="click: myDivHandler"&gt;
+    &lt;button data-bind="click: myButtonHandler, clickBubble: false"&gt;
+        Click me
+    &lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>通常情况下，<code>myButtonHandler</code>会先触发，然后click会向上冒泡到 <code>myDivHandler</code> 函数。 然而，<code>clickBubble: false</code> 绑定会阻止冒泡的过程。</p>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/bind-context" title=" bind context">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/component-bind" title="component bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/click-bind" data-title="click bind" data-thread-key="click bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p>&copy; 2015 wikieswan 欢迎分享，转载请注明出处。
+      </div>
+    </div>
+
+
+    
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>  
+    <script>hljs.initHighlightingOnLoad();</script>  
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-70707595-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  </body>
+</html>
+

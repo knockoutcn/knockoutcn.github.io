@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>knockoutjs</title>
-    
+    <title>visible bind</title>
+    <meta name="description" content="knockoutjs API">
     <meta name="author" content="wikieswan">
 
     <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
@@ -146,64 +146,136 @@
       <div class="container">
         
 <div class="page-header">
-  <h1>knockoutjs  <small>knockoutjs 中文</small></h1>
+  <h1>visible bind </h1>
 </div>
 
-<div class="row">
+<div class="row post-full">
   <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="visible-">1 visible 绑定</h1>
+
+<p>作用</p>
+
+<p>visible 根据变量值的true或者false来控制DOM元素的显示或者隐藏。</p>
+
+<p>示例</p>
+
+<pre><code>&lt;div data-bind="visible: shouldShowMessage"&gt;
+    You will see this message only when "shouldShowMessage" holds a true value.
+&lt;/div&gt;
+
+var viewModel = {
+    shouldShowMessage: ko.observable(true) // Message initially visible
+};
+//viewModel.shouldShowMessage(false); // ... now it's hidden
+viewModel.shouldShowMessage(true); // ... now it's visible again
+ko.applyBindings(viewModel);
+</code></pre>
+
+<p>参数说明</p>
+
+<p>主要参数</p>
+
+<p>参数值为类似false值（eg，false、0、null、undefined）把yourElement.style.display设置为none，元素就隐藏了。</p>
+
+<p>参数值为类似true值（eg，true、非null 的对象），则元素会显示。</p>
+
+<p>如果参数是一个observable 变量，无论参数的值什么时候发生变化，元素的visible属性也会发生改变的。如果参数不是一个observable 变量，那么只会在第一次绑定的时候控制元素的visible属性，之后元素的visible属性不会发生变化。</p>
+
+<p>其他参数</p>
+
+<p>无</p>
+
+<p>注意 使用函数或者表达式控制元素的显示或者隐藏</p>
+
+<p>可以是用javascript函数或者表达式作为参数；knockout会运行函数或者表达式，用返回值来作为参数，从而觉得元素的显示或者隐藏。</p>
+
+<p>e.g.</p>
+
+<pre><code>&lt;div data-bind="visible: myValues().length &gt; 0"&gt;
+  You will see this message only when 'myValues' has at least one member.
+&lt;/div&gt;
+
+var viewModel = {
+    myValues: ko.observableArray([]) // Initially empty, so message hidden
+};
+viewModel.myValues.push("some value"); // Now visible
+ko.applyBindings(viewModel);
+</code></pre>
+
+<p>依赖</p>
+
+<p>无</p>
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
     
-<h1 id="knockoutjs-">knockoutjs 中文站</h1>
+  
 
-<h3 id="section">这里有</h3>
 
-<ul>
-  <li>
-    <p>knockoutjs 最新的官方文档翻译</p>
-  </li>
-  <li>
-    <p>knockoutjs 技术分享、讨论</p>
-  </li>
-  <li>
-    <p>knockoutjs 爱好者</p>
-  </li>
-</ul>
+    </ul>
+    
 
-<p>我们的github地址 <a href="https://github.com/knockoutcn/knockoutcn.github.io">https://github.com/knockoutcn/knockoutcn.github.io</a></p>
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
 
-<p>我们的网址 <a href="http://knockoutjs.site">http://knockoutjs.site</a></p>
 
-<p>有不正确的地方，欢迎指正。感谢网友们的共同支持。</p>
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
 
-<h3 id="code">贡献code方式：</h3>
 
-<ul>
-  <li>
-    <p>github fork me</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-</ul>
 
-<h3 id="section-1">联系我们</h3>
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/value-bind" title="value bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/with-bind" title="with bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
 
-<p>QQ群：121399064 KnockoutJS技术高级群</p>
 
-<h3 id="section-2">讨论方式</h3>
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/visible-bind" data-title="visible bind" data-thread-key="visible bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
 
-<ul>
-  <li>
-    <p>文章底部评论</p>
-  </li>
-  <li>
-    <p>github 提issue</p>
-  </li>
-  <li>
-    <p>QQ群</p>
-  </li>
-</ul>
-
-<p>我们是一群热爱knockoutjs技术的人，我们欢迎你的加入。</p>
 
 
   </div>

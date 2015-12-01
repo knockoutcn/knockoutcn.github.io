@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>value bind</title>
+    <meta name="description" content="">
+    <meta name="author" content="wikieswan">
+
+    <link rel="icon" href="//learn.knockoutjs.com/Content/App/icon.png" type="image/png" sizes="16x16">
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/bootstrap-3/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="http://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">  
+
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">knockoutjs 中文</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/api">API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/aqshare">分享</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive">所有文章</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories">分类</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages">所有页面</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags">标签</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>value bind </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>25 November 2015</span>
+    </div>
+    <div class="content">
+      
+<h1 id="value-">value 绑定</h1>
+
+<p><code>value</code> 绑定将 view model 的属性绑定到DOM元素的值上。常用于 <code>&lt;input&gt;</code>,<code>&lt;select&gt;</code>和 <code>&lt;textarea&gt;</code>标签中。</p>
+
+<p>当用户在表单中更改元素的值，view model的值会自动更新。反过来，view model的值发生变化，表单中元素的值也会发生变化。</p>
+
+<p>注意：如果使用 checkbox 或者 radio 标签，请使用 checked 绑定来读写DOM元素的 checked状态，而不是使用 <code>value</code> 绑定。</p>
+
+<h2 id="section">例子</h2>
+
+<pre><code>&lt;p&gt;Login name: &lt;input data-bind="value: userName" /&gt;&lt;/p&gt;
+&lt;p&gt;Password: &lt;input type="password" data-bind="value: userPassword" /&gt;&lt;/p&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        userName: ko.observable(""),        // Initially blank
+        userPassword: ko.observable("abc"), // Prepopulate
+    };
+&lt;/script&gt;
+</code></pre>
+
+<h2 id="section-1">参数</h2>
+
+<p>knockout 会用参数的值重写元素的 <code>value</code> 值。</p>
+
+<p>如果参数是 observable 值，那么当参数发生变化的时候，绑定会更新元素的值。如果参数不是一个 observable ，只会在第一次初始化的时候设置元素的值，以后就不会在更新元素了。</p>
+
+<p>如果参数不是 number 或 string（比如object或者array），那么会被转化成 string类型 <code>yourParameter.toString()</code></p>
+
+<p>无论何时用户编辑表单中得值，KO会更新 view model中属性的值。 页面上当表单中的值被修改并且元素失去焦点，KO就会修改view model中的值。 但是你可以使用 <code>valueUpdate</code>属性来触发KO更新。</p>
+
+<h3 id="section-2">附加参数</h3>
+
+<h4 id="valueupdate"><code>valueUpdate</code></h4>
+
+<p>如果绑定中包含参数 <code>valueUpdate</code>，那么除了 <code>change</code>事件之外，KO也会触发更新。参数值如下：</p>
+
+<ul>
+  <li>
+    <p><code>"input"</code> - <code>&lt;input&gt;</code>和<code>&lt;textarea&gt;</code> 的值改变的时候会触发更新view model。（IE 9+支持）</p>
+  </li>
+  <li>
+    <p><code>"keyup"</code> -   释放键盘是更新view model。</p>
+  </li>
+  <li>
+    <p><code>"keypress"</code> - 按下键盘是更新view model。和<code>"keyup"</code>不一样，用户按着键盘一直不松手的话，会持续触发更新view model。</p>
+  </li>
+  <li>
+    <p><code>"afterkeydown"</code> - 按下一个字符就更新 view model 。它的原理是捕获浏览器的 keydown 事件，然后一步处理。在一些移动端浏览器可能不起作用。</p>
+  </li>
+</ul>
+
+<h4 id="valueallowunset"><code>valueAllowUnset</code></h4>
+
+<p>只有在 <code>&lt;select&gt;</code>元素上使用，在其他元素上使用没有效果。</p>
+
+<h2 id="input">注意1 ： 立即更新来自input中的值</h2>
+
+<p>如果你用<code>&lt;input type="text" /&gt;</code> 或者 <code>&lt;textarea&gt;</code>，想立马更新 view model 的值，那么使用 <code>textInput</code>绑定吧，因为它比 value 绑定的 valueUpdate 浏览器兼容性更好。</p>
+
+<h2 id="select">注意2 ： 和下拉框组合使用（<code>&lt;select&gt;</code>元素）</h2>
+
+<p>knockout支持下拉框。<code>value</code> 绑定和<code>option</code> 绑定一起使用，来读写任意js对象的值。，而不仅仅是string类型的变量。具体细节可以参照 <code>option</code> 绑定。</p>
+
+<p><code>&lt;select&gt;</code>元素,你也可以使用value绑定而不使用option绑定。这是<code>option</code> 选项需呀使用 <code>foreach</code>或者<code>temlate</code>绑定来实现。你甚至可以嵌套使用 <code>&lt;optgroup&gt;</code> 。</p>
+
+<h3 id="selectvalueallowunset"><code>&lt;select&gt;</code>元素<code>valueAllowUnset</code></h3>
+
+<p>通常当你在<code>&lt;select&gt;</code>元素上使用 <code>value</code>绑定的时候，通常是指定某个option被选中。但是如果你设置一个在list中不存在的值怎么办呢？knockout会默认重写你的值，把它重设为下拉框中任何一个已经被选中的值，这样做是为了阻止模型和视图不同步。</p>
+
+<p>然而，有时候我们不想knockout这种默认行为。如果你想让knockout允许你输入一个在 <code>&lt;select&gt;</code>中不存在的值，那么就需要指定 <code>valueAllowUnset: true</code>。这样，只要有不匹配的值，<code>&lt;select&gt;</code>就没有被选中的值，通常是个空值。 用户再选中存在的值，<code>&lt;select&gt;</code>的值就正常表现了。例如：</p>
+
+<pre><code>&lt;p&gt;
+    Select a country:
+    &lt;select data-bind="options: countries,
+                       optionsCaption: 'Choose one...',
+                       value: selectedCountry,
+                       valueAllowUnset: true"&gt;&lt;/select&gt;
+&lt;/p&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        countries: ['Japan', 'Bolivia', 'New Zealand'],
+        selectedCountry: ko.observable('Latvia')
+    };
+&lt;/script&gt;
+</code></pre>
+
+<p><code>selectedCountry</code>的值是 <code>Latvia</code>,因为<code>countries</code>中不存在，那么<code>&lt;select&gt;</code>的值是个空值。</p>
+
+<p>如果 <code>valueAllowUnset</code> 没有被设置为 true，那么knockout就会用 <code>undefined</code>来重写 <code>selectedCountry</code>。</p>
+
+<h2 id="observablenon-observable">注意3 ： 更新observable和non-observable属性的值</h2>
+
+<p>如果使用 <code>value</code> 绑定把observable属性绑定到DOM元素上，knockout会建立一个双向绑定，这样一个改变会影响另一个值。</p>
+
+<p>但是，如果使用 <code>value</code> 绑定把一个non-observable属性绑定到DOM元素上，那么knockout会像下面那样做：</p>
+
+<ul>
+  <li>
+    <p>如果non-observable是一个简单属性，比如说事view model上的普通属性，那么knockout只会在初始化的绑定一次。</p>
+  </li>
+  <li>
+    <p>如果不是简单属性，比如说是一个函数或者一个复杂的表达式，也只会绑定一次。</p>
+  </li>
+</ul>
+
+<p>例子</p>
+
+<pre><code>&lt;!-- Two-way binding. Populates textbox; syncs both ways. --&gt;
+&lt;p&gt;First value: &lt;input data-bind="value: firstValue" /&gt;&lt;/p&gt;
+ 
+&lt;!-- One-way binding. Populates textbox; syncs only from textbox to model. --&gt;
+&lt;p&gt;Second value: &lt;input data-bind="value: secondValue" /&gt;&lt;/p&gt;
+ 
+&lt;!-- No binding. Populates textbox, but doesn't react to any changes. --&gt;
+&lt;p&gt;Third value: &lt;input data-bind="value: secondValue.length &gt; 8" /&gt;&lt;/p&gt;
+ 
+&lt;script type="text/javascript"&gt;
+    var viewModel = {
+        firstValue: ko.observable("hello"), // Observable
+        secondValue: "hello, again"         // Not observable
+    };
+&lt;/script&gt;
+</code></pre>
+
+<h2 id="checked--value">注意 4 ： checked 属性使用 value绑定</h2>
+
+<p>请不要使用 <code>value</code> 对 <code>&lt;input type='checkbox'&gt;</code> 或者 <code>&lt;input type='radio'&gt;</code> 进行绑定，要使用 <code>checked</code>绑定。如果一定要使用的话，相当于 <code>checked</code> 绑定的 <code>checkedValue</code>参数。</p>
+
+
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#knockoutjs API-ref">
+    		knockoutjs API <span>28</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#knockoutjs API-ref">knockoutjs API <span>28</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev"><a href="/2015/11/25/text-bind" title="text bind">&laquo; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="/2015/11/25/visible-bind" title="visible bind">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="ds-thread" class="ds-thread" data-url="/2015/11/25/value-bind" data-title="value bind" data-thread-key="value bind"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name: 'wan'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p>&copy; 2015 wikieswan 欢迎分享，转载请注明出处。
+      </div>
+    </div>
+
+
+    
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>  
+    <script>hljs.initHighlightingOnLoad();</script>  
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-70707595-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  </body>
+</html>
+

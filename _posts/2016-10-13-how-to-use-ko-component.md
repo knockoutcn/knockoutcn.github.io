@@ -125,6 +125,16 @@ store 指的是 ko的 vm observable 对象， action 是 ko 的 vm 函数。
 			    	text: "确认按钮"
 			    }
 			}'></div>
+			<div data-bind='component: {
+			    name: "component-parent",
+			    params: {}
+			}'>
+				<div data-bind='component: {
+				    name: "component-child",
+				    params: {}
+				}'>
+				</div>
+			</div>
 		</div>
 	</body>
 	</html>
@@ -168,6 +178,23 @@ store 指的是 ko的 vm observable 对象， action 是 ko 的 vm 函数。
 		    },
 		    template: '<div class="button" >'
 		    		+ '<button data-bind="click: handleClick,text: text"></button'
+		    		+ '</div>'
+		});
+		ko.components.register('component-parent', {
+		    viewModel: function(params) {
+		        
+		    },
+		    template: '<div class="parent" >'
+		    		+ '<p>this is parent</p>'
+		    		+ '<!-- ko template: { nodes: $componentTemplateNodes } --><!-- /ko -->'
+		    		+ '</div>'
+		});
+		ko.components.register('component-child', {
+		    viewModel: function(params) {
+		        
+		    },
+		    template: '<div class="child" >'
+		    		+ '<p>this is child</p>'
 		    		+ '</div>'
 		});
 

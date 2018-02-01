@@ -206,7 +206,7 @@ displayMode: function(employee, bindingContext) {
 
 然后使用jquery.tmpl作为你的模板引擎：
 
-+ ps：因为 github 的限制，```{{```  ```}}``` 在Jekyll 不作为文本显示，所以下面代码加了空格，实际书写请忽略
+ps：因为 github 的限制，```{{```  ```}}``` 在Jekyll 不作为文本显示，所以下面代码加了空格，实际书写请忽略
 
 
 	<h1>People</h1>

@@ -194,7 +194,7 @@ displayMode: function(employee, bindingContext) {
 ```
 
 
-##　注意6 使用jQuery.tmpl-外部的模板引擎
+## 注意6 使用jQuery.tmpl-外部的模板引擎
 
 在绝大多数情况下，```foreach```, ```with```, ```if```和其他控制流绑定可以满足你构建UI应用的所有需求。但是如果你想使用第三方模板库，比如 [Underscore template engine](http://documentcloud.github.io/underscore/#template) 或者 [jquery.tmpl](http://api.jquery.com/jquery.tmpl/), KO也会支持。
 
@@ -206,15 +206,18 @@ displayMode: function(employee, bindingContext) {
 
 然后使用jquery.tmpl作为你的模板引擎：
 
++ ps：因为 github 的限制，```{{```  ```}}``` 在Jekyll 不作为文本显示，所以下面代码加了空格，实际书写请忽略
+
+
 	<h1>People</h1>
 	<div data-bind="template: 'peopleList'"></div>
 	 
 	<script type="text/html" id="peopleList">
-	    {{each people}}
+	    { {each people} }
 	        <p>
 	            <b>${name}</b> is ${age} years old
 	        </p>
-	    {{/each}}
+	    { {/each} }
 	</script>
 	 
 	<script type="text/javascript">
